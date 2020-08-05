@@ -19,6 +19,6 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
       - name: Run chart-releaser
-        uses: treeverse/chart-releaser-action@v1.0.1-alpha1
+        uses: treeverse/chart-releaser-action@v1.0.2-alpha1
         env:
           CR_TOKEN: "${{ secrets.CR_TOKEN }}"
