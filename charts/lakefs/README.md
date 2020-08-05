@@ -8,7 +8,7 @@ To install the chart with Helm Release *my-release* run the following commands:
 
 ```bash
 # Add the lakeFS repository
-helm repo add lakefs https://chart.lakefes.io
+helm repo add lakefs https://charts.lakefes.io
 # Deploy lakeFS
 helm install lakefs/lakefs -f my-values.yaml --name my-release
 ```
