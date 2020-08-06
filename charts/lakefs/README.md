@@ -23,6 +23,7 @@ If you can't provide such access, you can use an AWS key-pair to authenticate (s
 | `blockstore.s3.region`                      | AWS region where to use for storage                                                                        |             |
 | `blockstore.s3.credentials.accessKeyId`     | AWS Access Key to use when accessing S3. Leave empty if your Kuberenets nodes have access to your buckets. |             |
 | `blockstore.s3.credentials.secretAccessKey` | AWS Secret Key to use when accessing S3. Leave empty if your Kuberenets nodes have access to your buckets. |             |
+| `gateways.s3.domain_name` | Domain name to be used by clients to call the lakeFS S3-compatible API |             |
 | `databaseConnectionString`                  | Connection string to your lakeFS database                                                                  |             |
 | `authEncryptSecretKey`                      | A cryptographically secure random string                                                                   |             |
 | `replicaCount`                              | Number of lakeFS pods                                                                                      | `1`         |

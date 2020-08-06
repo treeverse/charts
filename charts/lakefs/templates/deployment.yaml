@@ -47,6 +47,8 @@ spec:
             value: {{ .Values.databaseConnectionString }}
           - name: LAKEFS_BLOCKSTORE_TYPE
             value: {{ .Values.blockstore.type | default "local" }}
+          - name: LAKEFS_GATEWAYS_S3_DOMAIN_NAME
+            value: {{ .Values.gateways.s3.domain_name }}
           {{- if eq .Values.blockstore.type "local" }}
           - name: LAKEFS_BLOCKSTORE_LOCAL_PATH
             value: {{ .Values.blockstore.local.path | default "/home/lakefs" }}
