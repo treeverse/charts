@@ -38,3 +38,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+configmap:
+  name: lakefs-config

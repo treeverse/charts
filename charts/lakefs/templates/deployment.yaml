@@ -18,10 +18,18 @@ spec:
       labels:
         {{- include "lakefs.selectorLabels" . | nindent 8 }}
     spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Values.configmap.name }}
+            items:
+              - key: config.yaml
+                path: config.yaml
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          args: ["run", "--config", "/etc/lakefs/config.yaml"]
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -32,43 +40,17 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /_health
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /_health
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          env:
-          - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
-            value: {{ .Values.authEncryptSecretKey}}
-          - name: LAKEFS_DATABASE_CONNECTION_STRING
-            value: {{ .Values.databaseConnectionString }}
-          - name: LAKEFS_BLOCKSTORE_TYPE
-            value: {{ .Values.blockstore.type | default "local" }}
-          - name: LAKEFS_GATEWAYS_S3_DOMAIN_NAME
-            value: {{ .Values.gateways.s3.domain_name }}
-          {{- if eq .Values.blockstore.type "local" }}
-          - name: LAKEFS_BLOCKSTORE_LOCAL_PATH
-            value: {{ .Values.blockstore.local.path | default "/home/lakefs" }}
-          {{- end }}
-          {{- if eq .Values.blockstore.type "s3" }}
-          - name: LAKEFS_BLOCKSTORE_S3_REGION
-            value: {{ .Values.blockstore.s3.region }}
-          {{- if .Values.blockstore.s3.credentials }}
-          - name: LAKEFS_BLOCKSTORE_S3_CREDENTIALS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.blockstore.s3.credentials.secret }}
-                key: accessKeyId
-          - name: LAKEFS_BLOCKSTORE_S3_CREDENTIALS_ACCESS_SECRET_KEY
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.blockstore.s3.credentials.secret }}
-                key: secretAccessKey
-          {{- end }}
-          {{- end }}
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/lakefs
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
