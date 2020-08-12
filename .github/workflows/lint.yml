@@ -28,4 +28,5 @@ jobs:
       id: lint
       uses: helm/chart-testing-action@v1.0.0
       with:
-        command: "lint --charts-dir ./charts --all --debug"
+        command: lint
+        config: ct.yaml
