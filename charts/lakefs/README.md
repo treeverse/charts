@@ -39,7 +39,7 @@ If you can't provide such access, you can use an AWS key-pair to authenticate (s
 ## Configurations
 | **Parameter**                               | **Description**                                                                                            | **Default** |
 |---------------------------------------------|------------------------------------------------------------------------------------------------------------|-------------|
-| `lakefsConfig`                              | lakeFS config YAML stringified, as shown above. See [reference](https://docs.lakefs.io/reference/configuration.html){: target="_blank" } for available configurations.                                                               |             |
+| `lakefsConfig`                              | lakeFS config YAML stringified, as shown above. See [reference](https://docs.lakefs.io/reference/configuration.html) for available configurations.                                                               |             |
 | `replicaCount`                              | Number of lakeFS pods                                                                                      | `1`         |
 | `resources`                                 | Pod resource requests & limits                                                                             | `{}`        |
 | `service.type`                              | Kuberenetes service type                                                                                   | ClusterIP   |
