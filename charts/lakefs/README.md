@@ -13,19 +13,33 @@ helm repo add lakefs https://charts.lakefs.io
 helm install lakefs/lakefs -f my-values.yaml --name my-release
 ```
 
+Example my-values.yaml:
+
+```yaml
+service:
+	type: LoadBalancer
+lakefsConfig: |
+  database:
+    connection_string: postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs?search_path=lakefs
+  auth:
+    encrypt:
+      secret_key: <some random string>
+  blockstore:
+    type: s3
+    s3:
+      region: us-east-1
+  gateways:
+    s3:
+      domain_name: s3.lakefs.example.com
+```
+
 You should give your Kubernetes nodes access to all S3 buckets you intend to use lakeFS with.
 If you can't provide such access, you can use an AWS key-pair to authenticate (see configurations below). 
 
 ## Configurations
 | **Parameter**                               | **Description**                                                                                            | **Default** |
 |---------------------------------------------|------------------------------------------------------------------------------------------------------------|-------------|
-| `blockstore.type`                           | Type of storage to use: `s3`, `local`, `mem`                                                               |             |
-| `blockstore.s3.region`                      | AWS region where to use for storage                                                                        |             |
-| `blockstore.s3.credentials.accessKeyId`     | AWS Access Key to use when accessing S3. Leave empty if your Kuberenets nodes have access to your buckets. |             |
-| `blockstore.s3.credentials.secretAccessKey` | AWS Secret Key to use when accessing S3. Leave empty if your Kuberenets nodes have access to your buckets. |             |
-| `gateways.s3.domain_name` | Domain name to be used by clients to call the lakeFS S3-compatible API |             |
-| `databaseConnectionString`                  | Connection string to your lakeFS database                                                                  |             |
-| `authEncryptSecretKey`                      | A cryptographically secure random string                                                                   |             |
+| `lakefsConfig`                              | lakeFS config YAML stringified, as shown above. See reference for available configurations.                                                               |             |
 | `replicaCount`                              | Number of lakeFS pods                                                                                      | `1`         |
 | `resources`                                 | Pod resource requests & limits                                                                             | `{}`        |
 | `service.type`                              | Kuberenetes service type                                                                                   | ClusterIP   |

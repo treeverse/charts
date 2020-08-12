@@ -1,4 +1,13 @@
-blockstore:
-  type: s3
-  s3:
-    region: us-east-1
+lakefsConfig: |
+  database:
+    connection_string: postgres://postgres:A65W5C9jKRHjQefX@lakefs-on-k8s.cluster-cysfcahbvkps.us-east-1.rds.amazonaws.com:5432/lakefs?search_path=lakefs
+  auth:
+    encrypt:
+      secret_key: 10a718b3f285d89c36e9864494cdd1507f3bc85b342df24736ea81f9a1134bcc09e90b6641393a0a89d1a645dcf990fbd5f48cae092a5eee7b804e45c7d6a20e6b840e8124334312e01dde9a087228485512feb0780f4589d01fd2cc825dbb1925c3968c95083c2fca5ac07d61a10d15fdb6f43236dc5347dddfa3e7852f1654410ef53082b0007f33387dcdfd735c5b48e61991ceef3e8bba7267af4f0383a73af07b0c767ddd78b9a771ccb8be3d6662191f1b76d0e725ac59f1a63d110b018c2d0a727097ed9363fcb3f822d8dc7f12584bda25182cd74fece779977ca24caf774a3d5e3579228b27bbac99a5b7384367a5a6f3da629d00159edec45bc8fa
+  blockstore:
+    type: s3
+    s3:
+      region: us-east-1
+  gateways:
+    s3:
+      domain_name: s3.lakefs.example.com

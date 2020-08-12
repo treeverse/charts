@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name }}
+{{- with .Values.lakefsConfig }}
+data:
+  config.yaml:
+    {{- toYaml . | nindent 2 }}
+{{- end }}
+
