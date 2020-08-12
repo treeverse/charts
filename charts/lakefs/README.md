@@ -17,20 +17,20 @@ Example my-values.yaml:
 
 ```yaml
 service:
-	type: LoadBalancer
+    type: LoadBalancer
 lakefsConfig: |
   database:
-    connection_string: postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs?search_path=lakefs
+	connection_string: postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs?search_path=lakefs
   auth:
-    encrypt:
-      secret_key: <some random string>
+	encrypt:
+	  secret_key: <some random string>
   blockstore:
-    type: s3
-    s3:
-      region: us-east-1
+	type: s3
+	s3:
+	  region: us-east-1
   gateways:
-    s3:
-      domain_name: s3.lakefs.example.com
+	s3:
+	  domain_name: s3.lakefs.example.com
 ```
 
 You should give your Kubernetes nodes access to all S3 buckets you intend to use lakeFS with.
