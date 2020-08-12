@@ -41,4 +41,3 @@ affinity: {}
 
 configmap:
   name: lakefs-config
-
