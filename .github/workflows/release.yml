@@ -5,7 +5,6 @@ on:
     branches: [master]
   pull_request:
     branches: []
-jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -14,7 +13,8 @@ jobs:
 
     - name: Fetch history
       run: git fetch --prune --unshallow
-
+    - name: gitLeaks
+      uses: zricethezav/gitleaks-action@v1.1.2
     - name: Run chart-testing (lint)
       id: lint
       uses: helm/chart-testing-action@v1.0.0
