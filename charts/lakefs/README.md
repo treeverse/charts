@@ -10,7 +10,7 @@ To install the chart with Helm Release *my-release* run the following commands:
 # Add the lakeFS repository
 helm repo add lakefs https://charts.lakefs.io
 # Deploy lakeFS
-helm install lakefs/lakefs -f my-values.yaml --name my-release
+helm install -f m-values.yaml my-release lakefs/lakefs
 ```
 
 Example my-values.yaml:
