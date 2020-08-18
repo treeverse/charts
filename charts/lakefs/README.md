@@ -26,7 +26,7 @@ To install the chart with custom configuration values:
 
 ```bash
 # Deploy lakeFS with helm release "my-lakefs"
-helm install -f m-values.yaml my-lakefs lakefs/lakefs
+helm install -f my-values.yaml my-lakefs lakefs/lakefs
 ```
 
 Example my-values.yaml:
