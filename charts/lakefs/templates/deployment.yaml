@@ -51,6 +51,17 @@ spec:
           volumeMounts:
           - name: config-volume
             mountPath: /etc/lakefs
+          env:
+            - name: LAKEFS_DATABASE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "lakefs.fullname" . }}
+                  key: database_connection_string
+            - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "lakefs.fullname" . }}
+                  key: auth_encrypt_secret_key
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
