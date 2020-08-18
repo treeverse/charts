@@ -4,25 +4,29 @@ A Helm chart to deploy lakeFS on Kubernetes.
 
 ## Installing the Chart
 
-### Quickstart
-For learning purposes, you can install lakeFS with the following commands:
+First, add the lakeFS helm repository:
+
 ```bash
-# Add the lakeFS repository
 helm repo add lakefs https://charts.lakefs.io
-# Deploy lakeFS
+```
+### Quickstart
+
+For learning purposes, you can install lakeFS with the following commands:
+
+```bash
+# Deploy lakeFS with helm release "my-lakefs"
 helm install my-lakefs lakefs/lakefs
 ```
 
 This will start lakeFS with a dedicated PostgreSQL container. Data will be stored inside the container and will not be persisted.
 
 ### Custom Configuration
-To install the chart with Helm Release *my-release* run the following commands:
+
+To install the chart with custom configuration values:
 
 ```bash
-# Add the lakeFS repository
-helm repo add lakefs https://charts.lakefs.io
-# Deploy lakeFS
-helm install -f m-values.yaml my-release lakefs/lakefs
+# Deploy lakeFS with helm release "my-lakefs"
+helm install -f m-values.yaml my-lakefs lakefs/lakefs
 ```
 
 Example my-values.yaml:
