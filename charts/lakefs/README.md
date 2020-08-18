@@ -15,7 +15,6 @@ helm install my-lakefs lakefs/lakefs
 
 This will start lakeFS with a dedicated PostgreSQL container. Data will be stored inside the container.
 
-
 ### Custom Configuration
 To install the chart with Helm Release *my-release* run the following commands:
 
