@@ -47,7 +47,7 @@ lakefsConfig: |
 ```
 
 The `lakefsConfig` parameter is the lakeFS configuration documented [here](https://docs.lakefs.io/reference/configuration.html), but without sensitive information.
-Sensitive information like `database_connection_string` are given through separate parameters, and they this chart will inject them to Kubernetes secrets.
+Sensitive information like `database_connection_string` is given through separate parameters, and the chart will inject them into Kubernetes secrets.
 
 You should give your Kubernetes nodes access to all S3 buckets you intend to use lakeFS with.
 If you can't provide such access, lakeFS can be configured to use an AWS key-pair to authenticate (part of the `lakefsConfig` YAML below).
