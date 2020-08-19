@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.configmap.name }}
+  name: {{ include "lakefs.fullname" . }}
 {{- with .Values.lakefsConfig }}
 data:
   config.yaml:

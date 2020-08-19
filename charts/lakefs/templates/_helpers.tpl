@@ -47,6 +47,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "lakefs.selectorLabels" -}}
+app: {{ include "lakefs.name" . }}
 app.kubernetes.io/name: {{ include "lakefs.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
