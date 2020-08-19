@@ -18,18 +18,15 @@ spec:
       labels:
         {{- include "lakefs.selectorLabels" . | nindent 8 }}
     spec:
-      volumes:
-        - name: config-volume
-          configMap:
-            name: {{ .Values.configmap.name }}
-            items:
-              - key: config.yaml
-                path: config.yaml
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          {{- if .Values.lakefsConfig }}
           args: ["run", "--config", "/etc/lakefs/config.yaml"]
+          {{- else }}
+          args: ["run"]
+          {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -49,8 +46,58 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-          - name: config-volume
-            mountPath: /etc/lakefs
+          {{- if .Values.lakefsConfig }}
+            - name: config-volume
+              mountPath: /etc/lakefs
+          {{- else }}
+            - name: {{ .Chart.Name }}-local-data
+              mountPath: "/lakefs/data"
+          {{- end }}
+          env:
+            {{- if .Values.lakefsConfig }}
+            - name: LAKEFS_DATABASE_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "lakefs.fullname" . }}
+                  key: database_connection_string
+            - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "lakefs.fullname" . }}
+                  key: auth_encrypt_secret_key
+            {{- else }}
+            - name: LAKEFS_DATABASE_CONNECTION_STRING
+              value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
+            - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+              value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
+            - name: LAKEFS_BLOCKSTORE_LOCAL_PATH
+              value: /lakefs/data
+            {{- end }}
+        {{- if not .Values.lakefsConfig }}
+        - name: {{ .Chart.Name }}-postgres
+          image: postgres:11
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: password
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: {{ .Chart.Name }}-postgredb
+        {{- end }}
+      volumes:
+        {{- if not .Values.lakefsConfig }}
+        - name: {{ .Chart.Name }}-postgredb
+        - name: {{ .Chart.Name }}-local-data
+        {{- else }}
+        - name: config-volume
+          configMap:
+            name: {{ .Values.configmap.name }}
+            items:
+              - key: config.yaml
+                path: config.yaml
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
