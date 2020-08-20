@@ -27,6 +27,9 @@ ingress:
 
 podAnnotations: {}
 
+deployment:
+  port: 8000
+
 service:
   type: ClusterIP
   port: 80
@@ -38,6 +41,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-configmap:
-  name: lakefs-config

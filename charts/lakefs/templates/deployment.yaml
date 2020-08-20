@@ -33,7 +33,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8000
+              containerPort: {{ .Values.deployment.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -93,7 +93,7 @@ spec:
         {{- else }}
         - name: config-volume
           configMap:
-            name: {{ .Values.configmap.name }}
+            name: {{ include "lakefs.fullname" . }}
             items:
               - key: config.yaml
                 path: config.yaml
