@@ -1,6 +1,6 @@
 Thank you for installing lakeFS!
 
-1. Run the following To get a url to start setting up lakeFS:
+1. Run the following to get a url to start setting up lakeFS:
 {{- if contains "NodePort" .Values.service.type }}
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "lakefs.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
