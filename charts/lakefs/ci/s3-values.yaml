@@ -1,9 +1,7 @@
+secrets:
+  databaseConnectionString: postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs?search_path=lakefs
+  authEncryptSecretKey: <some random string>
 lakefsConfig: |
-  database:
-    connection_string: postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs?search_path=lakefs
-  auth:
-    encrypt:
-      secret_key: <some random string>
   blockstore:
     type: s3
     s3:
