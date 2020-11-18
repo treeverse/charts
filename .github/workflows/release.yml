@@ -2,7 +2,7 @@ name: Lint and Release Charts
 
 on:
   push:
-    branches: [master]
+    branches: [master, upgrade_chart_testing_action_version]
   pull_request:
     branches: []
 jobs:
@@ -29,7 +29,7 @@ jobs:
     - name: Create kind cluster
       uses: helm/kind-action@v1.0.0
       # Only build a kind cluster if there are chart changes to test.
-      if: ${{ steps.lint.outputs.changed == 'true' && github.event_name == 'push' &&  github.ref == 'refs/heads/master' }}
+      if: ${{ steps.lint.outputs.changed == 'true' && github.event_name == 'push' }}
     - name: Run chart-testing (install)
     - name: Run chart-testing (install)
       run: ct install
