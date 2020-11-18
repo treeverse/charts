@@ -31,7 +31,6 @@ jobs:
       # Only build a kind cluster if there are chart changes to test.
       if: ${{ steps.lint.outputs.changed == 'true' && github.event_name == 'push' }}
     - name: Run chart-testing (install)
-    - name: Run chart-testing (install)
       run: ct install
   release:
     runs-on: ubuntu-latest
