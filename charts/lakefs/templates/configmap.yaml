@@ -7,4 +7,3 @@ data:
   config.yaml:
     {{- toYaml . | nindent 2 }}
 {{- end }}
-
