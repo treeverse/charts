@@ -16,4 +16,4 @@ Thank you for installing lakeFS!
   kubectl port-forward $POD_NAME {{ .Values.deployment.port }}:{{ .Values.deployment.port }} --namespace {{ .Release.Namespace }}
 {{- end }}
 
-2. See the docs on how to create your first repository: https://docs.lakefs.io/quickstart.html#setting-up-a-repository
+2. See the docs on how to create your first repository: https://docs.lakefs.io/quickstart/repository.html
