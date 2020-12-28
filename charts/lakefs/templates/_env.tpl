@@ -16,6 +16,8 @@ env:
     value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
+  {{- end }}
+  {{- if not .Values.lakefsConfig }}
   - name: LAKEFS_BLOCKSTORE_LOCAL_PATH
     value: /lakefs/data
   {{- end }}

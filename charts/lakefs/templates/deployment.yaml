@@ -23,6 +23,9 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          {{- if or (not .Values.lakefsConfig) .Values.localPostgres }}
+          command: ["/app/wait-for", "localhost:5432", "--", "/app/lakefs", "run"]
+          {{- end }}
           {{- if .Values.lakefsConfig }}
           args: ["run", "--config", "/etc/lakefs/config.yaml"]
           {{- else }}
