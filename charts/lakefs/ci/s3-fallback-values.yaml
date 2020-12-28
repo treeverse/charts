@@ -1,2 +1,2 @@
-s3Proxy:
+s3Fallback:
   enabled: true
