@@ -55,7 +55,8 @@ spec:
               mountPath: "/lakefs/data"
           {{- end }}
           {{- include "lakefs.env" . | nindent 10 }}
-        {{- if not .Values.lakefsConfig }}
+        {{- include "lakefs.s3proxyContainer" . | nindent 8}}
+        {{- if or (not .Values.lakefsConfig) .Values.localPostgres }}
         - name: {{ .Chart.Name }}-postgres
           image: postgres:11
           imagePullPolicy: "IfNotPresent"
