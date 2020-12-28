@@ -2,7 +2,6 @@
 {{- if .Values.lakefsConfig }}
 {{ $config := .Values.lakefsConfig | fromYaml  }}
 {{- end }}
-{{- if .Values.s3Fallback }}
 {{- if .Values.s3Fallback.enabled }}
 - name: s3proxy
   image: andrewgaul/s3proxy
@@ -25,6 +24,5 @@
     value: "http://0.0.0.0:7001"
   - name: LOG_LEVEL
     value: trace
-{{- end }}
 {{- end }}
 {{- end }}

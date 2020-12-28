@@ -19,11 +19,9 @@ env:
   - name: LAKEFS_BLOCKSTORE_LOCAL_PATH
     value: /lakefs/data
   {{- end }}
-  {{- if .Values.s3Fallback }}
   {{- if .Values.s3Fallback.enabled }}
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
     value: http://localhost:7001
-  {{- end }}
   {{- end }}
 {{- if .Values.extraEnvVarsSecret }}
 envFrom:
