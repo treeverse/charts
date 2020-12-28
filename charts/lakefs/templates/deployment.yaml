@@ -23,6 +23,9 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          {{- if or (not .Values.lakefsConfig) .Values.localPostgres }}
+          command: ["/app/wait-for", "localhost:5432", "--", "/app/lakefs", "run"]
+          {{- end }}
           {{- if .Values.lakefsConfig }}
           args: ["run", "--config", "/etc/lakefs/config.yaml"]
           {{- else }}
@@ -55,7 +58,8 @@ spec:
               mountPath: "/lakefs/data"
           {{- end }}
           {{- include "lakefs.env" . | nindent 10 }}
-        {{- if not .Values.lakefsConfig }}
+        {{- include "lakefs.s3proxyContainer" . | nindent 8}}
+        {{- if or (not .Values.lakefsConfig) .Values.localPostgres }}
         - name: {{ .Chart.Name }}-postgres
           image: postgres:11
           imagePullPolicy: "IfNotPresent"

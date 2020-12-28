@@ -11,7 +11,7 @@ env:
       secretKeyRef:
         name: {{ include "lakefs.fullname" . }}
         key: auth_encrypt_secret_key
-  {{- else if not .Values.lakefsConfig }}
+  {{- else if or (not .Values.lakefsConfig) .Values.localPostgres }}
   - name: LAKEFS_DATABASE_CONNECTION_STRING
     value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
@@ -21,6 +21,10 @@ env:
   - name: LAKEFS_BLOCKSTORE_LOCAL_PATH
     value: /lakefs/data
   {{- end }}
+  {{- if .Values.s3Fallback.enabled }}
+  - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
+    value: http://localhost:7001
+  {{- end }}
 {{- if .Values.extraEnvVarsSecret }}
 envFrom:
   - secretRef:
@@ -29,10 +33,13 @@ envFrom:
 {{- end }}
 
 {{- define "lakefs.volumes" -}}
-{{- if not .Values.lakefsConfig }}
+{{- if or (not .Values.lakefsConfig) .Values.localPostgres }}
 - name: {{ .Chart.Name }}-postgredb
+{{- end }}
+{{- if not .Values.lakefsConfig }}
 - name: {{ .Chart.Name }}-local-data
-{{- else }}
+{{- end}}
+{{- if .Values.lakefsConfig }}
 - name: config-volume
   configMap:
     name: {{ include "lakefs.fullname" . }}

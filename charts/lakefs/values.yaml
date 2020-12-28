@@ -41,3 +41,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+s3Fallback:
+  enabled: false
