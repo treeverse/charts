@@ -22,7 +22,5 @@
     value: http://s3.amazonaws.com
   - name: S3PROXY_ENDPOINT
     value: "http://0.0.0.0:7001"
-  - name: LOG_LEVEL
-    value: trace
 {{- end }}
 {{- end }}
