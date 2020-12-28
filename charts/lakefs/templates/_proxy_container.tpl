@@ -19,7 +19,7 @@
   - name: JCLOUDS_PROVIDER
     value: s3
   - name: JCLOUDS_ENDPOINT
-    value: http://s3.amazonaws.com
+    value: https://s3.amazonaws.com
   - name: S3PROXY_ENDPOINT
     value: "http://0.0.0.0:7001"
 {{- end }}
