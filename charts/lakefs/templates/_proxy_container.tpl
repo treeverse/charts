@@ -24,5 +24,7 @@
     value: "http://0.0.0.0:7001"
   - name: S3PROXY_VIRTUALHOST
     value: localhost
+  - name: LOG_LEVEL
+    value: {{ .Values.s3Fallback.log_level | default "info" }}
 {{- end }}
 {{- end }}
