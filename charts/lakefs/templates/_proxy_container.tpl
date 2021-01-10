@@ -22,9 +22,7 @@
     value: https://s3.amazonaws.com
   - name: S3PROXY_ENDPOINT
     value: "http://0.0.0.0:7001"
-{{- if .Values.s3Fallback.virtual_host }}
-  - name: S3PROXY_VIRTUAL_HOST
-    value: {{ .Values.s3Fallback.virtual_host }}
-{{- end }}
+  - name: S3PROXY_VIRTUALHOST
+    value: localhost
 {{- end }}
 {{- end }}
