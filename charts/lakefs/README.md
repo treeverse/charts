@@ -66,4 +66,3 @@ If you can't provide such access, lakeFS can be configured to use an AWS key-pai
 | `s3Fallback.enabled`                            | If set to true, an [S3Proxy](https://github.com/gaul/s3proxy) container will be started. Requests to lakeFS S3 gateway with a non-existing repository will be forwarded to this container.
 | `s3Fallback.aws_access_key` | An AWS access key to be used by the S3Proxy for authentication |
 | `s3Fallback.aws_secret_key` | An AWS secret key to be used by the S3Proxy for authentication |
-| `s3Fallback.virtual_host` | The lakeFS S3 gateway domain name. S3Proxy will use this to extract the bucket name for S3 [virtual-hosted-style](https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html#virtual-hosted-style-access) requests. |
