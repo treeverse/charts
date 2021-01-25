@@ -25,6 +25,10 @@ env:
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
     value: http://localhost:7001
   {{- end }}
+  {{- if .Values.local_cache_volume }}
+    name: LAKEFS_COMMITTED_LOCAL_CACHE_DIR
+    value: /lakefs/cache
+  {{- end }}
 {{- if .Values.extraEnvVarsSecret }}
 envFrom:
   - secretRef:
@@ -33,6 +37,10 @@ envFrom:
 {{- end }}
 
 {{- define "lakefs.volumes" -}}
+{{- if .Values.committedLocalCacheVolume }}
+- name: committed-local-cache
+{{- toYaml .Values.committedLocalCacheVolume | nindent 2 }}
+{{- end }}
 {{- if or (not .Values.lakefsConfig) .Values.localPostgres }}
 - name: {{ .Chart.Name }}-postgredb
 {{- end }}

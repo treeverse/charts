@@ -66,3 +66,4 @@ If you can't provide such access, lakeFS can be configured to use an AWS key-pai
 | `s3Fallback.enabled`                            | If set to true, an [S3Proxy](https://github.com/gaul/s3proxy) container will be started. Requests to lakeFS S3 gateway with a non-existing repository will be forwarded to this container.
 | `s3Fallback.aws_access_key` | An AWS access key to be used by the S3Proxy for authentication |
 | `s3Fallback.aws_secret_key` | An AWS secret key to be used by the S3Proxy for authentication |
+| `committedLocalCacheVolume` | A volume definition to be mounted by lakeFS and used for caching committed metadata. See [here](https://kubernetes.io/docs/concepts/storage/volumes/#volume-types) for a list of supported volume types. The default values.yaml file shows an example of how to use this parameter. |
