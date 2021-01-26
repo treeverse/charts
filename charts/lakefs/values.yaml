@@ -45,7 +45,8 @@ affinity: {}
 s3Fallback:
   enabled: false
 
+# Example: using node instance storage for caching committed data:
+# For more information: https://www.vipmind.me/infra/aws/how-to-use-ephemeral-disk-from-ec2-instance-in-eks.html
 #committedLocalCacheVolume:
-# awsElasticBlockStore:
-#   volumeID: "vol-a1b2c3d4"
-#   fsType: ext4
+#  hostPath:
+#    path: /media/ephemeral0

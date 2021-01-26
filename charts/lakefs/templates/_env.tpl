@@ -25,7 +25,7 @@ env:
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
     value: http://localhost:7001
   {{- end }}
-  {{- if .Values.local_cache_volume }}
+  {{- if .Values.committedLocalCacheVolume }}
     name: LAKEFS_COMMITTED_LOCAL_CACHE_DIR
     value: /lakefs/cache
   {{- end }}
