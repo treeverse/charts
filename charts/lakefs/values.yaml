@@ -44,3 +44,13 @@ affinity: {}
 
 s3Fallback:
   enabled: false
+
+# yamllint disable rule:comments
+
+# Example: using node instance storage for caching committed data:
+# For more information: https://www.vipmind.me/infra/aws/how-to-use-ephemeral-disk-from-ec2-instance-in-eks.html
+#committedLocalCacheVolume:
+#  hostPath:
+#    path: /media/ephemeral0
+
+# yamllint enable

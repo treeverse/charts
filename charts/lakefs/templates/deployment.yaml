@@ -50,6 +50,10 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+          {{- if .Values.committedLocalCacheVolume }}
+            - name: committed-local-cache
+              mountPath: "/lakefs/cache"
+          {{- end }}
           {{- if .Values.lakefsConfig }}
             - name: config-volume
               mountPath: /etc/lakefs
