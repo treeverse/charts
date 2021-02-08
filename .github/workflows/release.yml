@@ -13,7 +13,7 @@ jobs:
     - name: Fetch history
       run: git fetch --prune --unshallow
     - name: gitLeaks
-      uses: zricethezav/gitleaks-action@v1.1.2
+      uses: zricethezav/gitleaks-action@v1.3.0
     - name: Install chart-testing (lint)
       uses: helm/chart-testing-action@v2.0.1
     - name: Run chart-testing (list-changed)
