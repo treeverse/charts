@@ -32,7 +32,7 @@ env:
 {{- if .Values.extraEnvVarsSecret }}
 envFrom:
   - secretRef:
-    name: {{ .Values.extraEnvVarsSecret }}
+      name: {{ .Values.extraEnvVarsSecret }}
 {{- end }}
 {{- end }}
 
