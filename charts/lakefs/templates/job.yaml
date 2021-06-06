@@ -24,6 +24,9 @@ spec:
             - name: config-volume
               mountPath: /etc/lakefs
           {{- include "lakefs.env" . | nindent 10 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
       volumes:
         {{- include "lakefs.volumes" . | nindent 8 }}
 {{- end }}
