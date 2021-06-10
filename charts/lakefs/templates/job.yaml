@@ -13,6 +13,11 @@ spec:
   template:
     metadata:
       name: {{ include "lakefs.fullname" . }}-migrate
+      annotations:
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
     spec:
       restartPolicy: Never
       containers:
