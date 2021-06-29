@@ -26,6 +26,7 @@ ingress:
 
 
 podAnnotations: {}
+jobPodAnnotations: {}
 
 deployment:
   port: 8000
