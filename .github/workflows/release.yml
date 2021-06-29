@@ -30,7 +30,7 @@ jobs:
       # Only build a kind cluster if there are chart changes to test.
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
     - name: Run chart-testing (install)
-      run: ct install
+      run: ct install --debug
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
   release:
     runs-on: ubuntu-latest
