@@ -15,7 +15,7 @@ jobs:
     - name: gitLeaks
       uses: zricethezav/gitleaks-action@v1.3.0
     - name: Install chart-testing (lint)
-      uses: helm/chart-testing-action@v2.0.1
+      uses: helm/chart-testing-action@v2.1.0
     - name: Run chart-testing (list-changed)
       id: list-changed
       run: |
