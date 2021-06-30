@@ -15,7 +15,7 @@ jobs:
     - name: gitLeaks
       uses: zricethezav/gitleaks-action@v1.3.0
     - name: Install chart-testing (lint)
-      uses: helm/chart-testing-action@v2.0.1
+      uses: helm/chart-testing-action@v2.1.0
     - name: Run chart-testing (list-changed)
       id: list-changed
       run: |
@@ -23,11 +23,10 @@ jobs:
         if [[ -n "$changed" ]]; then
           echo "::set-output name=changed::true"
         fi
-    - name: Run chart-testing (lint)
-      run: ct lint
-    - name: Create kind cluster
-      uses: helm/kind-action@v1.0.0
-      # Only build a kind cluster if there are chart changes to test.
+    - uses: balchua/microk8s-actions@v0.2.1
+      with:
+        channel: '1.19/stable'
+        addons: '["dns"]'
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
     - name: Run chart-testing (install)
       run: ct install
