@@ -21,15 +21,11 @@ jobs:
         if [[ -n "$changed" ]]; then
           echo "::set-output name=changed::true"
         fi
-    - name: Create kind cluster
-      uses: helm/kind-action@v1.1.0
+    - uses: balchua/microk8s-actions@v0.2.1
       with:
-        log_level: trace
-        node_image: kindest/node:v1.19.11
-      # Only build a kind cluster if there are chart changes to test.
+        channel: '1.19/stable'
+        addons: '["dns", "rbac", "storage", "registry", "metrics-server"]'
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
-    - name: debug kind node
-      run: docker ps -q && docker logs $(docker ps -q)
     - name: Run chart-testing (install)
       run: ct install --debug
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
