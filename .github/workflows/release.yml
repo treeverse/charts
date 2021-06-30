@@ -25,6 +25,7 @@ jobs:
       uses: helm/kind-action@v1.1.0
       with:
         log_level: trace
+        node_image: kindest/node:v1.21.1
       # Only build a kind cluster if there are chart changes to test.
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
     - name: debug kind node
