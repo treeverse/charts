@@ -26,7 +26,8 @@ ingress:
 
 
 podAnnotations: {}
-jobPodAnnotations: {}
+jobPodAnnotations:
+  sidecar.istio.io/inject: "false"
 
 deployment:
   port: 8000

@@ -12,6 +12,8 @@ jobs:
       uses: actions/checkout@v2
     - name: Fetch history
       run: git fetch --prune --unshallow
+    - name: gitLeaks
+      uses: zricethezav/gitleaks-action@v1.3.0
     - name: Install chart-testing (lint)
       uses: helm/chart-testing-action@v2.1.0
     - name: Run chart-testing (list-changed)
@@ -24,10 +26,10 @@ jobs:
     - uses: balchua/microk8s-actions@v0.2.1
       with:
         channel: '1.19/stable'
-        addons: '["dns", "rbac", "storage", "registry", "metrics-server"]'
+        addons: '["dns"]'
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
     - name: Run chart-testing (install)
-      run: ct install --debug
+      run: ct install
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
   release:
     runs-on: ubuntu-latest
