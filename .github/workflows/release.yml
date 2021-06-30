@@ -12,8 +12,6 @@ jobs:
       uses: actions/checkout@v2
     - name: Fetch history
       run: git fetch --prune --unshallow
-    - name: gitLeaks
-      uses: zricethezav/gitleaks-action@v1.3.0
     - name: Install chart-testing (lint)
       uses: helm/chart-testing-action@v2.1.0
     - name: Run chart-testing (list-changed)
@@ -23,8 +21,6 @@ jobs:
         if [[ -n "$changed" ]]; then
           echo "::set-output name=changed::true"
         fi
-    - name: Run chart-testing (lint)
-      run: ct lint
     - name: Create kind cluster
       uses: helm/kind-action@v1.1.0
       with:
@@ -32,7 +28,7 @@ jobs:
       # Only build a kind cluster if there are chart changes to test.
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
     - name: debug kind node
-      run: docker logs kind-control-plane
+      run: docker ps -q && docker logs $(docker ps -q)
     - name: Run chart-testing (install)
       run: ct install --debug
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
