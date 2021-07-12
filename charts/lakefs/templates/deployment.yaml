@@ -50,6 +50,12 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+            - name: data-dir
+              mountPath: "/data/"
+          {{- if .Values.ssl.certName  }}
+            - name: ssl-cert
+              mountPath: /etc/ssl/certs/
+          {{- end }}
           {{- if .Values.committedLocalCacheVolume }}
             - name: committed-local-cache
               mountPath: "/lakefs/cache"
