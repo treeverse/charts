@@ -37,6 +37,13 @@ envFrom:
 {{- end }}
 
 {{- define "lakefs.volumes" -}}
+- name: data-dir
+{{- if .Values.ssl.certName }}
+- name: ssl-cert
+  secret:
+    secretName: {{ .Values.ssl.certName }}
+    defaultMode: 0660
+{{- end }}
 {{- if .Values.committedLocalCacheVolume }}
 - name: committed-local-cache
 {{- toYaml .Values.committedLocalCacheVolume | nindent 2 }}
