@@ -56,3 +56,5 @@ s3Fallback:
 #    path: /media/ephemeral0
 
 # yamllint enable
+
+serviceAccount: {}
