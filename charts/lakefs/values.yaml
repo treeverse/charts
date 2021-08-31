@@ -44,8 +44,6 @@ tolerations: []
 
 affinity: {}
 
-ssl: {}
-
 s3Fallback:
   enabled: false
 
