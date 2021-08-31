@@ -23,10 +23,11 @@ jobs:
         if [[ -n "$changed" ]]; then
           echo "::set-output name=changed::true"
         fi
-    - uses: balchua/microk8s-actions@v0.2.1
-      with:
-        channel: '1.19/stable'
-        addons: '["dns"]'
+    - name: Run chart-testing (lint)
+      run: ct lint
+    - name: Create kind cluster
+      uses: helm/kind-action@v1.2.0
+      # Only build a kind cluster if there are chart changes to test.
       if: ${{ steps.list-changed.outputs.changed == 'true' }}
     - name: Run chart-testing (install)
       run: ct install

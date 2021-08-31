@@ -18,6 +18,8 @@ env:
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
   {{- if not .Values.lakefsConfig }}
+  - name: LAKEFS_BLOCKSTORE_TYPE
+    value: local
   - name: LAKEFS_BLOCKSTORE_LOCAL_PATH
     value: /lakefs/data
   {{- end }}
