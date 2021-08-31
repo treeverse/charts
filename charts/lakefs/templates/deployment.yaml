@@ -51,6 +51,9 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
+          {{- if .Values.extraVolumeMounts }}
+            {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
+          {{- end }}
           {{- if .Values.committedLocalCacheVolume }}
             - name: committed-local-cache
               mountPath: "/lakefs/cache"

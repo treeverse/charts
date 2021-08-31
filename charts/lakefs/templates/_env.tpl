@@ -39,6 +39,9 @@ envFrom:
 {{- end }}
 
 {{- define "lakefs.volumes" -}}
+{{- if .Values.extraVolumes }}
+{{ toYaml .Values.extraVolumes }}
+{{- end }}
 {{- if .Values.committedLocalCacheVolume }}
 - name: committed-local-cache
 {{- toYaml .Values.committedLocalCacheVolume | nindent 2 }}
