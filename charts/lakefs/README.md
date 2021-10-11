@@ -62,6 +62,7 @@ If you can't provide such access, lakeFS can be configured to use an AWS key-pai
 | `resources`                                 | Pod resource requests & limits                                                                             | `{}`        |
 | `service.type`                              | Kuberenetes service type                                                                                   | ClusterIP   |
 | `service.port`                              | Kubernetes service external port                                                                           | 80          |
+| `extraEnvVars`                        | Adds additional environment variables to the deployment (in yaml syntax) | `{}` See [values.yaml](values.yaml) |
 | `extraEnvVarsSecret`                        | Name of a Kubernetes secret containing extra environment variables |
 | `s3Fallback.enabled`                            | If set to true, an [S3Proxy](https://github.com/gaul/s3proxy) container will be started. Requests to lakeFS S3 gateway with a non-existing repository will be forwarded to this container.
 | `s3Fallback.aws_access_key` | An AWS access key to be used by the S3Proxy for authentication |
