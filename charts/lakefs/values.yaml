@@ -58,3 +58,11 @@ s3Fallback:
 # yamllint enable
 
 serviceAccount: {}
+
+# Extra Environment Values - allows yaml definitions
+extraEnvVars:
+#  - name: VALUE_FROM_SECRET
+#    valueFrom:
+#      secretKeyRef:
+#        name: secret_name
+#        key: secret_key

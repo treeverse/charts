@@ -31,6 +31,9 @@ env:
     name: LAKEFS_COMMITTED_LOCAL_CACHE_DIR
     value: /lakefs/cache
   {{- end }}
+  {{- if .Values.extraEnvVars }}
+  {{- toYaml .Values.extraEnvVars | nindent 2 }}
+  {{- end }}
 {{- if .Values.extraEnvVarsSecret }}
 envFrom:
   - secretRef:
