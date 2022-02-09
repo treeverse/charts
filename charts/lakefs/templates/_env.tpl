@@ -28,7 +28,7 @@ env:
     value: http://localhost:7001
   {{- end }}
   {{- if .Values.committedLocalCacheVolume }}
-    name: LAKEFS_COMMITTED_LOCAL_CACHE_DIR
+  - name: LAKEFS_COMMITTED_LOCAL_CACHE_DIR
     value: /lakefs/cache
   {{- end }}
   {{- if .Values.extraEnvVars }}
