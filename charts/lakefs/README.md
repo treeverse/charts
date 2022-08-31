@@ -33,7 +33,6 @@ Example my-values.yaml:
 
 ```yaml
 secrets:
-  databaseType: postgres
   databaseConnectionString: postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs?search_path=lakefs
   authEncryptSecretKey: <some random string>
 lakefsConfig: |
@@ -51,6 +50,26 @@ Sensitive information like `database_connection_string` is given through "secret
 
 You should give your Kubernetes nodes access to all S3 buckets you intend to use lakeFS with.
 If you can't provide such access, lakeFS can be configured to use an AWS key-pair to authenticate (part of the `lakefsConfig` YAML below).
+
+## Major Chart Upgrades
+### General GuidelinesBefore 
+Before performing a major upgrade, it is strongly recommended to perform these steps:
+* Commit all uncommitted data on branches
+* Create a snapshot of your database
+
+### 0.6.1
+Introducing [lakeFS v0.80.0](https://github.com/treeverse/lakeFS/releases/tag/v0.80.0), with **Key Value Store** support. As part of this upgrade, the entire database will be ported to the new KV.
+In order to prevent loss of data during this process it is recommended to stop all the pods running `lakeFS`. This can be achieved by scaling the number of pods down to 0:
+```bash
+# Stopping all pods running release my-lakefs
+kubectl scale --replicas=0 deployment my-lakefs
+```
+
+Once all `lakeFS` pods are stopped, you can upgrade using the `upgrade` command
+```bash
+# Upgrade lakeFS to the latest helm release
+helm upgrade -f my-values.yaml my-lakefs lakefs/lakefs
+```
 
 
 ## Configurations

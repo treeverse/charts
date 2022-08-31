@@ -1,7 +1,5 @@
 {{- define "lakefs.env" -}}
 env:
-  - name: LAKEFS_DATABASE_KV_ENABLED
-    value: "true"
   - name: LAKEFS_DATABASE_TYPE
     value: postgres
   {{- if .Values.secrets }}
