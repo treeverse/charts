@@ -6,7 +6,7 @@ metadata:
   labels:
   {{- include "lakefs.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": pre-upgrade
+    # "helm.sh/hook": pre-upgrade
     "helm.sh/hook-weight": "-1"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
@@ -31,7 +31,7 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /etc/lakefs
-          {{- include "lakefs.env" . | nindent 10 }}
+          {{- include "lakefs.migrate.env" . | nindent 10 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 

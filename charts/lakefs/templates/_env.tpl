@@ -1,8 +1,8 @@
 {{- define "lakefs.env" -}}
 env:
-  {{- if .Values.secrets }}
   - name: LAKEFS_DATABASE_KV_ENABLED
     value: "true"
+  {{- if .Values.secrets }}
   - name: LAKEFS_DATABASE_TYPE
     valueFrom:
       secretKeyRef:
@@ -48,6 +48,20 @@ envFrom:
   - secretRef:
       name: {{ .Values.extraEnvVarsSecret }}
 {{- end }}
+{{- end }}
+
+{{- define "lakefs.migrate.env" -}}
+{{ include "lakefs.env" . }}
+  {{- if .Values.secrets }}
+  - name: LAKEFS_DATABASE_CONNECTION_STRING
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
+        key: database_connection_string
+  {{- else if or (not .Values.lakefsConfig) .Values.localPostgres }}
+  - name: LAKEFS_DATABASE_CONNECTION_STRING
+    value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
+  {{- end}}
 {{- end }}
 
 {{- define "lakefs.volumes" -}}
