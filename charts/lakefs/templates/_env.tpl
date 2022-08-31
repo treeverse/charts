@@ -2,12 +2,9 @@
 env:
   - name: LAKEFS_DATABASE_KV_ENABLED
     value: "true"
-  {{- if .Values.secrets }}
   - name: LAKEFS_DATABASE_TYPE
-    valueFrom:
-      secretKeyRef:
-        name: {{ include "lakefs.fullname" . }}
-        key: database_type
+    value: postgres
+  {{- if .Values.secrets }}
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
@@ -19,8 +16,6 @@ env:
         name: {{ include "lakefs.fullname" . }}
         key: auth_encrypt_secret_key
   {{- else if or (not .Values.lakefsConfig) .Values.localPostgres }}
-  - name: LAKEFS_DATABASE_TYPE
-    value: postgres
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
     value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
