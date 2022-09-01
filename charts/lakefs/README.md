@@ -52,13 +52,13 @@ You should give your Kubernetes nodes access to all S3 buckets you intend to use
 If you can't provide such access, lakeFS can be configured to use an AWS key-pair to authenticate (part of the `lakefsConfig` YAML below).
 
 ## Major Chart Upgrades
-### General Guidelines
-Before performing a major upgrade, it is strongly recommended to perform these steps:
-* Commit all uncommitted data on branches
-* Create a snapshot of your database
 
 ### Upgrading from chart version 0.5.XX or lower (lakeFS v0.70.XX or lower)
 Introducing [lakeFS v0.80.0](https://github.com/treeverse/lakeFS/releases/tag/v0.80.0), with **Key Value Store** support. As part of this upgrade, the entire database will be ported to the new KV.
+Before performing this upgrade, it is strongly recommended to perform these steps:
+* Commit all uncommitted data on branches
+* Create a snapshot of your database
+
 In order to prevent loss of data during this process it is recommended to stop all the pods running `lakeFS`. This can be achieved by scaling the number of pods down to 0:
 ```bash
 # Stopping all pods running release my-lakefs
