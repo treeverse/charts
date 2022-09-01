@@ -52,7 +52,7 @@ You should give your Kubernetes nodes access to all S3 buckets you intend to use
 If you can't provide such access, lakeFS can be configured to use an AWS key-pair to authenticate (part of the `lakefsConfig` YAML below).
 
 ## Major Chart Upgrades
-### General GuidelinesBefore 
+### General Guidelines
 Before performing a major upgrade, it is strongly recommended to perform these steps:
 * Commit all uncommitted data on branches
 * Create a snapshot of your database
