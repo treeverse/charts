@@ -57,7 +57,7 @@ Before performing a major upgrade, it is strongly recommended to perform these s
 * Commit all uncommitted data on branches
 * Create a snapshot of your database
 
-### 0.6.1
+### Upgrading from chart version 0.5.XX or lower (lakeFS v0.70.XX or lower)
 Introducing [lakeFS v0.80.0](https://github.com/treeverse/lakeFS/releases/tag/v0.80.0), with **Key Value Store** support. As part of this upgrade, the entire database will be ported to the new KV.
 In order to prevent loss of data during this process it is recommended to stop all the pods running `lakeFS`. This can be achieved by scaling the number of pods down to 0:
 ```bash
