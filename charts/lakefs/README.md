@@ -51,7 +51,7 @@ Sensitive information like `database_connection_string` is given through "secret
 You should give your Kubernetes nodes access to all S3 buckets you intend to use lakeFS with.
 If you can't provide such access, lakeFS can be configured to use an AWS key-pair to authenticate (part of the `lakefsConfig` YAML below).
 
-## Major Chart Upgrades
+## Notable Chart Upgrades
 
 ### Upgrading from chart version 0.5.XX or lower (lakeFS v0.70.XX or lower)
 Introducing [lakeFS v0.80.0](https://github.com/treeverse/lakeFS/releases/tag/v0.80.0), with **Key Value Store** support. As part of this upgrade, the entire database will be ported to the new KV.
