@@ -1,3 +1,6 @@
+{{- if and .Release.IsUpgrade (not .Values.kv_upgrade) }}
+{{- fail "Migration to KV requires kv_upgrade flag. Please use --set kv_upgrade=true"}}
+{{- end }}
 {{- if and .Values.lakefsConfig (not .Values.localPostgres) }}
 apiVersion: batch/v1
 kind: Job

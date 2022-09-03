@@ -68,8 +68,9 @@ kubectl scale --replicas=0 deployment my-lakefs
 Once all `lakeFS` pods are stopped, you can upgrade using the `upgrade` command
 ```bash
 # Upgrade lakeFS to the latest helm release
-helm upgrade -f my-values.yaml my-lakefs lakefs/lakefs
+helm upgrade -f my-values.yaml my-lakefs lakefs/lakefs --set kv_upgrade=true
 ```
+**Please note the `kv_upgrade` flag, which is required for this upgrade** (It is not required for a fresh installation of `lakeFS` with KV)
 
 
 ## Configurations
