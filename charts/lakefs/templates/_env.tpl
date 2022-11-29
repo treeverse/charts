@@ -1,6 +1,6 @@
 {{- define "lakefs.env" -}}
 env:
-  {{- if .Values.secrets.databaseConnectionString }}
+  {{- if and (.Values.secrets) (.Values.secrets.databaseConnectionString) }}
   - name: LAKEFS_DATABASE_TYPE
     value: postgres
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
@@ -13,12 +13,11 @@ env:
     value: postgres
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
     value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
-  {{ - else if not .Values.lakefsConfig}}
+  {{- else if not .Values.lakefsConfig }}
   - name: LAKEFS_DATABASE_TYPE
     value: local
   {{- end }}
-
-  {{- if .Values.secrets.authEncryptSecretKey }}
+  {{- if and (.Values.secrets) (.Values.secrets.authEncryptSecretKey) }}
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     valueFrom:
       secretKeyRef:
@@ -28,7 +27,6 @@ env:
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
-
   {{- if not .Values.lakefsConfig }}
   - name: LAKEFS_BLOCKSTORE_TYPE
     value: local
@@ -55,13 +53,13 @@ envFrom:
 
 {{- define "lakefs.migrate.env" -}}
 {{ include "lakefs.env" . }}
-  {{- if .Values.secrets }}
+  {{- if and (.Values.secrets) (.Values.secrets.databaseConnectionString) }}
   - name: LAKEFS_DATABASE_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
         name: {{ include "lakefs.fullname" . }}
         key: database_connection_string
-  {{- else if or (not .Values.lakefsConfig) .Values.localPostgres }}
+  {{- else if .Values.localPostgres }}
   - name: LAKEFS_DATABASE_CONNECTION_STRING
     value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
   {{- end}}
