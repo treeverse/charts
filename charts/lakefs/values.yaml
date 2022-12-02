@@ -49,6 +49,12 @@ affinity: {}
 s3Fallback:
   enabled: false
 
+lakefsConfig: |
+  database:
+    type: local
+  blockstore:
+    type: local
+
 # yamllint disable rule:comments
 
 # Example: using node instance storage for caching committed data:
