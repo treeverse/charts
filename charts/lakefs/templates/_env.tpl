@@ -43,9 +43,6 @@ envFrom:
 - name: committed-local-cache
 {{- toYaml .Values.committedLocalCacheVolume | nindent 2 }}
 {{- end }}
-{{- if or (not .Values.lakefsConfig) .Values.localPostgres }}
-- name: {{ .Chart.Name }}-postgredb
-{{- end }}
 {{- if not .Values.lakefsConfig }}
 - name: {{ .Chart.Name }}-local-data
 {{- end}}
