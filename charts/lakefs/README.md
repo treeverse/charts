@@ -78,7 +78,7 @@ If you can't provide such access, lakeFS can be configured to use an AWS key-pai
 
 ### Upgrading from chart version 0.7.XX or lower
 
-Database configuration is not set to use PostgreSQL by default using environment
+If you are using Postgres as your database, make sure your `lakefsConfig` property contains the key `database.type` and that it is set to `postgres`. Before this version, the Helm chart set this property implicitly.
 
 ### Upgrading from chart version 0.5.XX or lower (lakeFS v0.70.XX or lower)
 
