@@ -51,7 +51,6 @@ lakefsConfig: |
 Example `my-values.yaml` using DynamoDB:
 ```yaml
 secrets:
-  databaseConnectionString: postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs?search_path=lakefs
   authEncryptSecretKey: <some random string>
 lakefsConfig: |
   database:
