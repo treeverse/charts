@@ -9,6 +9,7 @@ First, add the lakeFS helm repository:
 ```bash
 helm repo add lakefs https://charts.lakefs.io
 ```
+
 ### Quickstart
 
 For learning purposes, you can install lakeFS with the following commands:
@@ -18,7 +19,7 @@ For learning purposes, you can install lakeFS with the following commands:
 helm install my-lakefs lakefs/lakefs
 ```
 
-This will start lakeFS with a dedicated PostgreSQL container. Data will be stored inside the container and will not be persisted.
+This will start lakeFS while data will be stored inside the container and will not be persisted.
 
 ### Custom Configuration
 
@@ -29,13 +30,34 @@ To install the chart with custom configuration values:
 helm install -f my-values.yaml my-lakefs lakefs/lakefs
 ```
 
-Example my-values.yaml:
+Example `my-values.yaml` using PostgreSQL:
 
 ```yaml
 secrets:
   databaseConnectionString: postgres://postgres:myPassword@my-lakefs-db.rds.amazonaws.com:5432/lakefs?search_path=lakefs
   authEncryptSecretKey: <some random string>
 lakefsConfig: |
+  database:
+    type: postgres
+  blockstore:
+    type: s3
+    s3:
+      region: us-east-1
+  gateways:
+    s3:
+      domain_name: s3.lakefs.example.com
+```
+
+Example `my-values.yaml` using DynamoDB:
+```yaml
+secrets:
+  authEncryptSecretKey: <some random string>
+lakefsConfig: |
+  database:
+    type: dynamodb
+    dynamodb:
+      table_name: my-lakefs
+      aws_region: us-east-1
   blockstore:
     type: s3
     s3:
@@ -46,12 +68,16 @@ lakefsConfig: |
 ```
 
 The `lakefsConfig` parameter is the lakeFS configuration documented [here](https://docs.lakefs.io/reference/configuration.html), but without sensitive information.
-Sensitive information like `database_connection_string` is given through "secrets" section, and will be injected into Kubernetes secrets.
+Sensitive information like `database_connection_string` (used by PostgreSQL) is given through "secrets" section, and will be injected into Kubernetes secrets.
 
-You should give your Kubernetes nodes access to all S3 buckets you intend to use lakeFS with.
-If you can't provide such access, lakeFS can be configured to use an AWS key-pair to authenticate (part of the `lakefsConfig` YAML below).
+You should give your Kubernetes nodes access to all S3 buckets (or other resources) you intend to use lakeFS with.
+If you can't provide such access, lakeFS can be configured to use an AWS key-pair to authenticate (part of the `lakefsConfig` YAML).
 
 ## Notable Chart Upgrades
+
+### Upgrading from chart version 0.7.XX or lower
+
+If you are using Postgres as your database, make sure your `lakefsConfig` property contains the key `database.type` and that it is set to `postgres`. Before this version, the Helm chart set this property implicitly.
 
 ### Upgrading from chart version 0.5.XX or lower (lakeFS v0.70.XX or lower)
 

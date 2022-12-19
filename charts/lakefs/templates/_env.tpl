@@ -1,21 +1,11 @@
 {{- define "lakefs.env" -}}
 env:
   {{- if and (.Values.secrets) (.Values.secrets.databaseConnectionString) }}
-  - name: LAKEFS_DATABASE_TYPE
-    value: postgres
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
         name: {{ include "lakefs.fullname" . }}
         key: database_connection_string
-  {{- else if .Values.localPostgres }}
-  - name: LAKEFS_DATABASE_TYPE
-    value: postgres
-  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
-    value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
-  {{- else if not .Values.lakefsConfig }}
-  - name: LAKEFS_DATABASE_TYPE
-    value: local
   {{- end }}
   {{- if and (.Values.secrets) (.Values.secrets.authEncryptSecretKey) }}
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
@@ -26,12 +16,6 @@ env:
   {{- else }}
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
-  {{- end }}
-  {{- if not .Values.lakefsConfig }}
-  - name: LAKEFS_BLOCKSTORE_TYPE
-    value: local
-  - name: LAKEFS_BLOCKSTORE_LOCAL_PATH
-    value: /lakefs/data
   {{- end }}
   {{- if .Values.s3Fallback.enabled }}
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
@@ -51,20 +35,6 @@ envFrom:
 {{- end }}
 {{- end }}
 
-{{- define "lakefs.migrate.env" -}}
-{{ include "lakefs.env" . }}
-  {{- if and (.Values.secrets) (.Values.secrets.databaseConnectionString) }}
-  - name: LAKEFS_DATABASE_CONNECTION_STRING
-    valueFrom:
-      secretKeyRef:
-        name: {{ include "lakefs.fullname" . }}
-        key: database_connection_string
-  {{- else if .Values.localPostgres }}
-  - name: LAKEFS_DATABASE_CONNECTION_STRING
-    value: postgres://postgres:password@localhost:5432/postgres?sslmode=disable
-  {{- end}}
-{{- end }}
-
 {{- define "lakefs.volumes" -}}
 {{- if .Values.extraVolumes }}
 {{ toYaml .Values.extraVolumes }}
@@ -72,9 +42,6 @@ envFrom:
 {{- if .Values.committedLocalCacheVolume }}
 - name: committed-local-cache
 {{- toYaml .Values.committedLocalCacheVolume | nindent 2 }}
-{{- end }}
-{{- if or (not .Values.lakefsConfig) .Values.localPostgres }}
-- name: {{ .Chart.Name }}-postgredb
 {{- end }}
 {{- if not .Values.lakefsConfig }}
 - name: {{ .Chart.Name }}-local-data
