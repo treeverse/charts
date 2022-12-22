@@ -1,13 +1,13 @@
 {{- define "lakefs.env" -}}
 env:
-  {{- if and (.Values.secrets) (.Values.secrets.databaseConnectionString) }}
+  {{- if and .Values.secrets (.Values.secrets).databaseConnectionString }}
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
         name: {{ include "lakefs.fullname" . }}
         key: database_connection_string
   {{- end }}
-  {{- if and (.Values.secrets) (.Values.secrets.authEncryptSecretKey) }}
+  {{- if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     valueFrom:
       secretKeyRef:
