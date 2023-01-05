@@ -74,3 +74,18 @@ extraEnvVars:
 #      secretKeyRef:
 #        name: secret_name
 #        key: secret_key
+
+# Override K8S defaults for readinessProbe
+# readinessProbe:
+#   failureThreshold: 10
+#   periodSeconds: 5
+#   successThreshold: 4
+#   timeoutSeconds: 1
+
+# Override K8S defaults for livenessProbe
+# livenessProbe:
+#   failureThreshold: 20
+#   periodSeconds: 5
+#   successThreshold: 4
+#   timeoutSeconds: 1
+#   initialDelaySeconds: 5
