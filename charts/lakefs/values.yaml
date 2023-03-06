@@ -21,6 +21,11 @@ ingress:
   hosts:
     - host: chart-example.local
       paths: []
+      # redirect to a different service based on path prefix for advanced use cases only
+      # pathsOverrides:
+      #   - path: /some/path
+      #     serviceName: other-example.local
+      #     servicePort: 80
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
