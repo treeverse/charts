@@ -21,7 +21,7 @@ spec:
     spec:
       {{- if .Values.image.privateRegistry.enabled }}
       imagePullSecrets:
-        {{- if .Values.image.privateRegistry.createSecret -}}
+        {{- if .Values.image.privateRegistry.createSecret }}
         - name: "docker-registry"
         {{- else }}
         - name: {{ .Values.image.privateRegistry.secretName }}
@@ -94,13 +94,14 @@ spec:
           {{- if .Values.extraVolumeMounts }}
             {{ toYaml .Values.extraVolumeMounts | nindent 12 }}
           {{- end }}
-            - name: fluffy-config
+            - name: {{ include "fluffy.fullname" . }}-config
               mountPath: /etc/fluffy/
           {{- if and .Values.sso.enabled (.Values.sso.saml).enabled -}}
             - name: secret-volume
               readOnly: true
               mountPath: "/etc/saml_certs/"
           {{- end }}
+          {{- include "fluffy.env" . | nindent 10 }}
       volumes:
         {{- include "fluffy.volumes" . | nindent 8 }}
       {{- with .Values.nodeSelector }}

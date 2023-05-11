@@ -19,9 +19,6 @@ podAnnotations: {}
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"
 
-deployment:
-  port: 8000
-
 service:
   type: ClusterIP
   port: 80

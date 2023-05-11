@@ -42,7 +42,7 @@ envFrom:
 - name: {{ .Chart.Name }}-local-data
 {{- end}}
 {{- if .Values.fluffyConfig }}
-- name: config-volume
+- name: {{ include "fluffy.fullname" . }}-config
   configMap:
     name: {{ include "fluffy.fullname" . }}-config
     items:
