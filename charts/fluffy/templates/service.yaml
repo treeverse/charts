@@ -1,0 +1,35 @@
+{{- if .Values.sso.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fluffy.fullname" . }}-sso
+  labels:
+    {{- include "fluffy.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.sso.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http-sso
+      protocol: TCP
+      name: http-sso
+  selector:
+    {{- include "fluffy.selectorLabels" . | nindent 4 }}
+{{- end }}
+---
+{{- if .Values.rbac.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fluffy.fullname" . }}-rbac
+  labels:
+    {{- include "fluffy.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.rbac.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http-rbac
+      protocol: TCP
+      name: http-rbac
+  selector:
+    {{- include "fluffy.selectorLabels" . | nindent 4 }}
+{{- end }}

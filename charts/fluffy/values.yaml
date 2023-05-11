@@ -1,0 +1,97 @@
+# Default values for fluffy
+replicaCount: 1
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: treeverse/fluffy
+  pullPolicy: IfNotPresent
+  privateRegistry:
+    enabled: true
+    createSecret: true
+    config:
+      auths:
+        https://index.docker.io/v1/: 
+          username: username
+          password: password
+
+podAnnotations: {}
+jobPodAnnotations:
+  sidecar.istio.io/inject: "false"
+
+deployment:
+  port: 8000
+
+service:
+  type: ClusterIP
+  port: 80
+  
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+fluffyConfig: |
+  logging:
+    level: "INFO"
+
+extraEnvVarsSecret: {}
+
+# yamllint enable
+
+serviceAccount: {}
+
+
+podSecurityContext: {}
+
+securityContext: {}
+
+# Extra Environment Values - allows yaml definitions
+extraEnvVars:
+#  - name: VALUE_FROM_SECRET
+#    valueFrom:
+#      secretKeyRef:
+#        name: secret_name
+#        key: secret_key
+# Override K8S defaults for readinessProbe
+# readinessProbe:
+#   failureThreshold: 10
+#   periodSeconds: 5
+#   successThreshold: 4
+#   timeoutSeconds: 1
+# Override K8S defaults for livenessProbe
+# livenessProbe:
+#   failureThreshold: 20
+#   periodSeconds: 5
+#   successThreshold: 4
+#   timeoutSeconds: 1
+#   initialDelaySeconds: 5
+
+secrets:
+  create: true
+  databaseConnectionString: 'postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&...]'
+  authEncryptSecretKey:  'secret'
+sso:
+  enabled: false
+  service:
+    type: ClusterIP
+    port: 3000
+  oidc:
+    enabled: false
+    client_secret: <secret>
+  saml:
+    enabled: false 
+    createSecret: true
+    certificate:
+      saml_rsa_public_cert: ''
+      saml_rsa_private_key: ''
+
+rbac:
+  enabled: false 
+  service:
+    type: ClusterIP
+    port: 3001

@@ -1,0 +1,1 @@
+#TODO(isan) we don't really need ingress resource for fluffy, the ingress should be configured in lakeFS chart and point to services here.
