@@ -74,7 +74,7 @@ extraEnvVars:
 secrets:
   create: true
   databaseConnectionString: 'postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&...]'
-  authEncryptSecretKey:  'secret'
+  authEncryptSecretKey: 'secret'
 sso:
   enabled: false
   service:
