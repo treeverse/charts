@@ -1,0 +1,38 @@
+# Configuration in this file is related to lakeFS enterprise solutions, which are outside of the open source scope. When running regular open-source installation the resources in this file should be used.
+{{- if (.Values.fluffy).enabled }}
+{{- if .Values.fluffy.sso.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "lakefs.fullname" . }}-fluffy-sso
+  labels:
+    {{- include "fluffy.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.fluffy.sso.service.type }}
+  ports:
+    - port: {{ .Values.fluffy.service.port }}
+      targetPort: http-sso
+      protocol: TCP
+      name: http-sso
+  selector:
+    {{- include "fluffy.selectorLabels" . | nindent 4 }}
+{{- end }}
+---
+{{- if .Values.fluffy.rbac.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "lakefs.fullname" . }}-fluffy-rbac
+  labels:
+    {{- include "fluffy.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.fluffy.rbac.service.type }}
+  ports:
+    - port: {{ .Values.fluffy.service.port }}
+      targetPort: http-rbac
+      protocol: TCP
+      name: http-rbac
+  selector:
+    {{- include "fluffy.selectorLabels" . | nindent 4 }}
+{{- end }}
+{{- end}}

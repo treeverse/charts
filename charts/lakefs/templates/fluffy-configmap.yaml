@@ -1,0 +1,12 @@
+# Configuration in this file is related to lakeFS enterprise solutions, which are outside of the open source scope. When running regular open-source installation the resources in this file should be used.
+{{- if (.Values.fluffy).enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "lakefs.fullname" . }}-fluffy-config
+{{- with .Values.fluffy.fluffyConfig }}
+data:
+  config.yaml:
+    {{- toYaml .  | nindent 4 }}
+{{- end }}
+{{- end}}
