@@ -1,0 +1,9 @@
+dependencies:
+- name: fluffy
+  repository: file://../fluffy
+  version: 0.1.0
+- name: lakefs
+  repository: file://../lakefs
+  version: 0.9.4
+digest: sha256:22d30b8d606fb7a0139faea60b832b772788208ea4f677198829f9bbf6bf5a1d
+generated: "2023-05-11T14:29:59.674815+03:00"
