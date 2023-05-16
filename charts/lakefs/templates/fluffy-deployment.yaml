@@ -44,11 +44,11 @@ spec:
           imagePullPolicy: {{ .Values.fluffy.image.pullPolicy }}
           ports:
             - name: http-sso
-              containerPort: {{ .Values.fluffy.sso.service.port }}
+              containerPort: {{ .Values.fluffy.sso.service.containerPort }}
               protocol: TCP
           {{- if .Values.fluffy.rbac.enabled -}}
           - name: http-rbac
-              containerPort: {{ .Values.fluffy.rbac.service.port }}
+              containerPort: {{ .Values.fluffy.rbac.service.containerPort }}
               protocol: TCP
           {{- end }}
           readinessProbe:

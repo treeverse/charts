@@ -2,7 +2,7 @@
 fluffy resource full name
 */}}
 {{- define "fluffy.fullname" -}}
-{{- $name := include "lakefs.fullname" }}
+{{- $name := include "lakefs.fullname" . }}
 {{- printf "%s-fluffy" $name  | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -30,9 +30,8 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "fluffy.serviceAccountName" -}}
-{{- lakeFSAcc := include "lakefs.serviceAccountName" . }}
+{{- $lakeFSAcc := include "lakefs.serviceAccountName" . }}
 {{- default $lakeFSAcc .Values.fluffy.serviceAccountName }}
-{{- end }}
 {{- end }}
 
 
@@ -50,13 +49,13 @@ env:
         key: oidc_client_secret
   {{- end }}
   {{- if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
-  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+  - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
     valueFrom:
       secretKeyRef:
         name: {{ include "lakefs.fullname" . }}
         key: auth_encrypt_secret_key
   {{- else }}
-  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+  - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
   {{- if .Values.fluffy.extraEnvVars }}
