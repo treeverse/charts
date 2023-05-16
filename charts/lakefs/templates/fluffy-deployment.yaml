@@ -46,11 +46,9 @@ spec:
             - name: http-sso
               containerPort: {{ .Values.fluffy.sso.service.containerPort }}
               protocol: TCP
-          {{- if .Values.fluffy.rbac.enabled -}}
-          - name: http-rbac
+            - name: http-rbac
               containerPort: {{ .Values.fluffy.rbac.service.containerPort }}
               protocol: TCP
-          {{- end }}
           readinessProbe:
             {{- if  ((.Values.readinessProbe).failureThreshold) }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
