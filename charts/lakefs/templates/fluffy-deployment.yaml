@@ -85,7 +85,6 @@ spec:
             {{-  end }}                                                
             httpGet:
               path: /_health
-              # TODO(isan) which service?
               port: http-sso
           resources:
             {{- toYaml .Values.fluffy.resources | nindent 12 }}
