@@ -1,6 +1,4 @@
-# Configuration in this file is related to lakeFS enterprise solutions, which are outside of the open source scope. When running regular open-source installation the resources in this file should be used.
 {{- if (.Values.fluffy).enabled }}
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,17 +28,16 @@ spec:
         - name: {{ .Values.fluffy.image.privateRegistry.secretName }}
         {{- end }}
       {{- end }}
-      #TODO(isan) use same SA as lakeFS? 
       serviceAccountName: {{ include "fluffy.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          {{- if .Values.fluffy.fluffyConfig }}
-          args: ["run", "--config", "/etc/fluffy/config.yaml"]
-          {{- else }}
-          args: ["run"]
-          {{- end }}
+          args:
+            - run
+          {{ range (.Values.fluffy).additionalArguments }}
+            - {{ . }}
+          {{ end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.fluffy.image.repository }}:{{ .Values.fluffy.image.tag }}"
@@ -69,7 +66,6 @@ spec:
             {{-  end }}   
             httpGet:
               path: /_health
-              # TODO(isan) which service? - we need to check health of both ports 
               port: http-sso
           livenessProbe:
             {{- if  ((.Values.livenessProbe).failureThreshold) }}

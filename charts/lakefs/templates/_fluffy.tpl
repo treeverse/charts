@@ -10,7 +10,7 @@ fluffy resource full name
 Common labels
 */}}
 {{- define "fluffy.labels" -}}
-helm.sh/chart: {{ include "fluffy.chart" . }}
+helm.sh/chart: {{ include "lakefs.chart" . }}
 {{ include "fluffy.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -22,7 +22,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "fluffy.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "fluffy.name" . }}
+app.kubernetes.io/name: {{ include "lakefs.name" . }}-fluffy
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -30,10 +30,8 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "fluffy.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "fluffy.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- lakeFSAcc := include "lakefs.serviceAccountName" . }}
+{{- default $lakeFSAcc .Values.fluffy.serviceAccountName }}
 {{- end }}
 {{- end }}
 
@@ -52,13 +50,13 @@ env:
         key: oidc_client_secret
   {{- end }}
   {{- if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
-  - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
+  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     valueFrom:
       secretKeyRef:
-        name: {{ include "fluffy.fullname" . }}
+        name: {{ include "lakefs.fullname" . }}
         key: auth_encrypt_secret_key
   {{- else }}
-  - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
+  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
   {{- if .Values.fluffy.extraEnvVars }}

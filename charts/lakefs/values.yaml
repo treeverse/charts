@@ -92,3 +92,7 @@ extraEnvVars:
 #   successThreshold: 4
 #   timeoutSeconds: 1
 #   initialDelaySeconds: 5
+
+# Everything under fluffy is lakeFS enterprise only.
+# fluffy:
+#   enabled: false
