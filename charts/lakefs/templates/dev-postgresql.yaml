@@ -1,0 +1,50 @@
+# # TODO(add as option to additionalResources)
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: postgres-secret
+#   labels:
+#     app: postgres
+# data:
+#   POSTGRES_DB: postgres
+#   POSTGRES_USER: lakefs
+#   POSTGRES_PASSWORD: lakefs
+#   MAX_CONNECTIONS: "1000"
+# ---
+# apiVersion: apps/v1
+# kind: Deployment # Create a deployment
+# metadata:
+#   name: postgres # Set the name of the deployment
+# spec:
+#   replicas: 1 # Set 3 deployment replicas
+#   selector:
+#     matchLabels:
+#       app: postgres
+#   template:
+#     metadata:
+#       labels:
+#         app: postgres
+#     spec:
+#       containers:
+#         - name: postgres
+#           args: ["-c", "max_connections=1000"]
+#           image: postgres:11 # Docker image
+#           imagePullPolicy: "IfNotPresent"
+#           ports:
+#             - containerPort: 5432 # Exposing the container port 5432 for PostgreSQL client connections.
+#           envFrom:
+#             - configMapRef:
+#                 name: postgres-secret # Using the ConfigMap postgres-secret
+# ---
+# apiVersion: v1
+# kind: Service # Create service
+# metadata:
+#   name: postgres-server # Sets the service name
+#   labels:
+#     app: postgres # Defines app to create service for
+# spec:
+#   type: NodePort # Sets the service type
+#   ports:
+#     - port: 5432 # Sets the port to run the postgres application
+#   selector:
+#     app: postgres
