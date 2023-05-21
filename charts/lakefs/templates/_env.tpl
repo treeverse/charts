@@ -17,6 +17,12 @@ env:
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
+  {{- if and (.Values.fluffy).enabled (.Values.fluffy.rbac).enabled }}
+  - name: LAKEFS_AUTH_API_ENDPOINT
+    value: {{ printf "http://%s/api/v1" (include "fluffy.rbacServiceName" .) | quote }}
+  - name: LAKEFS_AUTH_UI_CONFIG_RBAC
+    value: internal
+  {{- end }}
   {{- if .Values.s3Fallback.enabled }}
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
     value: http://localhost:7001
@@ -24,6 +30,12 @@ env:
   {{- if .Values.committedLocalCacheVolume }}
   - name: LAKEFS_COMMITTED_LOCAL_CACHE_DIR
     value: /lakefs/cache
+  {{- end }}
+  {{- if .Values.useDevPostgres }}
+  - name: LAKEFS_DATABASE_TYPE
+    value: postgres
+  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
+    value: 'postgres://lakefs:lakefs@postgres-server:5432/postgres?sslmode=disable'
   {{- end }}
   {{- if .Values.extraEnvVars }}
   {{- toYaml .Values.extraEnvVars | nindent 2 }}

@@ -2,13 +2,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: fluffy-sso
+  name: {{ include "fluffy.ssoServiceName" . }}
   labels:
     {{- include "fluffy.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.fluffy.sso.service.type }}
+  type: {{ include "fluffy.sso.serviceType" . }}
   ports:
-    - port: {{ .Values.fluffy.sso.service.port }}
+    - port: {{ include "fluffy.sso.port" . }}
       targetPort: http-sso
       protocol: TCP
       name: http-sso
@@ -19,13 +19,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: fluffy-rbac
+  name: {{ include "fluffy.rbacServiceName" . }}
   labels:
     {{- include "fluffy.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.fluffy.rbac.service.type }}
+  type: {{ include "fluffy.rbac.serviceType" . }}
   ports:
-    - port: {{ .Values.fluffy.rbac.service.port }}
+    - port: {{ include "fluffy.rbac.port" . }}
       targetPort: http-rbac
       protocol: TCP
       name: http-rbac

@@ -34,6 +34,20 @@ Create the name of the service account to use
 {{- default $lakeFSAcc .Values.fluffy.serviceAccountName }}
 {{- end }}
 
+{{/*
+fluffy SSO service name
+*/}}
+{{- define "fluffy.ssoServiceName" -}}
+{{- printf "fluffy-sso" }}
+{{- end }}
+
+{{/*
+fluffy Authorization service name
+*/}}
+{{- define "fluffy.rbacServiceName" -}}
+{{- printf "fluffy-rbac" }}
+{{- end }}
+
 
 {{/*
 Fluffy environment variables
@@ -57,6 +71,16 @@ env:
   {{- else }}
   - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
+  {{- end }}
+  {{- if and (.Values.fluffy.rbac).enabled }}
+  - name: FLUFFY_AUTH_SERVE_LISTEN_ADDRESS
+    value: {{ printf ":%s" (include "fluffy.rbac.containerPort" .) }}
+  {{- end }}
+  {{- if .Values.useDevPostgres }}
+  - name: FLUFFY_DATABASE_TYPE
+    value: postgres
+  - name: FLUFFY_DATABASE_POSTGRES_CONNECTION_STRING
+    value: 'postgres://lakefs:lakefs@postgres-server:5432/postgres?sslmode=disable'
   {{- end }}
   {{- if .Values.fluffy.extraEnvVars }}
   {{- toYaml .Values.fluffy.extraEnvVars | nindent 2 }}
@@ -88,4 +112,53 @@ envFrom:
       - key: config.yaml
         path: config.yaml
 {{- end }}
+{{- end }}
+
+{{- define "fluffy.ingressOverrides" -}}
+{{- $serviceName :=  include "fluffy.ssoServiceName" . -}}
+{{- $gitVersion := .Capabilities.KubeVersion.GitVersion  -}}
+{{- $pathsOverrides := list "/oidc/" "/api/v1/oidc/" "/saml/" "/sso/" "/api/v1/ldap/" }}
+{{- range $pathsOverrides }}
+- path: {{ . }}
+{{- if semverCompare ">=1.19-0" $gitVersion }}
+  pathType: Prefix
+  backend:
+    service:
+      name: {{ $serviceName }}
+      port: 
+        number: 80
+{{- else }} 
+  backend:
+    serviceName: {{ $serviceName }}
+    servicePort: 80
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "fluffy.dockerConfigJson" }}
+{{- $token := .Values.fluffy.image.privateRegistry.secretToken }}
+{{- $username := "externallakefs" }}
+{{- $registry := "https://index.docker.io/v1/" }}
+{{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" $registry $username $token (printf "%s:%s" $username $token | b64enc) | b64enc }}
+{{- end }}
+
+{{- define "fluffy.sso.serviceType" }}
+{{- default "ClusterIP" (.Values.fluffy.sso.service).type }}
+{{- end }}
+{{- define "fluffy.rbac.serviceType" }}
+{{- default "ClusterIP" (.Values.fluffy.rbac.service).type }}
+{{- end }}
+
+{{- define "fluffy.sso.port" }}
+{{- default 80 (.Values.fluffy.sso.service).port }}
+{{- end }}
+{{- define "fluffy.rbac.port" }}
+{{- default 80 (.Values.fluffy.rbac.service).port }}
+{{- end }}
+
+{{- define "fluffy.sso.containerPort" }}
+{{- default 8000 (.Values.fluffy.sso.service).containerPort }}
+{{- end }}
+{{- define "fluffy.rbac.containerPort" }}
+{{- default 9000 (.Values.fluffy.rbac.service).containerPort }}
 {{- end }}

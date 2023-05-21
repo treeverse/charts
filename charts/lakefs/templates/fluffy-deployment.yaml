@@ -22,7 +22,7 @@ spec:
     spec:
       {{- if .Values.fluffy.image.privateRegistry.enabled }}
       imagePullSecrets:
-        {{- if .Values.fluffy.image.privateRegistry.createSecret }}
+        {{- if .Values.fluffy.image.privateRegistry.secretToken }}
         - name: "docker-registry"
         {{- else }}
         - name: {{ .Values.fluffy.image.privateRegistry.secretName }}
@@ -44,10 +44,10 @@ spec:
           imagePullPolicy: {{ .Values.fluffy.image.pullPolicy }}
           ports:
             - name: http-sso
-              containerPort: {{ .Values.fluffy.sso.service.containerPort }}
+              containerPort: {{ include "fluffy.sso.containerPort" . }}
               protocol: TCP
             - name: http-rbac
-              containerPort: {{ .Values.fluffy.rbac.service.containerPort }}
+              containerPort: {{ include "fluffy.rbac.containerPort" . }}
               protocol: TCP
           readinessProbe:
             {{- if  ((.Values.readinessProbe).failureThreshold) }}
