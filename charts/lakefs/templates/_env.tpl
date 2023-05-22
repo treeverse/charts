@@ -17,6 +17,24 @@ env:
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
+  {{- if and (.Values.fluffy).enabled .Values.ingress.enabled }}
+  {{- if (.Values.fluffy.sso.saml).enabled }}
+  - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
+    value: saml
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
+    value: {{ printf "%s/sso/login-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
+    value: {{ printf "%s/sso/logout-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+  {{- end }}
+  {{- end }}
+  {{- if and (.Values.fluffy).enabled (.Values.fluffy.sso).enabled }}
+  {{- if (.Values.fluffy.sso.oidc).enabled }}
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
+    value: '/oidc/login'
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
+    value: '/oidc/logout'
+  {{- end }}
+  {{- end }}
   {{- if and (.Values.fluffy).enabled (.Values.fluffy.sso).enabled }}
   {{- if (.Values.fluffy.sso.ldap).enabled }}
   - name: LAKEFS_AUTH_REMOTE_AUTHENTICATOR_ENDPOINT

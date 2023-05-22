@@ -55,12 +55,32 @@ Fluffy environment variables
 
 {{- define "fluffy.env" -}}
 env:
-  {{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.oidc).client_secret }}
+  {{- if and (.Values.fluffy).enabled .Values.ingress.enabled }}
+  {{- if (.Values.fluffy.sso.saml).enabled }}
+  - name: FLUFFY_AUTH_SAML_ENABLED
+    value: "true"
+  - name: FLUFFY_AUTH_LOGOUT_REDIRECT_URL
+    value: {{ .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+  - name: FLUFFY_AUTH_POST_LOGIN_REDIRECT_URL
+    value: {{ .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+  - name: FLUFFY_AUTH_SAML_SP_ROOT_URL
+    value: {{ .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+  - name: FLUFFY_AUTH_SAML_SP_X509_KEY_PATH
+    value: '/etc/saml_certs/rsa_saml_private.cert'
+  - name: FLUFFY_AUTH_SAML_SP_X509_CERT_PATH
+    value: '/etc/saml_certs/rsa_saml_public.pem'
+  {{- end }}
+  {{- end }}
+  {{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.oidc).enabled }}
+  - name: FLUFFY_AUTH_POST_LOGIN_REDIRECT_URL
+    value: '/'
+  {{- if (.Values.fluffy.sso.oidc).client_secret }}
   - name: FLUFFY_AUTH_OIDC_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
         name: {{ include "fluffy.fullname" . }}
         key: oidc_client_secret
+  {{- end }}
   {{- end }}
   {{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.ldap).enabled }}
   - name: FLUFFY_AUTH_LDAP_BIND_PASSWORD

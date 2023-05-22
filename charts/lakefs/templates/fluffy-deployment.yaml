@@ -92,10 +92,10 @@ spec:
           {{- end }}
             - name: {{ include "fluffy.fullname" . }}-config
               mountPath: /etc/fluffy/
-          {{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.saml).enabled -}}
+          {{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.saml).enabled }}
             - name: secret-volume
               readOnly: true
-              mountPath: "/etc/saml_certs/"
+              mountPath: /etc/saml_certs/
           {{- end }}
           {{- include "fluffy.env" . | nindent 10 }}
       volumes:
