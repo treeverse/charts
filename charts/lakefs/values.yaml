@@ -93,9 +93,13 @@ extraEnvVars:
 #   timeoutSeconds: 1
 #   initialDelaySeconds: 5
 
-# Everything under fluffy is lakeFS enterprise only.
+# Everything under fluffy stanza is for lakeFS enterprise only https://docs.lakefs.io/enterprise/
 fluffy:
   enabled: false
+  image:
+    repository: treeverse/fluffy
+    tag: '0.2.0'
+    pullPolicy: IfNotPresent
 
 # Start local postgres pod for quick start, not for production
 useDevPostgres: true
