@@ -1,0 +1,78 @@
+lakefsConfig: | 
+  logging:
+      level: "INFO"
+      audit_log_level: "INFO"
+  blockstore:
+    type: local
+  auth:
+    cookie_auth_verification:
+    # claim name to display user in the UI
+      friendly_name_claim_name: displayName
+      # claim name from IDP to use as the uniqueue user name
+      external_user_id_claim_name: samName
+      default_initial_groups:
+        - "Developers"
+    ui_config:
+      login_cookie_names:
+        - internal_auth_session
+        - saml_auth_session
+ingress:
+  enabled: true
+  ingressClassName: <class-name>
+  hosts:
+    - host: <lakefs.ingress.domain>
+      paths: 
+       - /
+
+##################################################
+########### lakeFS enterprise - FLUFFY ###########
+##################################################
+
+fluffy:
+  enabled: true
+  image:
+    privateRegistry:
+      enabled: true
+      secretToken: <dockerhub-token-fluffy-image>
+  fluffyConfig: |
+    logging:
+      level: "INFO"
+    auth:  
+      # logout_redirect_url: https://<lakefs.ingress.domain>
+      # post_login_redirect_url: https://<lakefs.ingress.domain>
+      saml:
+        sp_sign_request: true
+        # depends on IDP
+        sp_signature_method: "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+        # url to the metadata of the IDP
+        idp_metadata_url: "https://<adfs-auth.company.com>/federationmetadata/2007-06/federationmetadata.xml"
+        # IDP SAML claims format default unspecified
+        # idp_authn_name_id_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        # claim name from IDP to use as the uniqueue user name
+        external_user_id_claim_name: samName
+        # depending on IDP setup, if CA certs are self signed and not trusted by a known CA
+        idp_skip_verify_tls_cert: true
+
+  secrets:
+    create: true
+
+  sso:
+    enabled: true
+    saml:
+      enabled: true
+      createSecret: true
+      lakeFSServiceProviderIngress: https://<lakefs.ingress.domain>
+      certificate:
+        # certificates for AD FS IDP (e.g Azure AD)
+        saml_rsa_public_cert: |
+          -----BEGIN CERTIFICATE-----
+          ...
+          -----END CERTIFICATE-----
+        saml_rsa_private_key: |
+          -----BEGIN PRIVATE KEY-----
+          ...
+          -----END PRIVATE KEY-----
+  rbac:
+    enabled: true
+
+useDevPostgres: true

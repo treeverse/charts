@@ -1,0 +1,66 @@
+lakefsConfig: | 
+  logging:
+      level: "INFO"
+  blockstore:
+    type: local
+  auth:
+    oidc:
+      # the claim that's provided by the OIDC provider (e.g Okta) that will be used as the username according to OIDC provider claims provided after successfull authentication
+      friendly_name_claim_name: "<some-oidc-provider-claim-name>"
+      default_initial_groups: ["Developers"]
+    ui_config:
+      login_cookie_names:
+        - internal_auth_session
+        - oidc_auth_session
+ingress:
+  enabled: true
+  ingressClassName: <class-name>
+  hosts:
+    # the ingress that will be created for lakeFS
+    - host: <lakefs.ingress.domain>
+      paths: 
+       - /
+
+##################################################
+########### lakeFS enterprise - FLUFFY ###########
+##################################################
+
+fluffy:
+  enabled: true
+  image:
+    repository: treeverse/fluffy
+    tag: '0.2.0'
+    pullPolicy: IfNotPresent
+    privateRegistry:
+      enabled: true
+      secretToken: <dockerhub-token-fluffy-image>
+  fluffyConfig: |
+    logging:
+      format: "json"
+      level: "INFO"
+    auth:
+      logout_redirect_url: https://oidc-provider-url.com/logout/example
+      oidc:
+        enabled: true
+        url: https://oidc-provider-url.com/
+        client_id: <oidc-client-id>
+        callback_base_url: https://<lakefs.ingress.domain>
+        is_default_login: true
+        # the claim name that represents the client identifier in the OIDC provider (e.g Okta)
+        logout_client_id_query_parameter: client_id
+        # the query parameters that will be used to redirect the user to the OIDC provider (e.g Okta) after logout
+        logout_endpoint_query_parameters:
+          - returnTo
+          - https://<lakefs.ingress.domain>/oidc/login
+  secrets:
+    create: true
+  sso:
+    enabled: true
+    oidc:
+      enabled: true
+      # secret given by the OIDC provider (e.g auth0, Okta, etc)
+      client_secret: <oidc-client-secret>
+  rbac:
+    enabled: true
+
+useDevPostgres: true
