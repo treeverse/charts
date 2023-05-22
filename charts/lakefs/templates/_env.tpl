@@ -17,6 +17,14 @@ env:
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
+  {{- if and (.Values.fluffy).enabled (.Values.fluffy.sso).enabled }}
+  {{- if (.Values.fluffy.sso.ldap).enabled }}
+  - name: LAKEFS_AUTH_REMOTE_AUTHENTICATOR_ENDPOINT
+    value: {{ default (printf "http://%s/api/v1/ldap/login" (include "fluffy.ssoServiceName" .) | quote) (.Values.fluffy.sso.ldap).endpointOverride }}
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
+    value: /logout
+  {{- end }}
+  {{- end }}
   {{- if and (.Values.fluffy).enabled (.Values.fluffy.rbac).enabled }}
   - name: LAKEFS_AUTH_API_ENDPOINT
     value: {{ printf "http://%s/api/v1" (include "fluffy.rbacServiceName" .) | quote }}
