@@ -62,6 +62,13 @@ env:
         name: {{ include "fluffy.fullname" . }}
         key: oidc_client_secret
   {{- end }}
+  {{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.ldap).enabled }}
+  - name: FLUFFY_AUTH_LDAP_BIND_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "fluffy.fullname" . }}
+        key: ldap_bind_password
+  {{- end }}
   {{- if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
   - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
     valueFrom:
