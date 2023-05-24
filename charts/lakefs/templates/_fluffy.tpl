@@ -3,7 +3,7 @@ fluffy resource full name
 */}}
 {{- define "fluffy.fullname" -}}
 {{- $name := include "lakefs.fullname" . }}
-{{- printf "%s-fluffy" $name  | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-fluffy" $name  | trunc 63 }}
 {{- end }}
 
 {{/*
@@ -55,8 +55,8 @@ Fluffy environment variables
 
 {{- define "fluffy.env" -}}
 env:
-  {{- if and (.Values.fluffy).enabled .Values.ingress.enabled }}
-  {{- if (.Values.fluffy.sso.saml).enabled }}
+  {{- if (.Values.fluffy.sso).enabled }}
+  {{- if and .Values.ingress.enabled (.Values.fluffy.sso.saml).enabled }}
   - name: FLUFFY_AUTH_SAML_ENABLED
     value: "true"
   - name: FLUFFY_AUTH_LOGOUT_REDIRECT_URL
@@ -66,12 +66,11 @@ env:
   - name: FLUFFY_AUTH_SAML_SP_ROOT_URL
     value: {{ .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
   - name: FLUFFY_AUTH_SAML_SP_X509_KEY_PATH
-    value: '/etc/saml_certs/rsa_saml_private.cert'
+    value: '/etc/saml_certs/rsa_saml_private.key'
   - name: FLUFFY_AUTH_SAML_SP_X509_CERT_PATH
     value: '/etc/saml_certs/rsa_saml_public.pem'
   {{- end }}
-  {{- end }}
-  {{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.oidc).enabled }}
+  {{- if (.Values.fluffy.sso.oidc).enabled }}
   - name: FLUFFY_AUTH_POST_LOGIN_REDIRECT_URL
     value: '/'
   {{- if (.Values.fluffy.sso.oidc).client_secret }}
@@ -82,12 +81,13 @@ env:
         key: oidc_client_secret
   {{- end }}
   {{- end }}
-  {{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.ldap).enabled }}
+  {{- if (.Values.fluffy.sso.ldap).enabled }}
   - name: FLUFFY_AUTH_LDAP_BIND_PASSWORD
     valueFrom:
       secretKeyRef:
         name: {{ include "fluffy.fullname" . }}
         key: ldap_bind_password
+  {{- end }}
   {{- end }}
   {{- if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
   - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
@@ -126,7 +126,7 @@ envFrom:
 {{- if not .Values.fluffy.fluffyConfig }}
 - name: {{ .Chart.Name }}-local-data
 {{- end}}
-{{- if and .Values.fluffy.sso.enabled (.Values.fluffy.sso.saml).enabled }}
+{{- if (.Values.fluffy.sso.saml).enabled }}
 - name: secret-volume
   secret:
     secretName: saml-certificates

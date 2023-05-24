@@ -17,8 +17,9 @@ env:
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
-  {{- if and (.Values.fluffy).enabled .Values.ingress.enabled }}
-  {{- if (.Values.fluffy.sso.saml).enabled }}
+  {{- if (.Values.fluffy).enabled }}
+  {{- if (.Values.fluffy.sso).enabled }}
+  {{- if and .Values.ingress.enabled (.Values.fluffy.sso.saml).enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
@@ -26,16 +27,12 @@ env:
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: {{ printf "%s/sso/logout-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
   {{- end }}
-  {{- end }}
-  {{- if and (.Values.fluffy).enabled (.Values.fluffy.sso).enabled }}
   {{- if (.Values.fluffy.sso.oidc).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
     value: '/oidc/login'
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: '/oidc/logout'
   {{- end }}
-  {{- end }}
-  {{- if and (.Values.fluffy).enabled (.Values.fluffy.sso).enabled }}
   {{- if (.Values.fluffy.sso.ldap).enabled }}
   - name: LAKEFS_AUTH_REMOTE_AUTHENTICATOR_ENDPOINT
     value: {{ default (printf "http://%s/api/v1/ldap/login" (include "fluffy.ssoServiceName" .) | quote) (.Values.fluffy.sso.ldap).endpointOverride }}
@@ -43,11 +40,12 @@ env:
     value: /logout
   {{- end }}
   {{- end }}
-  {{- if and (.Values.fluffy).enabled (.Values.fluffy.rbac).enabled }}
+  {{- if (.Values.fluffy.rbac).enabled }}
   - name: LAKEFS_AUTH_API_ENDPOINT
     value: {{ printf "http://%s/api/v1" (include "fluffy.rbacServiceName" .) | quote }}
   - name: LAKEFS_AUTH_UI_CONFIG_RBAC
     value: internal
+  {{- end }}
   {{- end }}
   {{- if .Values.s3Fallback.enabled }}
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
