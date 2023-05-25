@@ -17,7 +17,6 @@ spec:
     spec:
       containers:
         - name: postgres
-          args: ["-c", "max_connections=50"]
           image: postgres:11
           imagePullPolicy: "IfNotPresent"
           ports:
