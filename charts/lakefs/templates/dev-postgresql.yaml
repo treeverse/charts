@@ -1,53 +1,47 @@
 {{- if .Values.useDevPostgres }}
+{{- if and (.Values.fluffy).enabled (.Values.fluffy.rbac).enabled }}
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgres-secret
-  labels:
-    app: postgres
-data:
-  POSTGRES_DB: postgres
-  POSTGRES_USER: lakefs
-  POSTGRES_PASSWORD: lakefs
-  MAX_CONNECTIONS: "1000"
----
 apiVersion: apps/v1
-kind: Deployment # Create a deployment
+kind: Deployment
 metadata:
-  name: postgres # Set the name of the deployment
+  name: postgres
 spec:
-  replicas: 1 # Set 3 deployment replicas
+  replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: postgres-lakefs
   template:
     metadata:
       labels:
-        app: postgres
+        app: postgres-lakefs
     spec:
       containers:
         - name: postgres
-          args: ["-c", "max_connections=1000"]
-          image: postgres:11 # Docker image
+          args: ["-c", "max_connections=50"]
+          image: postgres:11
           imagePullPolicy: "IfNotPresent"
           ports:
-            - containerPort: 5432 # Exposing the container port 5432 for PostgreSQL client connections.
-          envFrom:
-            - configMapRef:
-                name: postgres-secret # Using the ConfigMap postgres-secret
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: postgres
+            - name: POSTGRES_USER
+              value: lakefs
+            - name: POSTGRES_PASSWORD
+              value: lakefs
 ---
 apiVersion: v1
-kind: Service # Create service
+kind: Service
 metadata:
-  name: postgres-server # Sets the service name
+  name: postgres-server
   labels:
-    app: postgres # Defines app to create service for
+    app: postgres-lakefs
 spec:
-  type: NodePort # Sets the service type
+  type: ClusterIP
   ports:
-    - port: 5432 # Sets the port to run the postgres application
+    - port: 5432
   selector:
-    app: postgres
+    app: postgres-lakefs
 
+{{- end}}
 {{- end}}
