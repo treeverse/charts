@@ -103,7 +103,7 @@ env:
   - name: FLUFFY_AUTH_SERVE_LISTEN_ADDRESS
     value: {{ printf ":%s" (include "fluffy.rbac.containerPort" .) }}
   {{- end }}
-  {{- if .Values.useDevPostgres }}
+  {{- if and .Values.useDevPostgres (.Values.fluffy.rbac).enabled }}
   - name: FLUFFY_DATABASE_TYPE
     value: postgres
   - name: FLUFFY_DATABASE_POSTGRES_CONNECTION_STRING

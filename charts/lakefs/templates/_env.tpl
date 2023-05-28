@@ -56,10 +56,12 @@ env:
     value: /lakefs/cache
   {{- end }}
   {{- if .Values.useDevPostgres }}
+  {{- if and (.Values.fluffy).enabled (.Values.fluffy.rbac).enabled }}
   - name: LAKEFS_DATABASE_TYPE
     value: postgres
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
     value: 'postgres://lakefs:lakefs@postgres-server:5432/postgres?sslmode=disable'
+  {{- end }}
   {{- end }}
   {{- if .Values.extraEnvVars }}
   {{- toYaml .Values.extraEnvVars | nindent 2 }}
