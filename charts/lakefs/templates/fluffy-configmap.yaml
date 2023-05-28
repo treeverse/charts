@@ -1,0 +1,11 @@
+{{- if (.Values.fluffy).enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fluffy.fullname" . }}-config
+{{- with .Values.fluffy.fluffyConfig }}
+data:
+  config.yaml:
+    {{- toYaml .  | nindent 4 }}
+{{- end }}
+{{- end}}

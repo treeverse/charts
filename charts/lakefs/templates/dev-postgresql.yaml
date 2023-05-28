@@ -1,0 +1,46 @@
+{{- if .Values.useDevPostgres }}
+{{- if and (.Values.fluffy).enabled (.Values.fluffy.rbac).enabled }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-lakefs
+  template:
+    metadata:
+      labels:
+        app: postgres-lakefs
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:11
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: postgres
+            - name: POSTGRES_USER
+              value: lakefs
+            - name: POSTGRES_PASSWORD
+              value: lakefs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-server
+  labels:
+    app: postgres-lakefs
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: postgres-lakefs
+
+{{- end}}
+{{- end}}
