@@ -98,7 +98,7 @@ fluffy:
   enabled: false
   image:
     repository: treeverse/fluffy
-    tag: '0.2.0'
+    tag: '0.2.1'
     pullPolicy: IfNotPresent
 
 # Start local postgres pod for quick start, not for production
