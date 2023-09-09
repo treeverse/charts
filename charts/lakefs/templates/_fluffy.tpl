@@ -89,7 +89,13 @@ env:
         key: ldap_bind_password
   {{- end }}
   {{- end }}
-  {{- if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
+  {{- if .Values.existingSecret }}
+  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.existingSecret }}
+        key: {{ .Values.secretKeys.authEncryptSecretKey }}
+  {{- else if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
   - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
     valueFrom:
       secretKeyRef:
