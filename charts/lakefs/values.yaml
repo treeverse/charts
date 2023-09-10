@@ -111,6 +111,7 @@ useDevPostgres: true
 
 # Name of existing secret to use
 existingSecret: null
+
 # Keys used for existingSecret
 secretKeys:
   authEncryptSecretKey: auth_encrypt_secret_key
