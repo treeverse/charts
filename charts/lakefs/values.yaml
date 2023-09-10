@@ -114,5 +114,6 @@ existingSecret: null
 # Keys used for existingSecret
 secretKeys:
   authEncryptSecretKey: auth_encrypt_secret_key
-  # Use the following to set existing postgres
-  #databaseConnectionString: null
+  # Set the following as the database connection string key in existing secret.
+  # Ex: 'database_connection_string'
+  databaseConnectionString: null
