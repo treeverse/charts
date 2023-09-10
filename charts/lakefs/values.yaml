@@ -111,5 +111,8 @@ useDevPostgres: true
 
 # Name of existing secret to use
 existingSecret: null
-secretKeys.databaseConnectionString: database_connection_string
-secretKeys.authEncryptSecretKey: auth_encrypt_secret_key
+# Keys used for existingSecret
+secretKeys:
+  authEncryptSecretKey: auth_encrypt_secret_key
+  # Use the following to set existing postgres
+  #databaseConnectionString: null

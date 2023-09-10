@@ -1,6 +1,6 @@
 {{- define "lakefs.env" -}}
 env:
-  {{- if .Values.existingSecret }}
+  {{- if and .Values.existingSecret .Values.secretKeys.databaseConnectionString }}
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
     valueFrom:
       secretKeyRef:
