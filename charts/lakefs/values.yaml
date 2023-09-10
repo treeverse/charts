@@ -108,3 +108,8 @@ fluffy:
 
 # Start local postgres pod for quick start, not for production
 useDevPostgres: true
+
+# Name of existing secret to use
+existingSecret: null
+secretKeys.databaseConnectionString: database_connection_string
+secretKeys.authEncryptSecretKey: auth_encrypt_secret_key
