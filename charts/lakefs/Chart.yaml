@@ -2,8 +2,8 @@ apiVersion: v2
 name: lakefs
 description: A Helm chart for running LakeFS on Kubernetes
 type: application
-version: 0.13.0
-appVersion: 0.111.0
+version: 0.13.1
+appVersion: 0.112.0
 
 home: https://lakefs.io
 icon: https://lakefs.io/wp-content/uploads/2020/07/lake-fs-color-2.svg
