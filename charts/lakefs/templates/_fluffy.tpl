@@ -90,7 +90,7 @@ env:
   {{- end }}
   {{- end }}
   {{- if .Values.existingSecret }}
-  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+  - name: FLUFFY_AUTH_ENCRYPT_SECRET_KEY
     valueFrom:
       secretKeyRef:
         name: {{ .Values.existingSecret }}
