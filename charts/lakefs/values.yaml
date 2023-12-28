@@ -77,6 +77,10 @@ lakefsConfig: |
 
 serviceAccount: {}
 
+# to use an existing service account, replace the serviceAccount map above with the following:
+# serviceAccount:
+#   name: "my-serviceaccount"
+
 # Extra Environment Values - allows yaml definitions
 extraEnvVars:
 #  - name: VALUE_FROM_SECRET
