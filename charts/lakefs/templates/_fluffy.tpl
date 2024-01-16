@@ -109,7 +109,19 @@ env:
   - name: FLUFFY_AUTH_SERVE_LISTEN_ADDRESS
     value: {{ printf ":%s" (include "fluffy.rbac.containerPort" .) }}
   {{- end }}
-  {{- if and .Values.useDevPostgres (.Values.fluffy.rbac).enabled }}
+  {{- if and .Values.existingSecret .Values.secretKeys.databaseConnectionString }}
+  - name: FLUFFY_DATABASE_POSTGRES_CONNECTION_STRING
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.existingSecret }}
+        key: {{ .Values.secretKeys.databaseConnectionString }}
+  {{- else if and .Values.secrets (.Values.secrets).databaseConnectionString }}
+  - name: FLUFFY_DATABASE_POSTGRES_CONNECTION_STRING
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
+        key: database_connection_string
+  {{- else if and .Values.useDevPostgres (.Values.fluffy.rbac).enabled }}
   - name: FLUFFY_DATABASE_TYPE
     value: postgres
   - name: FLUFFY_DATABASE_POSTGRES_CONNECTION_STRING
