@@ -30,6 +30,8 @@ env:
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
   {{- if (.Values.fluffy).enabled }}
+  - name: LAKEFS_USAGE_REPORT_ENABLED
+    value: "true"
   {{- if (.Values.fluffy.sso).enabled }}
   {{- if and .Values.ingress.enabled (.Values.fluffy.sso.saml).enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
