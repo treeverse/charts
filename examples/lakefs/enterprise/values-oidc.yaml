@@ -29,7 +29,7 @@ fluffy:
   enabled: true
   image:
     repository: treeverse/fluffy
-    tag: '0.2.0'
+    tag: '0.2.7'
     pullPolicy: IfNotPresent
     privateRegistry:
       enabled: true
