@@ -49,9 +49,18 @@ fluffy:
       external:
         aws_auth:
           enabled: true
+          get_caller_identity_max_age: 60
+    
           # list of headers that are required to be present in the GetCallerIdentity request
           required_headers:
-            x-lakefs-custom-key: "custom-value"
+            required-key: "custom-value"
+          # list of headers that are optional for the GetCallerIdentity request
+          optional_headers:
+            optional-key: "custom-value"
+          # list of valid STS hosts for the GetCallerIdentity request
+          valid_sts_hosts:
+            - "sts.amazonaws.com"
+            - "sts.us-east-1.amazonaws.com"
   secrets:
     create: true
   sso:
