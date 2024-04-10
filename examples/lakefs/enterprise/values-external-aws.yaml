@@ -1,0 +1,62 @@
+lakefsConfig: |
+  logging:
+      level: "INFO"
+  blockstore:
+    type: local
+  auth:
+    authentication_api:
+      endpoint: http://localhost:8080/api/v1
+      external_principals_enabled: true
+    api:
+      endpoint: http://localhost:9006/api/v1
+    remote_authenticator:
+      enabled: true
+      endpoint: http://localhost:9006/api/v1
+    ui_config:
+      login_cookie_names:
+        - internal_auth_session
+ingress:
+  enabled: true
+  ingressClassName: <class-name>
+  hosts:
+    # the ingress that will be created for lakeFS
+    - host: <lakefs.ingress.domain>
+      paths:
+        - /
+
+##################################################
+########### lakeFS enterprise - FLUFFY ###########
+##################################################
+
+fluffy:
+  enabled: true
+  image:
+    repository: treeverse/fluffy
+    tag: '0.3.0'
+    pullPolicy: IfNotPresent
+    privateRegistry:
+      enabled: true
+      secretToken: <dockerhub-token-fluffy-image>
+  fluffyConfig: |
+    logging:
+      format: "json"
+      level: "INFO"
+    auth:
+      serve_disable_authentication: true
+      serve_listen_address: localhost:9006
+      encrypt:
+        secret_key: shared-secrey-key
+      external:
+        aws_auth:
+          enabled: true
+          # list of headers that are required to be present in the GetCallerIdentity request
+          required_headers:
+            x-lakefs-custom-key: "custom-value"
+  secrets:
+    create: true
+  sso:
+    enabled: true
+  rbac:
+    enabled: true
+
+useDevPostgres: true
