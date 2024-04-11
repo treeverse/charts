@@ -53,6 +53,10 @@ env:
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /logout
   {{- end }}
+  {{- if (.Values.fluffy.sso).enabled }}
+  - name: LAKEFS_AUTH_AUTHENTICATION_API_ENDPOINT
+    value: {{ printf "http://%s/api/v1" (include "fluffy.ssoServiceName" .) | quote }}
+  {{- end }}
   {{- end }}
   {{- if (.Values.fluffy.rbac).enabled }}
   - name: LAKEFS_AUTH_API_ENDPOINT
