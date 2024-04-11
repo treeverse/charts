@@ -1,12 +1,3 @@
-lakefsConfig: |
-  logging:
-      level: "INFO"
-  blockstore:
-    type: local
-  auth:
-    authentication_api:
-      endpoint: http://localhost:8080/api/v1
-      external_principals_enabled: true
 ingress:
   enabled: true
   ingressClassName: <class-name>
@@ -30,25 +21,16 @@ fluffy:
       enabled: true
       secretToken: <dockerhub-token-fluffy-image>
   fluffyConfig: |
-    logging:
-      format: "json"
-      level: "INFO"
     auth:
       external:
         aws_auth:
           enabled: true
         # the maximum age in seconds for the GetCallerIdentity request
         #get_caller_identity_max_age: 60
-        # list of headers that are required to be present in the GetCallerIdentity request
-        #required_headers:
-        #  x-lakefs-custom-key: "custom-value"
-        # list of headers that are optional for the GetCallerIdentity request
-        #optional_headers:
-        #  optional-key: "custom-value"
-        # list of valid STS hosts for the GetCallerIdentity request
-        #valid_sts_hosts:
-        #  - "sts.amazonaws.com"
-        #  - "sts.us-east-1.amazonaws.com"
+        # headers that must be present by the client when doing login request
+        required_headers:
+          # same host as the lakeFS server ingress
+          X-LakeFS-Server-ID: <lakefs.ingress.domain>
   secrets:
     create: true
   sso:

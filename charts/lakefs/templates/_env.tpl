@@ -40,6 +40,8 @@ env:
     value: {{ printf "%s/sso/login-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: {{ printf "%s/sso/logout-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+  - name: LAKEFS_AUTH_AUTHENTICATION_API_ENDPOINT
+    value: {{ printf "http://%s/api/v1" (include "fluffy.ssoServiceName" .) | quote }}
   {{- end }}
   {{- if (.Values.fluffy.sso.oidc).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
@@ -52,10 +54,6 @@ env:
     value: {{ default (printf "http://%s/api/v1/ldap/login" (include "fluffy.ssoServiceName" .) | quote) (.Values.fluffy.sso.ldap).endpointOverride }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /logout
-  {{- end }}
-  {{- if (.Values.fluffy.sso).enabled }}
-  - name: LAKEFS_AUTH_AUTHENTICATION_API_ENDPOINT
-    value: {{ printf "http://%s/api/v1" (include "fluffy.ssoServiceName" .) | quote }}
   {{- end }}
   {{- end }}
   {{- if (.Values.fluffy.rbac).enabled }}
