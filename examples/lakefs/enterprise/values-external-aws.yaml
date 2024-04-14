@@ -1,0 +1,41 @@
+ingress:
+  enabled: true
+  ingressClassName: <class-name>
+  hosts:
+    # the ingress that will be created for lakeFS
+    - host: <lakefs.ingress.domain>
+      paths:
+        - /
+
+##################################################
+########### lakeFS enterprise - FLUFFY ###########
+##################################################
+
+fluffy:
+  enabled: true
+  image:
+    repository: treeverse/fluffy
+    tag: '0.3.0'
+    pullPolicy: IfNotPresent
+    privateRegistry:
+      enabled: true
+      secretToken: <dockerhub-token-fluffy-image>
+  fluffyConfig: |
+    auth:
+      external:
+        aws_auth:
+          enabled: true
+        # the maximum age in seconds for the GetCallerIdentity request
+        #get_caller_identity_max_age: 60
+        # headers that must be present by the client when doing login request
+        required_headers:
+          # same host as the lakeFS server ingress
+          X-LakeFS-Server-ID: <lakefs.ingress.domain>
+  secrets:
+    create: true
+  sso:
+    enabled: true
+  rbac:
+    enabled: true
+
+useDevPostgres: true
