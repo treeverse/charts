@@ -1,8 +1,7 @@
 lakefsConfig: |
   auth:
     authentication_api:
-      enabled: true
-        external_principals_enabled: true
+      external_principals_enabled: true
 ingress:
   enabled: true
   ingressClassName: <class-name>
