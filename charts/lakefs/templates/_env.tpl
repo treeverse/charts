@@ -34,7 +34,7 @@ env:
     value: "true"
   {{- if (.Values.fluffy.sso).enabled }}
   - name: LAKEFS_AUTH_AUTHENTICATION_API_ENDPOINT
-  value: {{ printf "http://%s/api/v1" (include "fluffy.ssoServiceName" .) | quote }}
+    value: {{ printf "http://%s/api/v1" (include "fluffy.ssoServiceName" .) | quote }}
   {{- if and .Values.ingress.enabled (.Values.fluffy.sso.saml).enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml
