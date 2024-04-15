@@ -1,3 +1,7 @@
+lakefsConfig: |
+  auth:
+    authentication_api:
+      external_principals_enabled: true
 ingress:
   enabled: true
   ingressClassName: <class-name>
@@ -15,7 +19,7 @@ fluffy:
   enabled: true
   image:
     repository: treeverse/fluffy
-    tag: '0.3.0'
+    tag: '0.4.0'
     pullPolicy: IfNotPresent
     privateRegistry:
       enabled: true
