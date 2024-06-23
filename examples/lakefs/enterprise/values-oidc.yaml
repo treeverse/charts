@@ -45,7 +45,6 @@ fluffy:
         url: https://oidc-provider-url.com/
         client_id: <oidc-client-id>
         callback_base_url: https://<lakefs.ingress.domain>
-        is_default_login: true
         # the claim name that represents the client identifier in the OIDC provider (e.g Okta)
         logout_client_id_query_parameter: client_id
         # the query parameters that will be used to redirect the user to the OIDC provider (e.g Okta) after logout
