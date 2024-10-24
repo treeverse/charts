@@ -1,5 +1,25 @@
 apiVersion: v1
 entries:
+  everest-lakefs-csi-driver:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-10-24T11:13:16.200621238Z"
+    description: A CSI Driver for lakeFS, allows your Kubernetes applications to access
+      lakeFS objects through a file system interface.
+    digest: a9c61efec58752353c221bc496c961d6afd3c56c4d901900674eda92e58bec9b
+    keywords:
+    - lakefs
+    - everest
+    - mount
+    - csi
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: services@treeverse.io
+      name: treeverse
+    name: everest-lakefs-csi-driver
+    urls:
+    - https://github.com/treeverse/charts/releases/download/everest-lakefs-csi-driver-0.0.1-rc1/everest-lakefs-csi-driver-0.0.1-rc1.tgz
+    version: 0.0.1-rc1
   lakefs:
   - apiVersion: v2
     appVersion: 1.39.2
@@ -3792,4 +3812,4 @@ entries:
     urls:
     - https://github.com/treeverse/charts/releases/download/lakefs-0.1.2/lakefs-0.1.2.tgz
     version: 0.1.2
-generated: "2024-10-23T12:00:14.653375057Z"
+generated: "2024-10-24T11:13:16.201229328Z"
