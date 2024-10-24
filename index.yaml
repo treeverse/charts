@@ -1,5 +1,46 @@
 apiVersion: v1
 entries:
+  everest-lakefs-csi-driver:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-10-24T11:50:31.436503+03:00"
+    description: A Helm chart for installing the Everest Mount for lakeFS CSI Driver.
+      This CSI driver allows your Kubernetes applications to access lakeFS objects
+      through a file system interface.
+    digest: d4e7215a476f2f2d2c74f802f206a3a59afd5136fcd41c65bbcba922b41b0a73
+    keywords:
+    - lakefs
+    - everest
+    - mount
+    - csi
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: services@treeverse.io
+      name: treeverse
+    name: everest-lakefs-csi-driver
+    urls:
+    - https://github.com/treeverse/charts/releases/download/everest-lakefs-csi-driver-0.0.1-testhelmrc1/everest-lakefs-csi-driver-0.0.1-testhelmrc1.tgz
+    version: 0.0.1-testhelmrc1
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-10-24T11:50:31.220008+03:00"
+    description: A Helm chart for installing the Everest Mount for lakeFS CSI Driver.
+      This CSI driver allows your Kubernetes applications to access lakeFS objects
+      through a file system interface.
+    digest: 96c76d5f9f8c662feb68a8c492ff5ea7db7b0f00b25bb66406327ef8adf41318
+    keywords:
+    - lakefs
+    - everest
+    - mount
+    - csi
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: services@treeverse.io
+      name: treeverse
+    name: everest-lakefs-csi-driver
+    urls:
+    - https://github.com/treeverse/charts/releases/download/everest-lakefs-csi-driver-0.0.1-helmrc1/everest-lakefs-csi-driver-0.0.1-helmrc1.tgz
+    version: 0.0.1-helmrc1
   lakefs:
   - apiVersion: v2
     appVersion: 1.39.2
@@ -3792,4 +3833,4 @@ entries:
     urls:
     - https://github.com/treeverse/charts/releases/download/lakefs-0.1.2/lakefs-0.1.2.tgz
     version: 0.1.2
-generated: "2024-10-23T12:00:14.653375057Z"
+generated: "2024-10-24T11:50:31.437743+03:00"
