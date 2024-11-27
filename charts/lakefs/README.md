@@ -48,6 +48,26 @@ lakefsConfig: |
       domain_name: s3.lakefs.example.com
 ```
 
+Example `my-values.yaml` using PostgreSQL with Cloud SQL Auth Proxy in GCP:
+
+```yaml
+secrets:
+    databaseConnectionString: postgres://<DB_USERNAME>:<DB_PASSWORD>@localhost:5432/<DB_NAME>
+    authEncryptSecretKey: <some random string>
+lakefsConfig: |
+  database:
+    type: postgres
+  blockstore:
+    type: gs
+    gs:
+      credentials_json: '<credentials_json>'
+serviceAccount:
+  name: <service account name>
+gcpFallback:
+  enabled: true
+  instances: <myproject:myregion:myinstance=tcp:5432>
+```
+
 Example `my-values.yaml` using DynamoDB:
 ```yaml
 secrets:
