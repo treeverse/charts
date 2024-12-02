@@ -10,9 +10,9 @@
     - /cloud_sql_proxy
     - -term_timeout=10s
   env:
-{{- if .Values.gcpFallback.instances }}
+{{- if .Values.gcpFallback.instance }}
   - name: INSTANCES
-    value: {{ .Values.gcpFallback.instances }}
+    value: {{ .Values.gcpFallback.instance }}
 {{- end }}
 {{- end }}
 {{- end }}
