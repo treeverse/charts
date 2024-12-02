@@ -40,6 +40,7 @@ deployment:
   port: 8000
 
 service:
+  annotations: {}
   type: ClusterIP
   port: 80
 
