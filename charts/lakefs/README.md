@@ -65,7 +65,7 @@ serviceAccount:
   name: <service account name>
 gcpFallback:
   enabled: true
-  instance: <myproject:myregion:myinstance=tcp:5432>
+  instance: <my_project>:<my_region>:<my_instance>=tcp:5432
 ```
 
 Example `my-values.yaml` using DynamoDB:
