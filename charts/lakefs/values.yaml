@@ -32,7 +32,12 @@ ingress:
   #      - chart-example.local
 
 
+# Extra annotations to add to the pod
 podAnnotations: {}
+
+# Extra labels to add to the pod
+podLabels: {}
+
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"
 
