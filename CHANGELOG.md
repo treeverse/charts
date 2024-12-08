@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.22
+
+:new: What's new:
+- Add support for a Google Cloud SQL sidecar
+
 ## v1.3.19
 
 :new: What's new:
