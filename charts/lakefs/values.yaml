@@ -60,6 +60,9 @@ topologySpreadConstraints: []
 s3Fallback:
   enabled: false
 
+gcpFallback:
+  enabled: false
+
 lakefsConfig: |
   database:
     type: local
