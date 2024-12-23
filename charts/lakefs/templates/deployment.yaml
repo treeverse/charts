@@ -94,6 +94,7 @@ spec:
           {{- end }}
           {{- include "lakefs.env" . | nindent 10 }}
         {{- include "lakefs.s3proxyContainer" . | nindent 8}}
+        {{- include "lakefs.gcpProxyContainer" . | nindent 8}}
       volumes:
         {{- include "lakefs.volumes" . | nindent 8 }}
       {{- with .Values.nodeSelector }}

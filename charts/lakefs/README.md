@@ -48,6 +48,26 @@ lakefsConfig: |
       domain_name: s3.lakefs.example.com
 ```
 
+Example `my-values.yaml` using PostgreSQL with Cloud SQL Auth Proxy in GCP:
+
+```yaml
+secrets:
+    databaseConnectionString: postgres://<DB_USERNAME>:<DB_PASSWORD>@localhost:5432/<DB_NAME>
+    authEncryptSecretKey: <some random string>
+lakefsConfig: |
+  database:
+    type: postgres
+  blockstore:
+    type: gs
+    gs:
+      credentials_json: '<credentials_json>'
+serviceAccount:
+  name: <service account name>
+gcpFallback:
+  enabled: true
+  instance: <my_project>:<my_region>:<my_instance>=tcp:5432
+```
+
 Example `my-values.yaml` using DynamoDB:
 ```yaml
 secrets:
@@ -130,5 +150,7 @@ helm upgrade -f my-values.yaml my-lakefs lakefs/lakefs --set kv_upgrade=true
 | `s3Fallback.enabled`                  | If set to true, an [S3Proxy](https://github.com/gaul/s3proxy) container will be started. Requests to lakeFS S3 gateway with a non-existing repository will be forwarded to this container.                                                                                           |                                     |
 | `s3Fallback.aws_access_key`           | An AWS access key to be used by the S3Proxy for authentication                                                                                                                                                                                                                       |                                     |
 | `s3Fallback.aws_secret_key`           | An AWS secret key to be used by the S3Proxy for authentication                                                                                                                                                                                                                       |                                     |
+| `gcpFallback.enabled`                 | If set to true, an [GCP Proxy](https://github.com/GoogleCloudPlatform/cloud-sql-proxy) container will be started.                                                                                                                                                                    |                                     |
+| `gcpFallback.instance`                | The instance to connect to. See the example above for the format.                                                                                                                                                                                                                                                        |                                     |
 | `committedLocalCacheVolume`           | A volume definition to be mounted by lakeFS and used for caching committed metadata. See [here](https://kubernetes.io/docs/concepts/storage/volumes/#volume-types) for a list of supported volume types. The default values.yaml file shows an example of how to use this parameter. |                                     |
-| `serviceAccount.name`                 | Name of the service account to use for the lakeFS pods. If not set, use the `default` service account.                                                                                                                          |                                     |
+| `serviceAccount.name`                 | Name of the service account to use for the lakeFS pods. If not set, use the `default` service account.                                                                                                                                                                               |                                     |
