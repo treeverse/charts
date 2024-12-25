@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.3.25
+## v1.3.26
 
 :new: What's new:
 - Updated lakeFS version to [1.46.0](https://github.com/treeverse/lakeFS/releases/tag/v1.46.0)
