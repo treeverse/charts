@@ -1,10 +1,16 @@
 # Changelog
 
+## 1.3.29
+
+:new: What's new:
+- Updated lakeFS version to [1.48.1](https://github.com/treeverse/lakeFS/releases/tag/v1.48.1)
+
 ## v1.3.28
+
+### Do **NOT** use this version, 1.48.0 breaks backwards compatibility
 
 :new: What's new:
 - Updated lakeFS version to [1.48.0](https://github.com/treeverse/lakeFS/releases/tag/v1.48.0)
-
 
 ## v1.3.27
 
