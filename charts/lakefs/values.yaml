@@ -139,3 +139,4 @@ extraContainers: []
   #   volumeMounts:
   #     - name: some-volume
   #       mountPath: /path/in/container
+extraInitContainers: [] 
