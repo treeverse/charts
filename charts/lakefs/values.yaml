@@ -52,6 +52,14 @@ tolerations: []
 
 affinity: {}
 
+lifecycle: {}
+  # postStart:
+  #   exec:
+  #     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+  # preStop:
+  #   exec:
+  #     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
+
 ## Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in.
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 ##
