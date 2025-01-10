@@ -93,7 +93,7 @@ spec:
         {{- include "lakefs.s3proxyContainer" . | nindent 8}}
         {{- include "lakefs.gcpProxyContainer" . | nindent 8}}
         {{- range .Values.extraContainers }}
-        {{ tpl (toYaml .) $ | nindent 8 }}
+        - {{ tpl (toYaml .) $ | nindent 2 }}
         {{- end }}
       volumes:
         {{- include "lakefs.volumes" . | nindent 8 }}
