@@ -125,3 +125,17 @@ secretKeys:
   authEncryptSecretKey: auth_encrypt_secret_key
   # Use the following to fetch PostgreSQL connection string from an existing secret:
   databaseConnectionString: null
+
+# Extra containers to run side-by-side
+extraContainers: []
+  # - name: sidecar-container
+  #   image: sidecar-image:latest
+  #   imagePullPolicy: IfNotPresent
+  #   args:
+  #     - "some-arg"
+  #   env:
+  #     - name: ENV_VAR
+  #       value: "value"
+  #   volumeMounts:
+  #     - name: some-volume
+  #       mountPath: /path/in/container
