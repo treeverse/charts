@@ -1,9 +1,19 @@
 # Changelog
 
+## 1.3.32
+
+:new: What's new:
+- Updated lakeFS version to [1.49.0](https://github.com/treeverse/lakeFS/releases/tag/v1.49.0)
+
+## 1.3.31
+
+:new: What's new:
+- Update Fluffy version to 0.8.3
+
 ## 1.3.30
 
 :new: What's new:
-- Updated lakeFS version to [1.48.1](https://github.com/treeverse/lakeFS/releases/tag/v1.48.2)
+- Updated lakeFS version to [1.48.2](https://github.com/treeverse/lakeFS/releases/tag/v1.48.2)
 
 ## 1.3.29
 
