@@ -19,7 +19,7 @@ spec:
       labels:
         {{- include "lakefs.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if (.Values.fluffy).enabled }}
+      {{- if eq ( include "lakefs.fullname" .) "treeverse/lakefs-enterprise" }}
        {{- if (.Values.fluffy.image.privateRegistry).enabled }}
       imagePullSecrets:
         {{- if (.Values.fluffy.image.privateRegistry).secretToken }}
@@ -41,11 +41,7 @@ spec:
           {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          {{- if (.Values.fluffy).enabled }}
-          image: "treeverse/lakefs-enterprise:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          {{- else}}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          {{- end }}
+          image: "{{ include "lakefs.repository" . }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
