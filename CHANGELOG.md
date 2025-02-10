@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.4.0
+
+### Important
+
+This chart introduces the use of lakeFS-Enterprise image when using fluffy.
+For enterprise users when upgrading to this chart, either:
+1. Remove the `image.repository` configuration from your `values.yaml` file so that the correct image is fetched
+2. Modify the value to `treeverse/lakefs-enterprise`
+
+**This chart is backwards compatible and does not require any special migration**
+
+:new: What's new:
+- Updated lakeFS version to [1.49.1](https://github.com/treeverse/lakeFS/releases/tag/v1.49.1)
+
 ## 1.3.33
 
 :new: What's new:
