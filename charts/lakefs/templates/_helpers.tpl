@@ -62,3 +62,21 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Define which repository to use according to the following:
+1. Explicitly defined
+2. Otherwise if fluffy is enabled - take enterprise image
+3. Otherwise use OSS image
+*/}}
+{{- define "lakefs.repository" -}}
+{{- if not .Values.image.repository }}
+{{- if (.Values.fluffy).enabled  }}
+{{- default "treeverse/lakefs-enterprise" .Values.image.repository }}
+{{- else }}
+{{- default "treeverse/lakefs" .Values.image.repository }}
+{{- end }}
+{{- else }}
+{{- default .Values.image.repository }}
+{{- end }}
+{{- end }}
