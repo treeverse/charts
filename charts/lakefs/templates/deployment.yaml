@@ -19,7 +19,7 @@ spec:
       labels:
         {{- include "lakefs.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if eq ( include "lakefs.fullname" .) "treeverse/lakefs-enterprise" }}
+      {{- if eq ( include "lakefs.repository" .) "treeverse/lakefs-enterprise" }}
        {{- if (.Values.fluffy.image.privateRegistry).enabled }}
       imagePullSecrets:
         {{- if (.Values.fluffy.image.privateRegistry).secretToken }}
