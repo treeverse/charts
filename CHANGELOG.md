@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.1
+
+:new: What's new:
+- Update Fluffy version to 0.8.4
+
 ## 1.4.0
 
 ### Important
