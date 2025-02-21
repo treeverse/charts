@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.3
+
+:new: What's new:
+- Fix v1.4.1 and v1.4.2 to use Fluffy v0.9.0 - v0.8.4 wasn't published
+
 ## 1.4.2
 
 :new: What's new:
