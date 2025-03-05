@@ -155,6 +155,23 @@ entries:
     version: 0.0.1-rc1
   lakefs:
   - apiVersion: v2
+    appVersion: 1.51.0
+    created: "2025-03-05T17:04:28.548943237Z"
+    description: A Helm chart for running LakeFS on Kubernetes
+    digest: 70fcda157c3daa591738c7336402d226970598e8e9d9bebe2de50c483ed2b6ac
+    home: https://lakefs.io
+    icon: https://lakefs.io/wp-content/uploads/2020/07/lake-fs-color-2.svg
+    maintainers:
+    - email: services@treeverse.io
+      name: treeverse
+    name: lakefs
+    sources:
+    - https://github.com/treeverse/lakeFS
+    type: application
+    urls:
+    - https://github.com/treeverse/charts/releases/download/lakefs-1.4.4/lakefs-1.4.4.tgz
+    version: 1.4.4
+  - apiVersion: v2
     appVersion: 1.50.0
     created: "2025-02-21T15:49:44.850030856Z"
     description: A Helm chart for running LakeFS on Kubernetes
@@ -4319,4 +4336,4 @@ entries:
     urls:
     - https://github.com/treeverse/charts/releases/download/lakefs-0.1.2/lakefs-0.1.2.tgz
     version: 0.1.2
-generated: "2025-02-21T15:49:44.851129977Z"
+generated: "2025-03-05T17:04:28.549648335Z"
