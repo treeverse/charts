@@ -4,6 +4,7 @@
 
 :new: What's new:
 - Update lakeFS version to [1.54.0](https://github.com/treeverse/lakeFS/releases/tag/v1.54.0)
+- For enterprise: added support for multi resource policies 
 
 ## 1.4.7
 
