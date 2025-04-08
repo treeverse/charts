@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.10
+
+:new: What's new:
+- Update fluffy version to [0.11.0](https://github.com/treeverse/fluffy/releases/tag/v0.11.0), support multi resource policies 
+
 ## 1.4.8
 
 :new: What's new:
