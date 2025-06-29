@@ -6,6 +6,10 @@ replicaCount: 1
 
 image:
   pullPolicy: IfNotPresent
+  privateRegistry:
+    enabled: false
+    secretToken: null
+    secretName: null
 
 nameOverride: ""
 fullnameOverride: ""
@@ -121,11 +125,6 @@ secretKeys:
 # Enterprise configuration
 enterprise:
   enabled: false
-  image:
-    privateRegistry:
-      enabled: false
-      secretToken: null
-      secretName: null
 
 # Auth configuration
 auth:

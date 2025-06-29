@@ -71,7 +71,7 @@ Define which repository to use according to the following:
 */}}
 {{- define "lakefs.repository" -}}
 {{- if not .Values.image.repository }}
-{{- if .Values.enterprise.enabled  }}
+{{- if (.Values.enterprise).enabled }}
 {{- default "treeverse/lakefs-enterprise" .Values.image.repository }}
 {{- else }}
 {{- default "treeverse/lakefs" .Values.image.repository }}
