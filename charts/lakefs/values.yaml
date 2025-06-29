@@ -126,24 +126,23 @@ secretKeys:
 enterprise:
   enabled: false
 
-# Auth configuration
-auth:
-  rbac:
-    enabled: false
+# Enterprise auth configuration
+  auth:
+    rbac:
+      enabled: false
 
-# LDAP, OIDC and SAML configuration are relevant only for lakeFS Enterprise
-  ldap:
-    enabled: false
-    bindPassword: null
+    ldap:
+      enabled: false
+      bindPassword: null
 
-  oidc:
-    enabled: false
-    clientSecret: null
+    oidc:
+      enabled: false
+      clientSecret: null
 
-  saml:
-    enabled: false
-    createSecret: false
-    certificate:
-      # certificates for AD FS IDP (e.g Azure AD)
-      saml_rsa_public_cert: null
-      saml_rsa_private_key: null
+    saml:
+      enabled: false
+      createSecret: false
+      certificate:
+        # certificates for AD FS IDP (e.g Azure AD)
+        saml_rsa_public_cert: null
+        saml_rsa_private_key: null
