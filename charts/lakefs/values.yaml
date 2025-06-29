@@ -111,7 +111,7 @@ extraEnvVars:
 
 
 # Start local postgres pod for quick start, not for production
-useDevPostgres: true
+useDevPostgres: false
 
 # Name of existing secret to use
 existingSecret: null
@@ -129,7 +129,7 @@ enterprise:
 # Enterprise auth configuration
   auth:
     rbac:
-      enabled: false
+      enabled: true
 
     ldap:
       enabled: false

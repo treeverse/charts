@@ -1,5 +1,4 @@
 {{- if .Values.ingress.enabled -}}
-  {{- $root := . -}}  
   {{- $fullName := include "lakefs.fullname" . -}}
   {{- $svcPort := .Values.service.port -}}
   {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion -}}

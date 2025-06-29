@@ -1,5 +1,4 @@
 {{- if .Values.useDevPostgres }}
-{{- if (((.Values.enterprise).auth).rbac).enabled }}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -42,5 +41,4 @@ spec:
   selector:
     app: postgres-lakefs
 
-{{- end}}
 {{- end}}

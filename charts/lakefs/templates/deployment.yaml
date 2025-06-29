@@ -20,14 +20,12 @@ spec:
       labels:
         {{- include "lakefs.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if eq ( include "lakefs.repository" .) "treeverse/lakefs-enterprise" }}
-       {{- if (.Values.image.privateRegistry).enabled }}
+      {{- if (.Values.image.privateRegistry).enabled }}
       imagePullSecrets:
-        {{- if (.Values.image.privateRegistry).secretToken }}
+       {{- if (.Values.image.privateRegistry).secretToken }}
         - name: "docker-registry"
-        {{- else }}
+       {{- else }}
         - name: {{ .Values.image.privateRegistry.secretName }}
-        {{- end }}
        {{- end }}
       {{- end }}
       serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
