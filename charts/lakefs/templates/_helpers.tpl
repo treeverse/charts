@@ -86,3 +86,10 @@ Define which repository to use according to the following:
 {{- fail "Fluffy configuration detected. Please migrate to lakeFS Enterprise auth configuration and use treeverse/lakefs-enterprise docker image. See migration guide." -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "lakefs.dockerConfigJson" }}
+{{- $token := .Values.image.privateRegistry.secretToken }}
+{{- $username := "externallakefs" }}
+{{- $registry := "https://index.docker.io/v1/" }}
+{{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" $registry $username $token (printf "%s:%s" $username $token | b64enc) | b64enc }}
+{{- end }}
