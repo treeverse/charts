@@ -100,7 +100,7 @@ spec:
             - name: {{ .Chart.Name }}-local-data
               mountPath: "/lakefs/data"
           {{- end }}
-          {{- if and .Values.enterprise.auth.saml.enabled }}
+          {{- if (((.Values.enterprise).auth).saml).enabled }}
             - name: secret-volume
               readOnly: true
               mountPath: /etc/saml_certs/
