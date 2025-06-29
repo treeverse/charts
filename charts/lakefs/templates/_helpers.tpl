@@ -66,12 +66,12 @@ Create the name of the service account to use
 {{/*
 Define which repository to use according to the following:
 1. Explicitly defined
-2. Otherwise if fluffy is enabled - take enterprise image
+2. Otherwise if enterprise is enabled - take enterprise image
 3. Otherwise use OSS image
 */}}
 {{- define "lakefs.repository" -}}
 {{- if not .Values.image.repository }}
-{{- if (.Values.fluffy).enabled  }}
+{{- if .Values.enterprise.enabled  }}
 {{- default "treeverse/lakefs-enterprise" .Values.image.repository }}
 {{- else }}
 {{- default "treeverse/lakefs" .Values.image.repository }}
@@ -80,3 +80,9 @@ Define which repository to use according to the following:
 {{- default .Values.image.repository }}
 {{- end }}
 {{- end }}
+
+{{- define "lakefs.checkDeprecated" -}}
+{{- if .Values.fluffy -}}
+{{- fail "Fluffy configuration detected. Please migrate to lakeFS Enterprise auth configuration. See migration guide." -}}
+{{- end -}}
+{{- end -}}

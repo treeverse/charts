@@ -56,9 +56,6 @@ spec:
               servicePort: {{ $svcPort }}
           {{- end }}
           {{- end }}
-          {{- if ($.Values.fluffy).enabled }}
-          {{- include "fluffy.ingressOverrides" $root | nindent 10 }}
-          {{- end }}
           {{- if (.pathsOverrides) }}
           {{- range .pathsOverrides }}
           - path: {{ .path }}

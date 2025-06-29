@@ -29,40 +29,39 @@ env:
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
-  {{- if (.Values.fluffy).enabled }}
+  {{- if .Values.enterprise.enabled }}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
-  {{- if (.Values.fluffy.sso).enabled }}
-  - name: LAKEFS_AUTH_AUTHENTICATION_API_ENDPOINT
-    value: {{ printf "http://%s/api/v1" (include "fluffy.ssoServiceName" .) | quote }}
-  {{- if and .Values.ingress.enabled (.Values.fluffy.sso.saml).enabled }}
+  {{- if .Values.auth.saml.enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
-    value: {{ printf "%s/sso/login-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+    value: /sso/login-saml
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
-    value: {{ printf "%s/sso/logout-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+    value: /sso/logout-saml
+  - name: LAKEFS_AUTH_LOGOUT_REDIRECT_URL
+    value: /
+  - name: LAKEFS_AUTH_PROVIDERS_SAML_POST_LOGIN_REDIRECT_URL
+    value: /
+  - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_ROOT_URL
+    value: /
+  - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_X509_KEY_PATH
+    value: '/etc/saml_certs/rsa_saml_private.key'
+  - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_X509_CERT_PATH
+    value: '/etc/saml_certs/rsa_saml_public.pem'
   {{- end }}
-  {{- if (.Values.fluffy.sso.oidc).enabled }}
+  {{- if .Values.auth.oidc.enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
     value: '/oidc/login'
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: '/oidc/logout'
   {{- end }}
-  {{- if (.Values.fluffy.sso.ldap).enabled }}
-  - name: LAKEFS_AUTH_REMOTE_AUTHENTICATOR_ENDPOINT
-    value: {{ default (printf "http://%s/api/v1/ldap/login" (include "fluffy.ssoServiceName" .) | quote) (.Values.fluffy.sso.ldap).endpointOverride }}
+  {{- if .Values.auth.ldap.enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /logout
   {{- end }}
   {{- end }}
-  {{- if (.Values.fluffy.rbac).enabled }}
-  - name: LAKEFS_AUTH_API_ENDPOINT
-    value: {{ printf "http://%s/api/v1" (include "fluffy.rbacServiceName" .) | quote }}
-  - name: LAKEFS_AUTH_UI_CONFIG_RBAC
-    value: internal
-  {{- end }}
-  {{- end }}
+
   {{- if .Values.s3Fallback.enabled }}
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
     value: http://localhost:7001
@@ -72,7 +71,7 @@ env:
     value: /lakefs/cache
   {{- end }}
   {{- if .Values.useDevPostgres }}
-  {{- if and (.Values.fluffy).enabled (.Values.fluffy.rbac).enabled }}
+  {{- if .Values.auth.rbac.enabled }}
   - name: LAKEFS_DATABASE_TYPE
     value: postgres
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
@@ -107,5 +106,10 @@ envFrom:
     items:
       - key: config.yaml
         path: config.yaml
+{{- end }}
+{{- if .Values.auth.saml.enabled }}
+- name: secret-volume
+  secret:
+    secretName: saml-certificates
 {{- end }}
 {{- end }}
