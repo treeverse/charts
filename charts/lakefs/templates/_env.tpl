@@ -32,7 +32,7 @@ env:
   {{- if .Values.enterprise.enabled }}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
-  {{- if .Values.auth.saml.enabled }}
+  {{- if .Values.enterprise.auth.saml.enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
@@ -50,17 +50,17 @@ env:
   - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_X509_CERT_PATH
     value: '/etc/saml_certs/rsa_saml_public.pem'
   {{- end }}
-  {{- if .Values.auth.oidc.enabled }}
+  {{- if .Values.enterprise.auth.oidc.enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
     value: '/oidc/login'
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: '/oidc/logout'
   {{- end }}
-  {{- if .Values.auth.ldap.enabled }}
+  {{- if .Values.enterprise.auth.ldap.enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /logout
   {{- end }}
-  {{- if .Values.auth.rbac.enabled }}
+  {{- if .Values.enterprise.auth.rbac.enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_RBAC
     value: internal
   {{- end }}
@@ -75,7 +75,7 @@ env:
     value: /lakefs/cache
   {{- end }}
   {{- if .Values.useDevPostgres }}
-  {{- if .Values.auth.rbac.enabled }}
+  {{- if .Values.enterprise.auth.rbac.enabled }}
   - name: LAKEFS_DATABASE_TYPE
     value: postgres
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
@@ -111,7 +111,7 @@ envFrom:
       - key: config.yaml
         path: config.yaml
 {{- end }}
-{{- if .Values.auth.saml.enabled }}
+{{- if .Values.enterprise.auth.saml.enabled }}
 - name: secret-volume
   secret:
     secretName: saml-certificates

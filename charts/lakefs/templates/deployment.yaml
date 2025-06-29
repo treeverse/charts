@@ -20,6 +20,16 @@ spec:
       labels:
         {{- include "lakefs.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if eq ( include "lakefs.repository" .) "treeverse/lakefs-enterprise" }}
+       {{- if (.Values.enterprise.image.privateRegistry).enabled }}
+      imagePullSecrets:
+        {{- if (.Values.enterprise.image.privateRegistry).secretToken }}
+        - name: "docker-registry"
+        {{- else }}
+        - name: {{ .Values.enterprise.image.privateRegistry.secretName }}
+        {{- end }}
+       {{- end }}
+      {{- end }}
       serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -90,7 +100,7 @@ spec:
             - name: {{ .Chart.Name }}-local-data
               mountPath: "/lakefs/data"
           {{- end }}
-          {{- if and .Values.auth.saml.enabled }}
+          {{- if and .Values.enterprise.auth.saml.enabled }}
             - name: secret-volume
               readOnly: true
               mountPath: /etc/saml_certs/

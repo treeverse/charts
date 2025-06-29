@@ -118,56 +118,61 @@ secretKeys:
   # Use the following to fetch PostgreSQL connection string from an existing secret:
   databaseConnectionString: null
 
-# Enterprise Auth configuration
+# Enterprise configuration
 enterprise:
-    enabled: false
-
-auth:
-  rbac:
-    enabled: false
-  ldap:
-    enabled: false
-    serverEndpoint: null
-    bindDN: null
-    bindPassword: null
-    usernameAttribute: null
-    userBaseDN: null
-    userFilter: null
-    connectionTimeoutSeconds: null
-    requestTimeoutSeconds: null
-
-  oidc:
-    enabled: false
-    url: null
-    clientId: null
-    clientSecret: null
-    callbackBaseUrl: null
-    callbackBaseUrls: null
-    authorizeEndpointQueryParameters: null
-    logoutEndpointQueryParameters: null
-    logoutClientIdQueryParameter: null
-    additionalScopeClaims: null
-
-  saml:
-    enabled: false
-    createSecret: false
-    spRootUrl: null
-    spX509KeyPath: null
-    spX509CertPath: null
-    spSignRequest: null
-    spSignatureMethod: null
-    idpMetadataUrl: null
-    idpSkipVerifyTlsCert: null
-    idpAuthnNameIdFormat: null
-    idpRequestTimeout: null
-    certificate:
-      # certificates for AD FS IDP (e.g Azure AD)
-      saml_rsa_public_cert: null
-      saml_rsa_private_key: null
-  external:
-    awsAuth:
+  enabled: false
+  image:
+    privateRegistry:
       enabled: false
-      getCallerIdentityMaxAge: null
-      requiredHeaders: null
-      optionalHeaders: null
-      validStsHosts: null
+      secretToken: null
+      secretName: null
+
+  auth:
+    rbac:
+      enabled: false
+    ldap:
+      enabled: false
+      serverEndpoint: null
+      bindDN: null
+      bindPassword: null
+      usernameAttribute: null
+      userBaseDN: null
+      userFilter: null
+      connectionTimeoutSeconds: null
+      requestTimeoutSeconds: null
+
+    oidc:
+      enabled: false
+      url: null
+      clientId: null
+      clientSecret: null
+      callbackBaseUrl: null
+      callbackBaseUrls: null
+      authorizeEndpointQueryParameters: null
+      logoutEndpointQueryParameters: null
+      logoutClientIdQueryParameter: null
+      additionalScopeClaims: null
+
+    saml:
+      enabled: false
+      createSecret: false
+      spRootUrl: null
+      spX509KeyPath: null
+      spX509CertPath: null
+      spSignRequest: null
+      spSignatureMethod: null
+      idpMetadataUrl: null
+      idpSkipVerifyTlsCert: null
+      idpAuthnNameIdFormat: null
+      idpRequestTimeout: null
+      certificate:
+        # certificates for AD FS IDP (e.g Azure AD)
+        saml_rsa_public_cert: null
+        saml_rsa_private_key: null
+    external:
+      awsAuth:
+        enabled: false
+        getCallerIdentityMaxAge: null
+        requiredHeaders: null
+        optionalHeaders: null
+        validStsHosts: null
