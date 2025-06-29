@@ -131,6 +131,8 @@ enterprise:
 auth:
   rbac:
     enabled: false
+
+# LDAP, OIDC and SAML configuration are relevant only for lakeFS Enterprise
   ldap:
     enabled: false
     bindPassword: null
