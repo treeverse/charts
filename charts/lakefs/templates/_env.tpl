@@ -60,6 +60,10 @@ env:
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /logout
   {{- end }}
+  {{- if .Values.auth.rbac.enabled }}
+  - name: LAKEFS_AUTH_UI_CONFIG_RBAC
+    value: internal
+  {{- end }}
   {{- end }}
 
   {{- if .Values.s3Fallback.enabled }}
