@@ -32,6 +32,8 @@ env:
   {{- if (.Values.enterprise).enabled}}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
+  - name: LAKEFS_FEATURES_LOCAL_RBAC
+    value: "true"
   {{- if (((.Values.enterprise).auth).saml).enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml
@@ -42,8 +44,6 @@ env:
   - name: LAKEFS_AUTH_LOGOUT_REDIRECT_URL
     value: /
   - name: LAKEFS_AUTH_PROVIDERS_SAML_POST_LOGIN_REDIRECT_URL
-    value: /
-  - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_ROOT_URL
     value: /
   - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_X509_KEY_PATH
     value: '/etc/saml_certs/rsa_saml_private.key'
