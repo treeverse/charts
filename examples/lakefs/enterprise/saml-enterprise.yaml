@@ -40,7 +40,7 @@ lakefsConfig: |
       auth_source: saml
       # claim name to display user in the UI
       friendly_name_claim_name: displayName      
-      # claim name from IDP to use as the uniqueue user name
+      # claim name from IDP to use as the unique user name
       external_user_id_claim_name: samName
       default_initial_groups:
         - "Developers"

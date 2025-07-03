@@ -25,7 +25,7 @@ fluffy:
         idp_metadata_url: "https://<adfs-auth.company.com>/federationmetadata/2007-06/federationmetadata.xml"
         # IDP SAML claims format default unspecified
         # idp_authn_name_id_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-        # claim name from IDP to use as the uniqueue user name
+        # claim name from IDP to use as the unique user name
         external_user_id_claim_name: samName
         # depending on IDP setup, if CA certs are self signed and not trusted by a known CA
         idp_skip_verify_tls_cert: true
@@ -56,7 +56,7 @@ lakefsConfig: |
     cookie_auth_verification:
     # claim name to display user in the UI
       friendly_name_claim_name: displayName
-      # claim name from IDP to use as the uniqueue user name
+      # claim name from IDP to use as the unique user name
       external_user_id_claim_name: samName
       default_initial_groups:
         - "Developers"
