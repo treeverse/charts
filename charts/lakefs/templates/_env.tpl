@@ -63,7 +63,7 @@ env:
   - name: LAKEFS_AUTH_PROVIDERS_OIDC_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
-        name: {{ include "lakefs.fullname" . }}
+        name: oidc-client-secret
         key: oidc_client_secret
   {{- end }}
   {{- end }}
@@ -74,7 +74,7 @@ env:
   - name: LAKEFS_AUTH_PROVIDERS_LDAP_BIND_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: {{ include "lakefs.fullname" . }}
+        name: ldap-secret
         key: ldap_bind_password
   {{- end }}
   {{- end }}

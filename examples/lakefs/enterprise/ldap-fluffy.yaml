@@ -12,7 +12,7 @@ fluffy:
   image:
     privateRegistry:
       enabled: true
-      secretToken: <dockerhub-token>
+      secretToken: <dockerhub-token-fluffy-image>
   fluffyConfig: |
     auth:
       post_login_redirect_url: /

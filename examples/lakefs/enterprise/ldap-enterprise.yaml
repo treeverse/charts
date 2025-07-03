@@ -4,15 +4,15 @@ ingress:
   hosts:
     # the ingress that will be created for lakeFS
     - host: <lakefs.ingress.domain>
-      paths: 
-       - /
+      paths:
+        - /
 
 enterprise:
   enabled: true
   auth:
     ldap:
       enabled: true
-      bind_password: <ldap bind password>
+      bindPassword: <ldap bind password>
 
 image:
   privateRegistry:
@@ -31,9 +31,9 @@ lakefsConfig: |
     providers:
       ldap:
         server_endpoint: ldaps://ldap.company.com:636
-        bind_dn: uid=<bind-user-name>,ou=Users,o=<org-id>,dc=<company>,dc=com
+        bind_dn: uid=<bind-user-name>,ou=Users,o=<org-id>,dc=<company>,dc=com        
         username_attribute: uid
-        user_base_dn: ou=Users,o=<org-id>,dc=<company>,dc=com
+        user_base_dn: ou=Users,o=<org-id>,dc=<company>,dc=com        
         user_filter: (objectClass=inetOrgPerson)
         default_user_group: "Developers"
         connection_timeout_seconds: 15
