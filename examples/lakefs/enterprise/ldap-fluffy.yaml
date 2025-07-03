@@ -1,0 +1,48 @@
+ingress:
+  enabled: true
+  ingressClassName: <class-name>
+  hosts:
+    # the ingress that will be created for lakeFS
+    - host: <lakefs.ingress.domain>
+      paths: 
+       - /
+
+fluffy:
+  enabled: true
+  image:
+    privateRegistry:
+      enabled: true
+      secretToken: <dockerhub-token>
+  fluffyConfig: |
+    auth:
+      post_login_redirect_url: /
+      ldap: 
+        server_endpoint: ldaps://ldap.company.com:636
+        bind_dn: uid=<bind-user-name>,ou=Users,o=<org-id>,dc=<company>,dc=com
+        username_attribute: uid
+        user_base_dn: ou=Users,o=<org-id>,dc=<company>,dc=com
+        user_filter: (objectClass=inetOrgPerson)
+        connection_timeout_seconds: 15
+        request_timeout_seconds: 7
+
+  secrets:
+    create: true
+    
+  sso:
+    enabled: true
+    ldap:
+      enabled: true
+      bind_password: <ldap bind password>
+  rbac:
+    enabled: true
+
+lakefsConfig: |
+  blockstore:
+    type: local
+  auth:
+    remote_authenticator:
+      enabled: true
+      default_user_group: "Developers"
+    ui_config:
+      login_cookie_names:
+        - internal_auth_session

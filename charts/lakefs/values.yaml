@@ -141,8 +141,8 @@ enterprise:
 
     saml:
       enabled: false
-      createSecret: false
+      createCertificateSecret: false
       certificate:
         # certificates for AD FS IDP (e.g Azure AD)
-        saml_rsa_public_cert: null
-        saml_rsa_private_key: null
+        samlRsaPublicCert: null
+        samlRsaPrivateKey: null

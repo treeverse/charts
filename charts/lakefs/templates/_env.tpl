@@ -32,8 +32,10 @@ env:
   {{- if (.Values.enterprise).enabled}}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
+  {{- if (((.Values.enterprise).auth).rbac).enabled }}
   - name: LAKEFS_FEATURES_LOCAL_RBAC
     value: "true"
+  {{- end }}
   {{- if (((.Values.enterprise).auth).saml).enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml
@@ -41,8 +43,8 @@ env:
     value: /sso/login-saml
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /sso/logout-saml
-  - name: LAKEFS_AUTH_LOGOUT_REDIRECT_URL
-    value: /
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_COOKIE_NAME
+    value: "internal_auth_session, saml_auth_session"
   - name: LAKEFS_AUTH_PROVIDERS_SAML_POST_LOGIN_REDIRECT_URL
     value: /
   - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_X509_KEY_PATH
@@ -55,10 +57,26 @@ env:
     value: '/oidc/login'
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: '/oidc/logout'
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_COOKIE_NAME
+    value: "internal_auth_session, oidc_auth_session"
+  {{- if (((.Values.enterprise).auth).oidc).clientSecret }}
+  - name: LAKEFS_AUTH_PROVIDERS_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
+        key: oidc_client_secret
+  {{- end }}
   {{- end }}
   {{- if (((.Values.enterprise).auth).ldap).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /logout
+  {{- if (((.Values.enterprise).auth).ldap).bindPassword }}
+  - name: LAKEFS_AUTH_PROVIDERS_LDAP_BIND_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
+        key: ldap_bind_password
+  {{- end }}
   {{- end }}
   {{- if (((.Values.enterprise).auth).rbac).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_RBAC
