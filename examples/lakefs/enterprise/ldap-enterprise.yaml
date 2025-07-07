@@ -39,4 +39,3 @@ lakefsConfig: |
         connection_timeout_seconds: 15
         request_timeout_seconds: 7
 
-useDevPostgres: true

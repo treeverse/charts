@@ -7,7 +7,7 @@ ingress:
       paths:
         - /
 
-useDevPostgres: true
+
 
 lakefsConfig: |
   auth:

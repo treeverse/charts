@@ -54,4 +54,3 @@ lakefsConfig: |
       friendly_name_claim_name: <some-oidc-provider-claim-name>
       default_initial_groups: ["Developers"]
 
-useDevPostgres: true

@@ -57,4 +57,3 @@ lakefsConfig: |
         # depending on IDP setup, if CA certs are self signed and not trusted by a known CA
         #idp_skip_verify_tls_cert: true
 
-useDevPostgres: true

@@ -65,4 +65,3 @@ lakefsConfig: |
         - internal_auth_session
         - saml_auth_session
 
-useDevPostgres: true
