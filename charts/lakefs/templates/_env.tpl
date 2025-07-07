@@ -111,6 +111,12 @@ env:
   {{- if .Values.extraEnvVars }}
   {{- toYaml .Values.extraEnvVars | nindent 2 }}
   {{- end }}
+  {{- if (.Values.enterprise).enabled }}
+  {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
+  - name: LAKEFS_LICENSE_PATH
+    value: '/etc/lakefs/license.tkn'
+  {{- end }}
+  {{- end }}
 {{- if .Values.extraEnvVarsSecret }}
 envFrom:
   - secretRef:
@@ -136,6 +142,23 @@ envFrom:
     items:
       - key: config.yaml
         path: config.yaml
+{{- end }}
+{{- if (.Values.enterprise).enabled }}
+{{- if and .Values.existingSecret .Values.secretKeys.licenseContentsKey }}
+- name: secret-volume
+  secret:
+    secretName: {{ include "lakefs.fullname" . }}
+    items:
+      - key: licenseContentsKey
+        path: license.tkn
+{{- else if and .Values.secrets .Values.secrets.licenseContents }}
+- name: secret-volume
+  secret:
+    secretName: {{ include "lakefs.fullname" . }}
+    items:
+      - key: license_contents
+        path: license.tkn
+{{- end }}
 {{- end }}
 {{- if (((.Values.enterprise).auth).saml).enabled }}
 - name: secret-volume

@@ -103,6 +103,14 @@ spec:
               readOnly: true
               mountPath: /etc/saml_certs/
           {{- end }}
+          {{- if (.Values.enterprise).enabled }}
+          {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
+            - name: secret-volume
+              mountPath: /etc/lakefs/license.tkn
+              subPath: "license.tkn"
+              readOnly: true
+          {{- end }}
+          {{- end }}
           {{- include "lakefs.env" . | nindent 10 }}
         {{- include "lakefs.s3proxyContainer" . | nindent 8}}
         {{- include "lakefs.gcpProxyContainer" . | nindent 8}}
