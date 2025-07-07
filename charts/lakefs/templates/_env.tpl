@@ -57,22 +57,34 @@ env:
     value: '/oidc/logout'
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_COOKIE_NAME
     value: "internal_auth_session,oidc_auth_session"
-  {{- if (((.Values.enterprise).auth).oidc).clientSecret }}
+  {{- if and .Values.existingSecret .Values.secretKeys.oidcClientSecret }}
   - name: LAKEFS_AUTH_PROVIDERS_OIDC_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
-        name: oidc-client-secret
+        name: {{ .Values.existingSecret }}
+        key: {{ .Values.secretKeys.oidcClientSecret }}
+  {{- else if (((.Values.enterprise).auth).oidc).clientSecret }}
+  - name: LAKEFS_AUTH_PROVIDERS_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
         key: oidc_client_secret
   {{- end }}
   {{- end }}
   {{- if (((.Values.enterprise).auth).ldap).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /logout
-  {{- if (((.Values.enterprise).auth).ldap).bindPassword }}
+  {{- if and .Values.existingSecret .Values.secretKeys.ldapBindPassword }}
   - name: LAKEFS_AUTH_PROVIDERS_LDAP_BIND_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: ldap-secret
+        name: {{ .Values.existingSecret }}
+        key: {{ .Values.secretKeys.ldapBindPassword }}
+  {{- else if (((.Values.enterprise).auth).ldap).bindPassword }}
+  - name: LAKEFS_AUTH_PROVIDERS_LDAP_BIND_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
         key: ldap_bind_password
   {{- end }}
   {{- end }}

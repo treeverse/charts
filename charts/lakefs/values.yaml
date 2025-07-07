@@ -121,6 +121,10 @@ secretKeys:
   authEncryptSecretKey: auth_encrypt_secret_key
   # Use the following to fetch PostgreSQL connection string from an existing secret:
   databaseConnectionString: null
+  # Use the following to fetch LDAP bind password from an existing secret:
+  ldapBindPassword: null
+  # Use the following to fetch OIDC client secret from an existing secret:
+  oidcClientSecret: null
 
 # Enterprise configuration
 enterprise:
