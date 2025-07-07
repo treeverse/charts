@@ -32,10 +32,8 @@ env:
   {{- if (.Values.enterprise).enabled}}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
-  {{- if (((.Values.enterprise).auth).rbac).enabled }}
   - name: LAKEFS_FEATURES_LOCAL_RBAC
-    value: "true"
-  {{- end }}
+    value: "{{ (((.Values.enterprise).auth).rbac).enabled | default false }}"
   {{- if (((.Values.enterprise).auth).saml).enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml
@@ -44,7 +42,7 @@ env:
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /sso/logout-saml
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_COOKIE_NAME
-    value: "internal_auth_session, saml_auth_session"
+    value: "internal_auth_session,saml_auth_session"
   - name: LAKEFS_AUTH_PROVIDERS_SAML_POST_LOGIN_REDIRECT_URL
     value: /
   - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_X509_KEY_PATH
@@ -58,7 +56,7 @@ env:
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: '/oidc/logout'
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_COOKIE_NAME
-    value: "internal_auth_session, oidc_auth_session"
+    value: "internal_auth_session,oidc_auth_session"
   {{- if (((.Values.enterprise).auth).oidc).clientSecret }}
   - name: LAKEFS_AUTH_PROVIDERS_OIDC_CLIENT_SECRET
     valueFrom:
