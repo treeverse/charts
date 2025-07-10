@@ -1,18 +1,28 @@
 # Changelog
 
+# 1.4.20
+
+:new: What's new:
+- Update lakeFS version to [1.62.0](https://github.com/treeverse/lakeFS/releases/tag/v1.62.0)
+
 # 1.4.19
+
 :new: What's new:
 - Update lakeFS version to [1.61.0](https://github.com/treeverse/lakeFS/releases/tag/v1.61.0)
 - Update fluffy version to [0.13.2](https://github.com/treeverse/fluffy/releases/tag/v0.13.2), with latest security updates
+
 # 1.4.18
+
 :new: What's new:
 - Update lakeFS version to [1.60.0](https://github.com/treeverse/lakeFS/releases/tag/v1.60.0)
 
 # 1.4.17
+
 :new: What's new:
 - Update lakeFS version to [1.59.0](https://github.com/treeverse/lakeFS/releases/tag/v1.59.0)
 
 # 1.4.14
+
 :new: What's new:
 - Update lakeFS version to [1.58.0](https://github.com/treeverse/lakeFS/releases/tag/v1.58.0)
 
@@ -21,12 +31,10 @@
 :new: What's new:
 - Update lakeFS version to [1.57.0](https://github.com/treeverse/lakeFS/releases/tag/v1.57.0)
 
-
 ## 1.4.12
 
 :new: What's new:
 - Update lakeFS version to [1.56.0](https://github.com/treeverse/lakeFS/releases/tag/v1.56.0)
-
 
 ## 1.4.11
 
@@ -52,7 +60,6 @@
 
 :new: What's new:
 - Update lakeFS version to [1.53.0](https://github.com/treeverse/lakeFS/releases/tag/v1.53.0)
-
 
 ## 1.4.5
 
