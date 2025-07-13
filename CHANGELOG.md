@@ -3,8 +3,8 @@
 # 1.5.0
 
 ### Important
-The lakeFS Helm chart now uses lakeFS Enterprise with integrated authentication, removing the need for the separate Fluffy service. 
-All authentication capabilities (LDAP, OIDC, SAML, AWS IAM) are now built directly into lakeFS Enterprise.
+Fluffy is no longer supported in this chart version, and all authentication capabilities (LDAP, OIDC, SAML, AWS IAM) are now built directly into lakeFS Enterprise.
+lakeFS-Enterprise image is now required for all enterprise authentication capabilities to work.
 For more information, see the [migration guide](https://docs.lakefs.io/latest/enterprise/upgrade/#kubernetes-migrating-with-helm-from-fluffy-to-new-lakefs-enterprise).
 
 :new: What's new:
