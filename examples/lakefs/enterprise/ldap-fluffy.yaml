@@ -1,28 +1,11 @@
-lakefsConfig: |
-  logging:
-      level: "INFO"
-  blockstore:
-    type: local
-  auth:
-    remote_authenticator:
-      enabled: true
-      # RBAC group for first time users
-      default_user_group: "Developers"
-    ui_config:
-      login_cookie_names:
-        - internal_auth_session
-
 ingress:
   enabled: true
   ingressClassName: <class-name>
   hosts:
+    # the ingress that will be created for lakeFS
     - host: <lakefs.ingress.domain>
       paths: 
        - /
-
-##################################################
-########### lakeFS enterprise - FLUFFY ###########
-##################################################
 
 fluffy:
   enabled: true
@@ -31,18 +14,16 @@ fluffy:
       enabled: true
       secretToken: <dockerhub-token-fluffy-image>
   fluffyConfig: |
-    logging:
-      level: "INFO"
     auth:
       post_login_redirect_url: /
       ldap: 
-        server_endpoint: 'ldaps://ldap.company.com:636'
+        server_endpoint: ldaps://ldap.company.com:636
         bind_dn: uid=<bind-user-name>,ou=Users,o=<org-id>,dc=<company>,dc=com
         username_attribute: uid
         user_base_dn: ou=Users,o=<org-id>,dc=<company>,dc=com
         user_filter: (objectClass=inetOrgPerson)
         connection_timeout_seconds: 15
-        request_timeout_seconds: 17
+        request_timeout_seconds: 7
 
   secrets:
     create: true
@@ -55,4 +36,13 @@ fluffy:
   rbac:
     enabled: true
 
-useDevPostgres: true
+lakefsConfig: |
+  blockstore:
+    type: local
+  auth:
+    remote_authenticator:
+      enabled: true
+      default_user_group: "Developers"
+    ui_config:
+      login_cookie_names:
+        - internal_auth_session

@@ -1,5 +1,4 @@
 {{- if .Values.ingress.enabled -}}
-  {{- $root := . -}}  
   {{- $fullName := include "lakefs.fullname" . -}}
   {{- $svcPort := .Values.service.port -}}
   {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion -}}
@@ -55,9 +54,6 @@ spec:
               serviceName: {{ $fullName }}
               servicePort: {{ $svcPort }}
           {{- end }}
-          {{- end }}
-          {{- if ($.Values.fluffy).enabled }}
-          {{- include "fluffy.ingressOverrides" $root | nindent 10 }}
           {{- end }}
           {{- if (.pathsOverrides) }}
           {{- range .pathsOverrides }}

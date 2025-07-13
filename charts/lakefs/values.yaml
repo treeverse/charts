@@ -6,6 +6,10 @@ replicaCount: 1
 
 image:
   pullPolicy: IfNotPresent
+  privateRegistry:
+    enabled: false
+    secretToken: null
+    secretName: null
 
 nameOverride: ""
 fullnameOverride: ""
@@ -105,16 +109,9 @@ extraEnvVars:
 #   timeoutSeconds: 1
 #   initialDelaySeconds: 5
 
-# Everything under fluffy stanza is for lakeFS enterprise only https://docs.lakefs.io/enterprise/
-fluffy:
-  enabled: false
-  image:
-    repository: treeverse/fluffy
-    tag: '0.13.2'
-    pullPolicy: IfNotPresent
 
 # Start local postgres pod for quick start, not for production
-useDevPostgres: true
+useDevPostgres: false
 
 # Name of existing secret to use
 existingSecret: null
@@ -124,3 +121,32 @@ secretKeys:
   authEncryptSecretKey: auth_encrypt_secret_key
   # Use the following to fetch PostgreSQL connection string from an existing secret:
   databaseConnectionString: null
+  # Use the following to fetch LDAP bind password from an existing secret:
+  ldapBindPassword: null
+  # Use the following to fetch OIDC client secret from an existing secret:
+  oidcClientSecret: null
+
+# Enterprise configuration
+enterprise:
+  enabled: false
+
+# Enterprise auth configuration
+  auth:
+    rbac:
+      enabled: true
+
+    ldap:
+      enabled: false
+      bindPassword: null
+
+    oidc:
+      enabled: false
+      clientSecret: null
+
+    saml:
+      enabled: false
+      createCertificateSecret: false
+      certificate:
+        # certificates for AD FS IDP (e.g Azure AD)
+        samlRsaPublicCert: null
+        samlRsaPrivateKey: null

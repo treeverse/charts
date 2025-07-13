@@ -1,0 +1,59 @@
+ingress:
+  enabled: true
+  ingressClassName: <class-name>
+  hosts:
+    # the ingress that will be created for lakeFS
+    - host: <lakefs.ingress.domain>
+      paths: 
+        - /
+
+enterprise:
+  enabled: true
+  auth:
+    saml:
+      enabled: true
+      createCertificateSecret: true
+      certificate:
+        samlRsaPublicCert: |
+          -----BEGIN CERTIFICATE-----
+          ...
+          -----END CERTIFICATE-----
+        samlRsaPrivateKey: |
+          -----BEGIN PRIVATE KEY-----
+          ...
+          -----END PRIVATE KEY-----
+
+image:
+  privateRegistry:
+    enabled: true
+    secretToken: <dockerhub-token>
+
+lakefsConfig: |
+  blockstore:
+    type: local
+  features:
+    local_rbac: true
+  auth:
+    logout_redirect_url: https://<lakefs.ingress.domain>
+    cookie_auth_verification:
+      auth_source: saml
+      # claim name to display user in the UI
+      friendly_name_claim_name: displayName
+      # claim name from IDP to use as the unique user name
+      external_user_id_claim_name: samName
+      default_initial_groups:
+        - "Developers"
+    providers:
+      saml:
+        post_login_redirect_url: https://<lakefs.ingress.domain>
+        sp_root_url: https://<lakefs.ingress.domain>
+        sp_sign_request: true
+        # depends on IDP
+        sp_signature_method: "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+        # url to the metadata of the IDP
+        idp_metadata_url: "https://<adfs-auth.company.com>/federationmetadata/2007-06/federationmetadata.xml"
+        # IDP SAML claims format default unspecified
+        idp_authn_name_id_format: "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+        # depending on IDP setup, if CA certs are self signed and not trusted by a known CA
+        #idp_skip_verify_tls_cert: true
+

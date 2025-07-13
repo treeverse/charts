@@ -66,12 +66,12 @@ Create the name of the service account to use
 {{/*
 Define which repository to use according to the following:
 1. Explicitly defined
-2. Otherwise if fluffy is enabled - take enterprise image
+2. Otherwise if enterprise is enabled - take enterprise image
 3. Otherwise use OSS image
 */}}
 {{- define "lakefs.repository" -}}
 {{- if not .Values.image.repository }}
-{{- if (.Values.fluffy).enabled  }}
+{{- if (.Values.enterprise).enabled }}
 {{- default "treeverse/lakefs-enterprise" .Values.image.repository }}
 {{- else }}
 {{- default "treeverse/lakefs" .Values.image.repository }}
@@ -79,4 +79,17 @@ Define which repository to use according to the following:
 {{- else }}
 {{- default .Values.image.repository }}
 {{- end }}
+{{- end }}
+
+{{- define "lakefs.checkDeprecated" -}}
+{{- if .Values.fluffy -}}
+{{- fail "Fluffy configuration detected. Please migrate to lakeFS Enterprise auth configuration and use treeverse/lakefs-enterprise docker image. See migration guide: https://docs.lakefs.io/latest/enterprise/upgrade/#kubernetes-migrating-with-helm-from-fluffy-to-new-lakefs-enterprise." -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "lakefs.dockerConfigJson" }}
+{{- $token := .Values.image.privateRegistry.secretToken }}
+{{- $username := "externallakefs" }}
+{{- $registry := "https://index.docker.io/v1/" }}
+{{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" $registry $username $token (printf "%s:%s" $username $token | b64enc) | b64enc }}
 {{- end }}

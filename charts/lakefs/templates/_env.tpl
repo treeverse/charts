@@ -29,40 +29,71 @@ env:
   - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
-  {{- if (.Values.fluffy).enabled }}
+  {{- if (.Values.enterprise).enabled}}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
-  {{- if (.Values.fluffy.sso).enabled }}
-  - name: LAKEFS_AUTH_AUTHENTICATION_API_ENDPOINT
-    value: {{ printf "http://%s/api/v1" (include "fluffy.ssoServiceName" .) | quote }}
-  {{- if and .Values.ingress.enabled (.Values.fluffy.sso.saml).enabled }}
+  - name: LAKEFS_FEATURES_LOCAL_RBAC
+    value: "{{ (((.Values.enterprise).auth).rbac).enabled | default false }}"
+  {{- if (((.Values.enterprise).auth).saml).enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
-    value: {{ printf "%s/sso/login-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+    value: /sso/login-saml
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
-    value: {{ printf "%s/sso/logout-saml" .Values.fluffy.sso.saml.lakeFSServiceProviderIngress }}
+    value: /sso/logout-saml
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_COOKIE_NAME
+    value: "internal_auth_session,saml_auth_session"
+  - name: LAKEFS_AUTH_PROVIDERS_SAML_POST_LOGIN_REDIRECT_URL
+    value: /
+  - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_X509_KEY_PATH
+    value: '/etc/saml_certs/rsa_saml_private.key'
+  - name: LAKEFS_AUTH_PROVIDERS_SAML_SP_X509_CERT_PATH
+    value: '/etc/saml_certs/rsa_saml_public.pem'
   {{- end }}
-  {{- if (.Values.fluffy.sso.oidc).enabled }}
+  {{- if (((.Values.enterprise).auth).oidc).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_URL
     value: '/oidc/login'
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: '/oidc/logout'
+  - name: LAKEFS_AUTH_UI_CONFIG_LOGIN_COOKIE_NAME
+    value: "internal_auth_session,oidc_auth_session"
+  {{- if and .Values.existingSecret .Values.secretKeys.oidcClientSecret }}
+  - name: LAKEFS_AUTH_PROVIDERS_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.existingSecret }}
+        key: {{ .Values.secretKeys.oidcClientSecret }}
+  {{- else if (((.Values.enterprise).auth).oidc).clientSecret }}
+  - name: LAKEFS_AUTH_PROVIDERS_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
+        key: oidc_client_secret
   {{- end }}
-  {{- if (.Values.fluffy.sso.ldap).enabled }}
-  - name: LAKEFS_AUTH_REMOTE_AUTHENTICATOR_ENDPOINT
-    value: {{ default (printf "http://%s/api/v1/ldap/login" (include "fluffy.ssoServiceName" .) | quote) (.Values.fluffy.sso.ldap).endpointOverride }}
+  {{- end }}
+  {{- if (((.Values.enterprise).auth).ldap).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
     value: /logout
+  {{- if and .Values.existingSecret .Values.secretKeys.ldapBindPassword }}
+  - name: LAKEFS_AUTH_PROVIDERS_LDAP_BIND_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.existingSecret }}
+        key: {{ .Values.secretKeys.ldapBindPassword }}
+  {{- else if (((.Values.enterprise).auth).ldap).bindPassword }}
+  - name: LAKEFS_AUTH_PROVIDERS_LDAP_BIND_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
+        key: ldap_bind_password
   {{- end }}
   {{- end }}
-  {{- if (.Values.fluffy.rbac).enabled }}
-  - name: LAKEFS_AUTH_API_ENDPOINT
-    value: {{ printf "http://%s/api/v1" (include "fluffy.rbacServiceName" .) | quote }}
+  {{- if (((.Values.enterprise).auth).rbac).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_RBAC
     value: internal
   {{- end }}
   {{- end }}
+
   {{- if .Values.s3Fallback.enabled }}
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
     value: http://localhost:7001
@@ -72,12 +103,10 @@ env:
     value: /lakefs/cache
   {{- end }}
   {{- if .Values.useDevPostgres }}
-  {{- if and (.Values.fluffy).enabled (.Values.fluffy.rbac).enabled }}
   - name: LAKEFS_DATABASE_TYPE
     value: postgres
   - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
     value: 'postgres://lakefs:lakefs@postgres-server:5432/postgres?sslmode=disable'
-  {{- end }}
   {{- end }}
   {{- if .Values.extraEnvVars }}
   {{- toYaml .Values.extraEnvVars | nindent 2 }}
@@ -107,5 +136,10 @@ envFrom:
     items:
       - key: config.yaml
         path: config.yaml
+{{- end }}
+{{- if (((.Values.enterprise).auth).saml).enabled }}
+- name: secret-volume
+  secret:
+    secretName: saml-certificates
 {{- end }}
 {{- end }}

@@ -1,3 +1,4 @@
+{{- include "lakefs.checkDeprecated" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,14 +20,12 @@ spec:
       labels:
         {{- include "lakefs.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if eq ( include "lakefs.repository" .) "treeverse/lakefs-enterprise" }}
-       {{- if (.Values.fluffy.image.privateRegistry).enabled }}
+      {{- if (.Values.image.privateRegistry).enabled }}
       imagePullSecrets:
-        {{- if (.Values.fluffy.image.privateRegistry).secretToken }}
+       {{- if (.Values.image.privateRegistry).secretToken }}
         - name: "docker-registry"
-        {{- else }}
-        - name: {{ .Values.fluffy.image.privateRegistry.secretName }}
-        {{- end }}
+       {{- else }}
+        - name: {{ .Values.image.privateRegistry.secretName }}
        {{- end }}
       {{- end }}
       serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
@@ -98,6 +97,11 @@ spec:
           {{- else }}
             - name: {{ .Chart.Name }}-local-data
               mountPath: "/lakefs/data"
+          {{- end }}
+          {{- if (((.Values.enterprise).auth).saml).enabled }}
+            - name: secret-volume
+              readOnly: true
+              mountPath: /etc/saml_certs/
           {{- end }}
           {{- include "lakefs.env" . | nindent 10 }}
         {{- include "lakefs.s3proxyContainer" . | nindent 8}}

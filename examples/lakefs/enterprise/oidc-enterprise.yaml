@@ -1,0 +1,45 @@
+ingress:
+  enabled: true
+  ingressClassName: <class-name>
+  hosts:
+    # the ingress that will be created for lakeFS
+    - host: <lakefs.ingress.domain>
+      paths: 
+        - /
+
+enterprise:
+  enabled: true
+  auth:
+    oidc:
+      enabled: true
+      # secret given by the OIDC provider (e.g auth0, Okta, etc)
+      client_secret: <oidc-client-secret>
+
+image:
+  privateRegistry:
+    enabled: true
+    secretToken: <dockerhub-token>
+
+lakefsConfig: |
+  blockstore:
+    type: local
+  features:
+    local_rbac: true
+  auth:
+    logout_redirect_url: https://oidc-provider-url.com/logout/example
+    oidc:
+      friendly_name_claim_name: <some-oidc-provider-claim-name>
+      default_initial_groups: ["Developers"]
+    providers:
+      oidc:
+        post_login_redirect_url: /
+        url: https://oidc-provider-url.com/
+        client_id: <oidc-client-id>
+        callback_base_url: https://<lakefs.ingress.domain>
+        # the claim name that represents the client identifier in the OIDC provider (e.g Okta)
+        logout_client_id_query_parameter: client_id
+        # the query parameters that will be used to redirect the user to the OIDC provider (e.g Okta) after logout
+        logout_endpoint_query_parameters:
+          - returnTo
+          - https://<lakefs.ingress.domain>/oidc/login
+

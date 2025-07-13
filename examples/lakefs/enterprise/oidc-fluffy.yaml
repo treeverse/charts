@@ -1,17 +1,3 @@
-lakefsConfig: | 
-  logging:
-      level: "INFO"
-  blockstore:
-    type: local
-  auth:
-    oidc:
-      # the claim that's provided by the OIDC provider (e.g Okta) that will be used as the username according to OIDC provider claims provided after successfull authentication
-      friendly_name_claim_name: "<some-oidc-provider-claim-name>"
-      default_initial_groups: ["Developers"]
-    ui_config:
-      login_cookie_names:
-        - internal_auth_session
-        - oidc_auth_session
 ingress:
   enabled: true
   ingressClassName: <class-name>
@@ -19,24 +5,15 @@ ingress:
     # the ingress that will be created for lakeFS
     - host: <lakefs.ingress.domain>
       paths: 
-       - /
-
-##################################################
-########### lakeFS enterprise - FLUFFY ###########
-##################################################
+        - /
 
 fluffy:
   enabled: true
   image:
-    repository: treeverse/fluffy
-    pullPolicy: IfNotPresent
     privateRegistry:
       enabled: true
       secretToken: <dockerhub-token-fluffy-image>
   fluffyConfig: |
-    logging:
-      format: "json"
-      level: "INFO"
     auth:
       logout_redirect_url: https://oidc-provider-url.com/logout/example
       oidc:
@@ -61,4 +38,19 @@ fluffy:
   rbac:
     enabled: true
 
-useDevPostgres: true
+lakefsConfig: |
+  database:
+    type: local
+  blockstore:
+    type: local
+  features:
+    local_rbac: true
+  auth:
+    ui_config:
+      login_cookie_names:
+        - internal_auth_session
+        - oidc_auth_session
+    oidc:
+      friendly_name_claim_name: <some-oidc-provider-claim-name>
+      default_initial_groups: ["Developers"]
+

@@ -11,10 +11,6 @@ ingress:
       paths:
         - /
 
-##################################################
-########### lakeFS enterprise - FLUFFY ###########
-##################################################
-
 fluffy:
   enabled: true
   image:
@@ -41,4 +37,5 @@ fluffy:
   rbac:
     enabled: true
 
-useDevPostgres: true
+
+
