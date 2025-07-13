@@ -83,7 +83,7 @@ Define which repository to use according to the following:
 
 {{- define "lakefs.checkDeprecated" -}}
 {{- if .Values.fluffy -}}
-{{- fail "Fluffy configuration detected. Please migrate to lakeFS Enterprise auth configuration and use treeverse/lakefs-enterprise docker image. See migration guide." -}}
+{{- fail "Fluffy configuration detected. Please migrate to lakeFS Enterprise auth configuration and use treeverse/lakefs-enterprise docker image. See migration guide: https://docs.lakefs.io/latest/enterprise/upgrade/#kubernetes-migrating-with-helm-from-fluffy-to-new-lakefs-enterprise." -}}
 {{- end -}}
 {{- end -}}
 
