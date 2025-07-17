@@ -30,6 +30,10 @@ env:
     value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
   {{- end }}
   {{- if (.Values.enterprise).enabled}}
+  {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
+  - name: LAKEFS_LICENSE_PATH
+    value: '/etc/lakefs/license.tkn'
+  {{- end }}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
   - name: LAKEFS_FEATURES_LOCAL_RBAC
@@ -137,8 +141,25 @@ envFrom:
       - key: config.yaml
         path: config.yaml
 {{- end }}
+{{- if (.Values.enterprise).enabled }}
+{{- if and .Values.existingSecret .Values.secretKeys.licenseContentsKey }}
+- name: secret-volume-license-token
+  secret:
+    secretName: {{ .Values.existingSecret }}
+    items:
+      - key: {{ .Values.secretKeys.licenseContentsKey }}
+        path: license.tkn
+{{- else if and .Values.secrets .Values.secrets.licenseContents }}
+- name: secret-volume-license-token
+  secret:
+    secretName: {{ include "lakefs.fullname" . }}
+    items:
+      - key: license_contents
+        path: license.tkn
+{{- end }}
+{{- end }}
 {{- if (((.Values.enterprise).auth).saml).enabled }}
-- name: secret-volume
+- name: secret-volume-license-token
   secret:
     secretName: saml-certificates
 {{- end }}

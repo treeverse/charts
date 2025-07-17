@@ -121,6 +121,8 @@ secretKeys:
   authEncryptSecretKey: auth_encrypt_secret_key
   # Use the following to fetch PostgreSQL connection string from an existing secret:
   databaseConnectionString: null
+  # Use to fetch license token from an existing secret:
+  licenseContentsKey: null
   # Use the following to fetch LDAP bind password from an existing secret:
   ldapBindPassword: null
   # Use the following to fetch OIDC client secret from an existing secret:
@@ -150,3 +152,6 @@ enterprise:
         # certificates for AD FS IDP (e.g Azure AD)
         samlRsaPublicCert: null
         samlRsaPrivateKey: null
+
+secrets:
+  licenseContents: null
