@@ -145,7 +145,7 @@ envFrom:
 {{- if and .Values.existingSecret .Values.secretKeys.licenseContentsKey }}
 - name: secret-volume-license-token
   secret:
-    secretName: secretName: {{ .Values.existingSecret }}
+    secretName: {{ .Values.existingSecret }}
     items:
       - key: {{ .Values.secretKeys.licenseContentsKey }}
         path: license.tkn
