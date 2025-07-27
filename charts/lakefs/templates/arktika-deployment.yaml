@@ -1,0 +1,112 @@
+{{- if .Values.mds.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "arktika.fullname" . }}
+  labels:
+    {{- include "arktika.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "arktika.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/arktika-configmap.yaml") . | sha256sum }}
+      {{- with .Values.mds.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "arktika.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.image.privateRegistry.enabled }}
+      imagePullSecrets:
+       {{- if (.Values.image.privateRegistry).secretToken }}
+        - name: "docker-registry"
+       {{- else }}
+        - name: {{ .Values.image.privateRegistry.secretName }}
+       {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
+      {{- with .Values.mds.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: arktika
+          args:
+            - --config
+            - /app/config.yaml
+          image: "{{ .Values.mds.image.repository }}:{{ .Values.mds.image.tag }}"
+          imagePullPolicy: {{ .Values.mds.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- if .failureThreshold }}
+            failureThreshold: {{ .failureThreshold }}
+            {{- end }}
+            {{- if .periodSeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            {{- end }}
+            {{- if .successThreshold }}
+            successThreshold: {{ .successThreshold }}
+            {{- end }}
+            {{- if .timeoutSeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            {{- end }}
+            httpGet:
+              path: /_health
+              port: http
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- if .failureThreshold }}
+            failureThreshold: {{ .failureThreshold }}
+            {{- end }}
+            {{- if .periodSeconds }}
+            periodSeconds: {{ .periodSeconds }}
+            {{- end }}
+            {{- if .successThreshold }}
+            successThreshold: {{ .successThreshold }}
+            {{- end }}
+            {{- if .timeoutSeconds }}
+            timeoutSeconds: {{ .timeoutSeconds }}
+            {{- end }}
+            {{- if .initialDelaySeconds }}
+            initialDelaySeconds: {{ .initialDelaySeconds }}
+            {{- end }}
+            httpGet:
+              path: /_health
+              port: http
+          {{- end }}
+          {{- with .Values.mds.extraEnvVars }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.mds.resources | nindent 12 }}
+          volumeMounts:
+            {{- include "arktika.volumeMounts" . | nindent 12 }}
+      volumes:
+        {{- include "arktika.volumes" . | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
