@@ -1,5 +1,15 @@
 # Changelog
 
+# 1.6.1
+
+:new: What's new:
+- Update lakeFS version to [1.64.0](https://github.com/treeverse/lakeFS/releases/tag/v1.64.0)
+
+# 1.6.0
+
+:new: What's new:
+- Add license support to helm chart
+
 # 1.5.0
 
 ### Important
