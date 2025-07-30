@@ -1,0 +1,13 @@
+{{- if .Values.mds.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mds.fullname" . }}-config
+  labels:
+    {{- include "mds.labels" . | nindent 4 }}
+{{- with .Values.mds.config }}
+data:
+  config.yaml: |
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- end }}

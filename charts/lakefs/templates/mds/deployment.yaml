@@ -2,23 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "arktika.fullname" . }}
+  name: {{ include "mds.fullname" . }}
   labels:
-    {{- include "arktika.labels" . | nindent 4 }}
+    {{- include "mds.labels" . | nindent 4 }}
 spec:
+  # Currently, MDS is not scalable, so we only run one replica
   replicas: 1
   selector:
     matchLabels:
-      {{- include "arktika.selectorLabels" . | nindent 6 }}
+      {{- include "mds.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/arktika-configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/mds/configmap.yaml") . | sha256sum }}
       {{- with .Values.mds.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "arktika.selectorLabels" . | nindent 8 }}
+        {{- include "mds.selectorLabels" . | nindent 8 }}
     spec:
       {{- if .Values.image.privateRegistry.enabled }}
       imagePullSecrets:
@@ -34,7 +35,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: arktika
+        - name: mds
           args:
             - --config
             - /app/config.yaml
@@ -44,44 +45,13 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
-          {{- with .Values.readinessProbe }}
+          {{- with .Values.mds.readinessProbe }}
           readinessProbe:
-            {{- if .failureThreshold }}
-            failureThreshold: {{ .failureThreshold }}
-            {{- end }}
-            {{- if .periodSeconds }}
-            periodSeconds: {{ .periodSeconds }}
-            {{- end }}
-            {{- if .successThreshold }}
-            successThreshold: {{ .successThreshold }}
-            {{- end }}
-            {{- if .timeoutSeconds }}
-            timeoutSeconds: {{ .timeoutSeconds }}
-            {{- end }}
-            httpGet:
-              path: /_health
-              port: http
+            {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.livenessProbe }}
+          {{- with .Values.mds.livenessProbe }}
           livenessProbe:
-            {{- if .failureThreshold }}
-            failureThreshold: {{ .failureThreshold }}
-            {{- end }}
-            {{- if .periodSeconds }}
-            periodSeconds: {{ .periodSeconds }}
-            {{- end }}
-            {{- if .successThreshold }}
-            successThreshold: {{ .successThreshold }}
-            {{- end }}
-            {{- if .timeoutSeconds }}
-            timeoutSeconds: {{ .timeoutSeconds }}
-            {{- end }}
-            {{- if .initialDelaySeconds }}
-            initialDelaySeconds: {{ .initialDelaySeconds }}
-            {{- end }}
-            httpGet:
-              path: /_health
-              port: http
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.mds.extraEnvVars }}
           env:
@@ -90,9 +60,9 @@ spec:
           resources:
             {{- toYaml .Values.mds.resources | nindent 12 }}
           volumeMounts:
-            {{- include "arktika.volumeMounts" . | nindent 12 }}
+            {{- include "mds.volumeMounts" . | nindent 12 }}
       volumes:
-        {{- include "arktika.volumes" . | nindent 8 }}
+        {{- include "mds.volumes" . | nindent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
