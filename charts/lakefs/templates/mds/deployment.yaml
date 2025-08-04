@@ -1,0 +1,82 @@
+{{- if .Values.mds.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mds.fullname" . }}
+  labels:
+    {{- include "mds.labels" . | nindent 4 }}
+spec:
+  # Currently, MDS is not scalable, so we only run one replica
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "mds.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/mds/configmap.yaml") . | sha256sum }}
+      {{- with .Values.mds.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mds.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.image.privateRegistry.enabled }}
+      imagePullSecrets:
+       {{- if (.Values.image.privateRegistry).secretToken }}
+        - name: "docker-registry"
+       {{- else }}
+        - name: {{ .Values.image.privateRegistry.secretName }}
+       {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
+      {{- with .Values.mds.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: mds
+          args:
+            - --config
+            - /app/config.yaml
+          image: "{{ .Values.mds.image.repository }}:{{ .Values.mds.image.tag }}"
+          imagePullPolicy: {{ .Values.mds.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          {{- with .Values.mds.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.mds.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.mds.extraEnvVars }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.mds.resources | nindent 12 }}
+          volumeMounts:
+            {{- include "mds.volumeMounts" . | nindent 12 }}
+      volumes:
+        {{- include "mds.volumes" . | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
