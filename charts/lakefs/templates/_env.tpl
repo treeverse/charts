@@ -32,7 +32,7 @@ env:
   {{- if (.Values.enterprise).enabled}}
   {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
   - name: LAKEFS_LICENSE_PATH
-    value: '/etc/lakefs-license/license.tkn'
+    value: '/etc/lakefs/license.tkn'
   {{- end }}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"

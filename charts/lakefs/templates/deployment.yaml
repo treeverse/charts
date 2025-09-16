@@ -93,7 +93,9 @@ spec:
           {{- end }}
           {{- if .Values.lakefsConfig }}
             - name: config-volume
-              mountPath: /etc/lakefs
+              mountPath: /etc/lakefs/config.yaml
+              subPath: "config.yaml"
+              readOnly: true
           {{- else }}
             - name: {{ .Chart.Name }}-local-data
               mountPath: "/lakefs/data"
@@ -106,7 +108,7 @@ spec:
           {{- if (.Values.enterprise).enabled }}
           {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
             - name: secret-volume-license-token
-              mountPath: /etc/lakefs-license/license.tkn
+              mountPath: /etc/lakefs/license.tkn
               subPath: "license.tkn"
               readOnly: true
           {{- end }}
