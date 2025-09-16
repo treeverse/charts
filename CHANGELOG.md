@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.7.8
+:bug: Bugs fixed:
+- Prevent overlapping mounts: use subPath to mount the config file at `/etc/lakefs/config.yaml` so `/etc/lakefs/license.tkn` can be mounted separately
+
 # 1.7.7
 
 :new: What's new:

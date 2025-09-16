@@ -93,7 +93,9 @@ spec:
           {{- end }}
           {{- if .Values.lakefsConfig }}
             - name: config-volume
-              mountPath: /etc/lakefs
+              mountPath: /etc/lakefs/config.yaml
+              subPath: "config.yaml"
+              readOnly: true
           {{- else }}
             - name: {{ .Chart.Name }}-local-data
               mountPath: "/lakefs/data"
