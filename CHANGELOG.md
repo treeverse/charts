@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.7.8
+:bug: Bugs fixed:
+- Fixed an issue with passing license key via secret.
+
 # 1.7.7
 
 :new: What's new:

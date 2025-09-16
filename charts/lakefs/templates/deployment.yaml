@@ -106,7 +106,7 @@ spec:
           {{- if (.Values.enterprise).enabled }}
           {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
             - name: secret-volume-license-token
-              mountPath: /etc/lakefs/license.tkn
+              mountPath: /etc/lakefs-license/license.tkn
               subPath: "license.tkn"
               readOnly: true
           {{- end }}
