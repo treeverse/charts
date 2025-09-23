@@ -1,6 +1,12 @@
 # Changelog
 
+# 1.7.9
+
+:new: What's new:
+- Update lakeFS version to [1.70.1](https://github.com/treeverse/lakeFS/releases/tag/v1.70.1)
+
 # 1.7.8
+
 :bug: Bugs fixed:
 - Prevent overlapping mounts: use subPath to mount the config file at `/etc/lakefs/config.yaml` so `/etc/lakefs/license.tkn` can be mounted separately
 
