@@ -3,6 +3,12 @@
 # 1.7.9
 
 :new: What's new:
+- Update lakeFS version to [1.71.0](https://github.com/treeverse/lakeFS/releases/tag/v1.71.0)
+- Update metadata search version to v0.2.1
+
+# 1.7.9
+
+:new: What's new:
 - Update lakeFS version to [1.70.1](https://github.com/treeverse/lakeFS/releases/tag/v1.70.1)
 
 # 1.7.8
