@@ -114,7 +114,7 @@ mds:
   image:
     pullPolicy: IfNotPresent
     repository: treeverse/mds
-    tag: "0.1.0"
+    tag: "0.2.1"
   extraEnvVars: {}
   resources:
     # limits:
