@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.7.11
+
+:new: What's new:
+- Update lakeFS version to [1.72.0](https://github.com/treeverse/lakeFS/releases/tag/v1.72.0)
+
 # 1.7.9
 
 :new: What's new:
