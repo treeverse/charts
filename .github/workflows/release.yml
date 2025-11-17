@@ -4,7 +4,45 @@ on:
   push:
     branches: [master]
   pull_request:
+  workflow_dispatch:
 jobs:
+  check-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if Chart.yaml was modified
+        id: check-chart
+        run: |
+          git fetch origin ${{ github.base_ref || 'master' }}
+
+          # Check if Chart.yaml was modified in this PR
+          if git diff --name-only origin/${{ github.base_ref || 'master' }}...HEAD | grep -q "charts/lakefs/Chart.yaml"; then
+            echo "chart_modified=true" >> $GITHUB_OUTPUT
+            echo "Chart.yaml was modified"
+          else
+            echo "chart_modified=false" >> $GITHUB_OUTPUT
+            echo "Chart.yaml was not modified - skipping CHANGELOG check"
+          fi
+
+      - name: Check CHANGELOG updated
+        if: steps.check-chart.outputs.chart_modified == 'true'
+        run: |
+          # Check if CHANGELOG.md was modified in this PR
+          git diff --name-only origin/${{ github.base_ref || 'master' }}...HEAD | grep -q "CHANGELOG.md"
+
+          if [ $? -eq 0 ]; then
+            echo "✅ CHANGELOG.md has been updated"
+            exit 0
+          else
+            echo "❌ ERROR: Chart.yaml was modified but CHANGELOG.md was not updated"
+            echo "Please update CHANGELOG.md to document your changes"
+            exit 1
+          fi
+
   lint:
     runs-on: ubuntu-latest
     steps:
