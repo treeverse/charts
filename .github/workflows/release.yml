@@ -5,12 +5,6 @@ on:
     branches: [master]
   pull_request:
   workflow_dispatch:
-    inputs:
-      skip-checks:
-        description: 'Skip changelog and lint checks'
-        required: false
-        default: 'false'
-
 jobs:
   check-changelog:
     runs-on: ubuntu-latest
