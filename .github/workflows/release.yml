@@ -78,7 +78,10 @@ jobs:
       contents: write # needed to write releases
       pull-requests: read # needed for changelog
     needs: lint
-    if: ${{ github.event_name == 'push' &&  github.ref == 'refs/heads/master' }}
+    # Run on push to master or manual dispatch
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+      github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
