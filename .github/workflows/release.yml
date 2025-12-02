@@ -14,8 +14,6 @@ on:
 jobs:
   check-changelog:
     runs-on: ubuntu-latest
-    # Run if NOT manual or skip-checks is false
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.skip-checks == 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
