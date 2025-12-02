@@ -5,9 +5,17 @@ on:
     branches: [master]
   pull_request:
   workflow_dispatch:
+    inputs:
+      skip-checks:
+        description: 'Skip changelog and lint checks'
+        required: false
+        default: 'false'
+
 jobs:
   check-changelog:
     runs-on: ubuntu-latest
+    # Run if NOT manual or skip-checks is false
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.skip-checks == 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -78,7 +86,10 @@ jobs:
       contents: write # needed to write releases
       pull-requests: read # needed for changelog
     needs: lint
-    if: ${{ github.event_name == 'push' &&  github.ref == 'refs/heads/master' }}
+    # Run on push to master or manual dispatch
+    if: >
+      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+      github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
