@@ -5,12 +5,18 @@ on:
     branches: [master]
   pull_request:
   workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Trigger chart release (this will create a new chart version if changes are detected)'
+        required: false
+        type: boolean
+        default: true
 jobs:
   check-changelog:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -46,45 +52,44 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: gitLeaks
-      uses: zricethezav/gitleaks-action@v1.3.0
-    - name: Install chart-testing (lint)
-      uses: helm/chart-testing-action@v2
-      with:
-        version: v3.8.0
-    - name: Run chart-testing (list-changed)
-      id: list-changed
-      run: |
-        changed=$(ct list-changed)
-        if [[ -n "$changed" ]]; then
-          echo "changed=true" >> $GITHUB_OUTPUT
-        fi
-    - name: Run chart-testing (lint)
-      run: ct lint
-    - name: Create kind cluster
-      uses: helm/kind-action@v1
-      # Only build a kind cluster if there are chart changes to test.
-      if: ${{ steps.list-changed.outputs.changed == 'true' }}
-    - name: Run chart-testing (install)
-      if: ${{ steps.list-changed.outputs.changed == 'true' }}
-      run: ct install
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: gitLeaks
+        uses: zricethezav/gitleaks-action@v1.3.0
+      - name: Install chart-testing (lint)
+        uses: helm/chart-testing-action@v2
+        with:
+          version: v3.8.0
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed)
+          if [[ -n "$changed" ]]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      - name: Run chart-testing (lint)
+        run: ct lint
+      - name: Create kind cluster
+        uses: helm/kind-action@v1
+        # Only build a kind cluster if there are chart changes to test.
+        if: ${{ steps.list-changed.outputs.changed == 'true' }}
+      - name: Run chart-testing (install)
+        if: ${{ steps.list-changed.outputs.changed == 'true' }}
+        run: ct install
   release:
     runs-on: ubuntu-latest
     permissions:
       contents: write # needed to write releases
       pull-requests: read # needed for changelog
-    needs: lint
-    # Run on push to master or manual dispatch
+    needs: [lint, check-changelog]
     if: >
       (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
-      github.event_name == 'workflow_dispatch'
+      (github.event_name == 'workflow_dispatch' && inputs.confirm == true)
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Configure Git
