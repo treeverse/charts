@@ -1,0 +1,13 @@
+{{- if .Values.replication.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "replication.fullname" . }}
+  labels:
+    {{- include "replication.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    {{- $config := deepCopy .Values.replication.config }}
+    {{- $_ := set $config "committed" (dict "local_cache" (dict "dir" (printf "%s/cache" .Values.replication.local_cache.base_dir) "size_bytes" .Values.replication.local_cache.size_bytes)) }}
+    {{- toYaml $config | nindent 4 }}
+{{- end }}

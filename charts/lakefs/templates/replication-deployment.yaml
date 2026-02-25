@@ -1,0 +1,81 @@
+{{- if .Values.replication.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "replication.fullname" . }}
+  labels:
+    {{- include "replication.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replication.replicas }}
+  selector:
+    matchLabels:
+      {{- include "replication.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/replication-configmap.yaml") . | sha256sum }}
+        {{- with .Values.replication.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "replication.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.replication.serviceAccountName }}
+      serviceAccountName: {{ .Values.replication.serviceAccountName }}
+      {{- end }}
+      containers:
+        - name: replication
+          image: "{{ .Values.replication.image.repository }}:{{ .Values.replication.image.tag }}"
+          imagePullPolicy: {{ .Values.replication.image.pullPolicy }}
+          args: ["run", "--config", "/etc/replication/config.yaml"]
+          ports:
+            - containerPort: {{ .Values.replication.port }}
+              protocol: TCP
+          {{- if or .Values.replication.extraEnvVars .Values.replication.extraEnvVarsSecret }}
+          env:
+            {{- with .Values.replication.extraEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.replication.extraEnvVarsSecret }}
+            - name: REPLICATION_LAKEFS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.replication.extraEnvVarsSecret }}
+                  key: source_lakefs_access_key_id
+            - name: REPLICATION_LAKEFS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.replication.extraEnvVarsSecret }}
+                  key: source_lakefs_secret_access_key
+            - name: REPLICATION_AUTH_ENCRYPT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.replication.extraEnvVarsSecret }}
+                  key: auth_encrypt_secret_key
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/replication
+              readOnly: true
+            - name: cache
+              mountPath: {{ .Values.replication.local_cache.base_dir }}
+          {{- with .Values.replication.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "replication.fullname" . }}
+        - name: cache
+          emptyDir: {}
+      {{- if (.Values.image.privateRegistry).enabled }}
+      imagePullSecrets:
+       {{- if (.Values.image.privateRegistry).secretToken }}
+        - name: "docker-registry"
+       {{- else if (.Values.image.privateRegistry).secretName }}
+        - name: {{ .Values.image.privateRegistry.secretName }}
+       {{- end }}
+      {{- end }}
+{{- end }}

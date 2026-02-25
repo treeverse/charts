@@ -1,0 +1,16 @@
+{{- if .Values.replication.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "replication.fullname" . }}
+  labels:
+    {{- include "replication.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.replication.port }}
+      targetPort: {{ .Values.replication.port }}
+      protocol: TCP
+  selector:
+    {{- include "replication.selectorLabels" . | nindent 4 }}
+{{- end }}

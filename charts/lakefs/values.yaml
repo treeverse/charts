@@ -172,6 +172,7 @@ replication:
   podAnnotations: {}
   extraEnvVars: []
   extraEnvVarsSecret: null
+  serviceAccountName: ""
   base_dir: /home/replication
   local_cache:
     base_dir: /cache
