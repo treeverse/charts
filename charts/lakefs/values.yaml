@@ -178,10 +178,12 @@ replication:
     base_dir: /cache
     size_bytes: "512000000"
   # All replication service configuration.
-  # Required fields: region, organization_id, mirrors_database, refstore_database, auth, blockstore.
+  # Required fields: region, organization_id, mirrors_database, auth, blockstore.
   # See services/mirroring/config.go for the full schema.
   # Note: committed.local_cache (dir and size_bytes) is automatically injected from
   #       replication.local_cache above — do not set it here.
+  # Note: refstore_database is automatically populated from lakefsConfig.database
+  #       if not explicitly set here.
   # Example:
   #   region: "us-east-1"
   #   organization_id: "my-org"
@@ -197,7 +199,7 @@ replication:
   #   refstore_database:
   #     type: dynamodb
   #     dynamodb:
-  #       table_name: lakefs-cloud-refstore-my-org
+  #       table_name: lakefs-refstore-my-org
   #   auth:
   #     api:
   #       endpoint: "http://lakefs:8000/api/v1"

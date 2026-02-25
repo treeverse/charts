@@ -9,5 +9,12 @@ data:
   config.yaml: |
     {{- $config := deepCopy .Values.replication.config }}
     {{- $_ := set $config "committed" (dict "local_cache" (dict "dir" (printf "%s/cache" .Values.replication.local_cache.base_dir) "size_bytes" .Values.replication.local_cache.size_bytes)) }}
+    {{- /* Auto-populate refstore_database from lakefsConfig.database if not explicitly set */ -}}
+    {{- if not (hasKey $config "refstore_database") }}
+    {{- $lakefsConf := fromYaml .Values.lakefsConfig }}
+    {{- if and $lakefsConf (hasKey $lakefsConf "database") }}
+    {{- $_ := set $config "refstore_database" $lakefsConf.database }}
+    {{- end }}
+    {{- end }}
     {{- toYaml $config | nindent 4 }}
 {{- end }}
