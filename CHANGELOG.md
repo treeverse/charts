@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.7.20
+:bug: Bugs fixed:
+- Fix MDS crash when securityContext sets a different runAsUser by adding PYTHONPATH workaround
+
 # 1.7.19
 :new: What's new:
 - Update lakeFS version to [1.78.0](https://github.com/treeverse/lakeFS/releases/tag/v1.78.0)
