@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/replication-configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- with .Values.replication.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -60,6 +60,18 @@ spec:
               readOnly: true
             - name: cache
               mountPath: {{ .Values.replication.local_cache.base_dir }}
+          readinessProbe:
+            httpGet:
+              path: /_health
+              port: {{ .Values.replication.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: {{ .Values.replication.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 30
           {{- with .Values.replication.resources }}
           resources:
             {{- toYaml . | nindent 12 }}

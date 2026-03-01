@@ -165,7 +165,7 @@ replication:
   replicas: 1
   image:
     repository: treeverse/replication
-    tag: ""
+    tag: 0.1.16
     pullPolicy: IfNotPresent
   port: 8008
   resources: {}
