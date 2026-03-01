@@ -53,8 +53,14 @@ spec:
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.mds.extraEnvVars }}
           env:
+            # TODO(mds): Remove this workaround once the MDS image installs
+            # packages globally instead of under the arktika user home directory.
+            # When securityContext sets a different runAsUser, Python cannot find
+            # packages installed in /home/arktika/.local/lib/python3.13/site-packages.
+            - name: PYTHONPATH
+              value: /home/arktika/.local/lib/python3.13/site-packages
+          {{- with .Values.mds.extraEnvVars }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:

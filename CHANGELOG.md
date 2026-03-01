@@ -1,8 +1,12 @@
 # Changelog
 
-# 1.7.20
+# 1.7.21
 :new: What's new:
 - Add support for replication service (Enterprise-only feature)
+
+# 1.7.20
+:bug: Bugs fixed:
+- Fix MDS crash when securityContext sets a different runAsUser by adding PYTHONPATH workaround
 
 # 1.7.19
 :new: What's new:
