@@ -162,10 +162,9 @@ mds:
 # https://docs.lakefs.io/latest/howto/mirroring/
 replication:
   enabled: false
-  replicas: 1
   image:
     repository: treeverse/replication
-    tag: 0.1.16
+    tag: 0.1.17
     pullPolicy: IfNotPresent
   port: 8008
   resources: {}

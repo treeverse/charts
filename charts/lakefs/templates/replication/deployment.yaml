@@ -6,7 +6,10 @@ metadata:
   labels:
     {{- include "replication.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replication.replicas }}
+  # Increasing replicas will not improve performance and is not recommended.
+  # The service uses internal concurrency controls and running multiple replicas
+  # may cause conflicts.
+  replicas: 1
   selector:
     matchLabels:
       {{- include "replication.selectorLabels" . | nindent 6 }}
