@@ -87,6 +87,36 @@ Define which repository to use according to the following:
 {{- end -}}
 {{- end -}}
 
+{{/*
+Replication resource full name
+*/}}
+{{- define "replication.fullname" -}}
+{{- $name := include "lakefs.fullname" . }}
+{{- printf "%s-replication" $name | trunc 63 }}
+{{- end }}
+
+{{/*
+Replication common labels
+*/}}
+{{- define "replication.labels" -}}
+helm.sh/chart: {{ include "lakefs.chart" . }}
+{{ include "replication.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Replication selector labels
+*/}}
+{{- define "replication.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "lakefs.name" . }}-replication
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/component: replication
+app: {{ include "lakefs.name" . }}-replication
+{{- end }}
+
 {{- define "lakefs.dockerConfigJson" }}
 {{- $token := .Values.image.privateRegistry.secretToken }}
 {{- $username := "externallakefs" }}

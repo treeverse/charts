@@ -159,6 +159,57 @@ mds:
       #   - main
       #   - feature-*
 
+# https://docs.lakefs.io/latest/howto/mirroring/
+replication:
+  enabled: false
+  image:
+    repository: treeverse/replication
+    tag: 0.1.17
+    pullPolicy: IfNotPresent
+  port: 8008
+  resources: {}
+  podAnnotations: {}
+  extraEnvVars: []
+  extraEnvVarsSecret: null
+  serviceAccountName: ""
+  base_dir: /home/replication
+  local_cache:
+    base_dir: /cache
+    size_bytes: "512000000"
+  # All replication service configuration.
+  # Required fields: region, organization_id, mirrors_database, auth, blockstore.
+  # See services/mirroring/config.go for the full schema.
+  # Note: committed.local_cache (dir and size_bytes) is automatically injected from
+  #       replication.local_cache above — do not set it here.
+  # Note: refstore_database is automatically populated from lakefsConfig.database
+  #       if not explicitly set here.
+  # Example:
+  #   region: "us-east-1"
+  #   organization_id: "my-org"
+  #   regional_endpoint: "https://my-lakefs.us-east-1.example.com"
+  #   lakefs_access_key_id: "AKIAIOSFODNN7EXAMPLE"
+  #   lakefs_secret_access_key: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  #   dst_endpoints:
+  #     us-west-2: "https://my-lakefs.us-west-2.example.com"
+  #   mirrors_database:
+  #     type: dynamodb
+  #     dynamodb:
+  #       table_name: lakefs-replication-table
+  #   refstore_database:
+  #     type: dynamodb
+  #     dynamodb:
+  #       table_name: lakefs-refstore-my-org
+  #   auth:
+  #     api:
+  #       endpoint: "http://lakefs:8000/api/v1"
+  #     encrypt:
+  #       secret_key: "some-random-secret"
+  #   blockstore:
+  #     type: s3
+  #     s3:
+  #       region: "us-east-1"
+  config: {}
+
 # Start local postgres pod for quick start, not for production
 useDevPostgres: false
 
