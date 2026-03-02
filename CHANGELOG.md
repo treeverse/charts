@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.7.22
+:new: What's new:
+- Update lakeFS version to [1.79.0](https://github.com/treeverse/lakeFS/releases/tag/v1.79.0)
+
 # 1.7.21
 :new: What's new:
 - Add support for replication service (Enterprise-only feature)
