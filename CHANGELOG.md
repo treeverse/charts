@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.8.1
+:new: What's new:
+- Update lakeFS version to [1.80.0](https://github.com/treeverse/lakeFS/releases/tag/v1.80.0)
+
 # 1.8.0
 :new: What's new:
 - Remove image tag from mds (will take latest tag)
