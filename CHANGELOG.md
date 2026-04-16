@@ -2,7 +2,7 @@
 
 # 1.8.2
 :new: What's new:
-- Update lakeFS version to [1.81.0](https://github.com/treeverse/lakeFS-Enterprise/releases/tag/v1.81.0)
+- Update lakeFS version to [1.81.0](https://changelog.lakefs.io/changelog/releases/v1.81.0/)
 
 # 1.8.1
 :new: What's new:
