@@ -117,6 +117,36 @@ app.kubernetes.io/component: replication
 app: {{ include "lakefs.name" . }}-replication
 {{- end }}
 
+{{/*
+Audit maintenance resource full name
+*/}}
+{{- define "audit.fullname" -}}
+{{- $name := include "lakefs.fullname" . }}
+{{- printf "%s-audit-maintain" $name | trunc 63 }}
+{{- end }}
+
+{{/*
+Audit maintenance common labels
+*/}}
+{{- define "audit.labels" -}}
+helm.sh/chart: {{ include "lakefs.chart" . }}
+{{ include "audit.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Audit maintenance selector labels
+*/}}
+{{- define "audit.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "lakefs.name" . }}-audit-maintain
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/component: audit-maintain
+app: {{ include "lakefs.name" . }}-audit-maintain
+{{- end }}
+
 {{- define "lakefs.dockerConfigJson" }}
 {{- $token := .Values.image.privateRegistry.secretToken }}
 {{- $username := "externallakefs" }}

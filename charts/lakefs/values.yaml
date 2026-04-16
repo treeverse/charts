@@ -252,5 +252,39 @@ enterprise:
         samlRsaPublicCert: null
         samlRsaPrivateKey: null
 
+# Audit log maintenance CronJob (Enterprise-only).
+# Requires enterprise.enabled: true and audit_log.enabled: true in lakefsConfig.
+auditLog:
+  enabled: false
+  maintenance:
+    # Cron schedule for the maintenance job (default: every 4 hours).
+    schedule: "0 */4 * * *"
+    # Credentials for the audit service user (created by lakeFS bootstrap).
+    # Either set these directly or use existingSecret.
+    accessKeyID: ""
+    secretAccessKey: ""
+    # Use an existing K8s Secret instead of creating one.
+    # existingSecret: my-audit-secret
+    # secretKeys:
+    #   accessKeyID: access_key_id
+    #   secretAccessKey: secret_access_key
+    # Override the lakeFS endpoint (defaults to the in-cluster service).
+    # endpoint: http://lakefs:80
+    # Snapshot retention in days (0 = no expiration).
+    retentionDays: 90
+    # Time to keep the process alive after work completes for Prometheus scraping.
+    shutdownDelay: 2m
+    # Port for the Prometheus /metrics endpoint.
+    metricsPort: 9090
+    # Extra CLI arguments to pass to the maintain command.
+    extraArgs: []
+    extraEnvVars: []
+    podAnnotations: {}
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
+
 secrets:
   licenseContents: null

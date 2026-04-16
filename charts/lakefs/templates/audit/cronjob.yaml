@@ -1,0 +1,90 @@
+{{- if and (.Values.enterprise).enabled (.Values.auditLog).enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "audit.fullname" . }}
+  labels:
+    {{- include "audit.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.auditLog.maintenance.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.auditLog.maintenance.successfulJobsHistoryLimit | default 3 }}
+  failedJobsHistoryLimit: {{ .Values.auditLog.maintenance.failedJobsHistoryLimit | default 3 }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "audit.selectorLabels" . | nindent 12 }}
+          annotations:
+            prometheus.io/scrape: "true"
+            prometheus.io/port: {{ .Values.auditLog.maintenance.metricsPort | default 9090 | quote }}
+            {{- with .Values.auditLog.maintenance.podAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        spec:
+          {{- if .Values.serviceAccount.create }}
+          serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
+          {{- else if .Values.auditLog.maintenance.serviceAccountName }}
+          serviceAccountName: {{ .Values.auditLog.maintenance.serviceAccountName }}
+          {{- end }}
+          restartPolicy: OnFailure
+          containers:
+            - name: audit-maintain
+              image: "{{ include "lakefs.repository" . }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              args:
+                - audit
+                - maintain
+                - --endpoint
+                - {{ .Values.auditLog.maintenance.endpoint | default (printf "http://%s:%v" (include "lakefs.fullname" .) .Values.service.port) }}
+                {{- if .Values.auditLog.maintenance.retentionDays }}
+                - --retention-days
+                - {{ .Values.auditLog.maintenance.retentionDays | quote }}
+                {{- end }}
+                {{- if .Values.auditLog.maintenance.shutdownDelay }}
+                - --shutdown-delay
+                - {{ .Values.auditLog.maintenance.shutdownDelay | quote }}
+                {{- end }}
+                {{- if .Values.auditLog.maintenance.metricsPort }}
+                - --metrics-port
+                - {{ .Values.auditLog.maintenance.metricsPort | quote }}
+                {{- end }}
+                {{- with .Values.auditLog.maintenance.extraArgs }}
+                {{- toYaml . | nindent 16 }}
+                {{- end }}
+              env:
+                - name: LAKEFS_AUDIT_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.auditLog.maintenance.existingSecret | default (include "audit.fullname" .) }}
+                      key: {{ ((.Values.auditLog.maintenance).secretKeys).accessKeyID | default "access_key_id" }}
+                - name: LAKEFS_AUDIT_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.auditLog.maintenance.existingSecret | default (include "audit.fullname" .) }}
+                      key: {{ ((.Values.auditLog.maintenance).secretKeys).secretAccessKey | default "secret_access_key" }}
+                {{- with .Values.auditLog.maintenance.extraEnvVars }}
+                {{- toYaml . | nindent 16 }}
+                {{- end }}
+              {{- with .Values.auditLog.maintenance.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          {{- if (.Values.image.privateRegistry).enabled }}
+          imagePullSecrets:
+           {{- if (.Values.image.privateRegistry).secretToken }}
+            - name: "docker-registry"
+           {{- else if (.Values.image.privateRegistry).secretName }}
+            - name: {{ .Values.image.privateRegistry.secretName }}
+           {{- end }}
+          {{- end }}
+          {{- with .Values.auditLog.maintenance.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.auditLog.maintenance.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}
