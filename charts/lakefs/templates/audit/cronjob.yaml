@@ -12,6 +12,7 @@ spec:
   failedJobsHistoryLimit: {{ .Values.auditLog.maintenance.failedJobsHistoryLimit | default 3 }}
   jobTemplate:
     spec:
+      activeDeadlineSeconds: {{ .Values.auditLog.maintenance.activeDeadlineSeconds | default 28800 }}
       template:
         metadata:
           labels:

@@ -276,6 +276,8 @@ auditLog:
     shutdownDelay: 2m
     # Port for the Prometheus /metrics endpoint.
     metricsPort: 9090
+    # Maximum time (seconds) the job is allowed to run before K8s kills it (default: 8 hours).
+    activeDeadlineSeconds: 28800
     # Extra CLI arguments to pass to the maintain command.
     extraArgs: []
     extraEnvVars: []
