@@ -81,6 +81,18 @@ Define which repository to use according to the following:
 {{- end }}
 {{- end }}
 
+{{/*
+Select the image tag based on the enterprise flag. Community and enterprise
+tags are decoupled to allow independent release cadences.
+*/}}
+{{- define "lakefs.tag" -}}
+{{- if (.Values.enterprise).enabled }}
+{{- required "image.enterprise.tag is required when enterprise.enabled is true" (((.Values.image).enterprise).tag) }}
+{{- else }}
+{{- required "image.community.tag is required" (((.Values.image).community).tag) }}
+{{- end }}
+{{- end }}
+
 {{- define "lakefs.checkDeprecated" -}}
 {{- if .Values.fluffy -}}
 {{- fail "Fluffy configuration detected. Please migrate to lakeFS Enterprise auth configuration and use treeverse/lakefs-enterprise docker image. See migration guide: https://docs.lakefs.io/latest/enterprise/upgrade/#kubernetes-migrating-with-helm-from-fluffy-to-new-lakefs-enterprise." -}}
