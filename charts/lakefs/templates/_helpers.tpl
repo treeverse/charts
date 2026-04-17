@@ -82,11 +82,14 @@ Define which repository to use according to the following:
 {{- end }}
 
 {{/*
-Select the image tag based on the enterprise flag. Community and enterprise
-tags are decoupled to allow independent release cadences.
+Select the image tag. An explicit .Values.image.tag wins (back-compat override).
+Otherwise pick community or enterprise tag based on the enterprise flag so each
+variant can release on its own cadence.
 */}}
 {{- define "lakefs.tag" -}}
-{{- if (.Values.enterprise).enabled }}
+{{- if .Values.image.tag }}
+{{- .Values.image.tag }}
+{{- else if (.Values.enterprise).enabled }}
 {{- required "image.enterprise.tag is required when enterprise.enabled is true" (((.Values.image).enterprise).tag) }}
 {{- else }}
 {{- required "image.community.tag is required" (((.Values.image).community).tag) }}
