@@ -1,6 +1,6 @@
 # Changelog
 
-# 1.9.0
+# 1.8.2
 :new: What's new:
 - Add audit log maintenance CronJob support (Enterprise-only). Runs compaction, snapshot expiration, orphan cleanup, and lakeFS commit on a configurable schedule (default: every 4 hours). Enable with `auditLog.enabled: true`.
 
