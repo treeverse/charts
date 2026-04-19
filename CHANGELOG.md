@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.9.1
+:new: What's new:
+- Update lakeFS version to [1.81.0](https://changelog.lakefs.io/changelog/releases/v1.81.0/)
+
 # 1.9.0
 :new: What's new:
 - Decouple lakeFS image tag from `Chart.AppVersion`: select community or enterprise tag via `image.community.tag` / `image.enterprise.tag` based on the `enterprise.enabled` flag

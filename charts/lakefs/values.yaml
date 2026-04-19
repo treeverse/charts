@@ -9,7 +9,7 @@ image:
   community:
     tag: "1.80.0"
   enterprise:
-    tag: "1.80.0"
+    tag: "1.81.0"
   privateRegistry:
     enabled: false
     secretToken: null
