@@ -37,8 +37,8 @@ spec:
               args:
                 - audit
                 - maintain
-                - --endpoint
-                - {{ .Values.auditLog.maintenance.endpoint | default (printf "http://%s:%v" (include "lakefs.fullname" .) .Values.service.port) }}
+                - -c
+                - /etc/lakefs/config.yaml
                 {{- if .Values.auditLog.maintenance.retentionDays }}
                 - --retention-days
                 - {{ .Values.auditLog.maintenance.retentionDays | quote }}
@@ -54,24 +54,51 @@ spec:
                 {{- with .Values.auditLog.maintenance.extraArgs }}
                 {{- toYaml . | nindent 16 }}
                 {{- end }}
-              env:
-                - name: LAKEFS_AUDIT_ACCESS_KEY_ID
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ .Values.auditLog.maintenance.existingSecret | default (include "audit.fullname" .) }}
-                      key: {{ ((.Values.auditLog.maintenance).secretKeys).accessKeyID | default "access_key_id" }}
-                - name: LAKEFS_AUDIT_SECRET_ACCESS_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ .Values.auditLog.maintenance.existingSecret | default (include "audit.fullname" .) }}
-                      key: {{ ((.Values.auditLog.maintenance).secretKeys).secretAccessKey | default "secret_access_key" }}
-                {{- with .Values.auditLog.maintenance.extraEnvVars }}
-                {{- toYaml . | nindent 16 }}
+              {{- include "lakefs.env" . | nindent 14 }}
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /etc/lakefs
+                  readOnly: true
+                {{- if (.Values.enterprise).enabled }}
+                {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
+                - name: secret-volume-license-token
+                  mountPath: /etc/lakefs/license.tkn
+                  subPath: license.tkn
+                  readOnly: true
                 {{- end }}
+                {{- end }}
+              {{- with .Values.auditLog.maintenance.extraEnvVars }}
+              env:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               {{- with .Values.auditLog.maintenance.resources }}
               resources:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
+          volumes:
+            - name: config-volume
+              configMap:
+                name: {{ include "lakefs.fullname" . }}
+                items:
+                  - key: config.yaml
+                    path: config.yaml
+            {{- if (.Values.enterprise).enabled }}
+            {{- if and .Values.existingSecret .Values.secretKeys.licenseContentsKey }}
+            - name: secret-volume-license-token
+              secret:
+                secretName: {{ .Values.existingSecret }}
+                items:
+                  - key: {{ .Values.secretKeys.licenseContentsKey }}
+                    path: license.tkn
+            {{- else if and .Values.secrets .Values.secrets.licenseContents }}
+            - name: secret-volume-license-token
+              secret:
+                secretName: {{ include "lakefs.fullname" . }}
+                items:
+                  - key: license_contents
+                    path: license.tkn
+            {{- end }}
+            {{- end }}
           {{- if (.Values.image.privateRegistry).enabled }}
           imagePullSecrets:
            {{- if (.Values.image.privateRegistry).secretToken }}
