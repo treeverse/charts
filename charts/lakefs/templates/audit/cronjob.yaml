@@ -57,7 +57,8 @@ spec:
               {{- include "lakefs.env" . | nindent 14 }}
               volumeMounts:
                 - name: config-volume
-                  mountPath: /etc/lakefs
+                  mountPath: /etc/lakefs/config.yaml
+                  subPath: config.yaml
                   readOnly: true
                 {{- if (.Values.enterprise).enabled }}
                 {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
