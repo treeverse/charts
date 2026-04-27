@@ -100,7 +100,7 @@ env:
 
   {{- if (.Values.auditLog).enabled }}
   - name: LAKEFS_AUDIT_LOG_MAINTENANCE_ENABLED
-    value: {{ ((.Values.auditLog).maintenance).inProcess | default true | quote }}
+    value: {{ .Values.auditLog.maintenance.inProcess | quote }}
   {{- end }}
   {{- if .Values.s3Fallback.enabled }}
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
