@@ -262,6 +262,8 @@ auditLog:
     schedule: "0 */4 * * *"
     # Snapshot retention in days (0 = no expiration).
     retentionDays: 90
+    # Hard deadline for the maintenance run (0 = no timeout, default: 72h).
+    # timeout: 72h
     # Maximum time (seconds) the job is allowed to run before K8s kills it (default: 8 hours).
     activeDeadlineSeconds: 28800
     # Extra CLI arguments to pass to the maintain command.
