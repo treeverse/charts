@@ -1,4 +1,4 @@
-{{- if and (.Values.enterprise).enabled (.Values.auditLog).enabled }}
+{{- if and (.Values.enterprise).enabled (.Values.auditLog).enabled (.Values.auditLog.maintenance).cronJob }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:

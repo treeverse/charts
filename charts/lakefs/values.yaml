@@ -258,13 +258,20 @@ enterprise:
 auditLog:
   enabled: false
   maintenance:
-    # Cron schedule for the maintenance job (default: every 4 hours).
+    # Run maintenance inside the lakeFS server process (default: true).
+    # Disable to rely solely on the external CronJob instead.
+    inProcess: true
+    # Deploy a Kubernetes CronJob for maintenance instead of the default
+    # in-process scheduler. Set to true only if you want maintenance to
+    # run as a separate pod.
+    cronJob: false
+    # Cron schedule for the CronJob (default: every 4 hours).
     schedule: "0 */4 * * *"
     # Snapshot retention in days (0 = no expiration).
     retentionDays: 90
     # Hard deadline for the maintenance run (0 = no timeout, default: 72h).
     # timeout: 72h
-    # Maximum time (seconds) the job is allowed to run before K8s kills it (default: 8 hours).
+    # Maximum time (seconds) the CronJob is allowed to run before K8s kills it (default: 8 hours).
     activeDeadlineSeconds: 28800
     # Extra CLI arguments to pass to the maintain command.
     extraArgs: []

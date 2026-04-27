@@ -98,6 +98,10 @@ env:
   {{- end }}
   {{- end }}
 
+  {{- if (.Values.auditLog).enabled }}
+  - name: LAKEFS_AUDIT_LOG_MAINTENANCE_ENABLED
+    value: {{ ((.Values.auditLog).maintenance).inProcess | default true | quote }}
+  {{- end }}
   {{- if .Values.s3Fallback.enabled }}
   - name: LAKEFS_GATEWAYS_S3_FALLBACK_URL
     value: http://localhost:7001
