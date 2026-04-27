@@ -17,12 +17,10 @@ spec:
         metadata:
           labels:
             {{- include "audit.selectorLabels" . | nindent 12 }}
+          {{- with .Values.auditLog.maintenance.podAnnotations }}
           annotations:
-            prometheus.io/scrape: "true"
-            prometheus.io/port: {{ .Values.auditLog.maintenance.metricsPort | default 9090 | quote }}
-            {{- with .Values.auditLog.maintenance.podAnnotations }}
             {{- toYaml . | nindent 12 }}
-            {{- end }}
+          {{- end }}
         spec:
           {{- if .Values.serviceAccount.create }}
           serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
@@ -42,14 +40,6 @@ spec:
                 {{- if .Values.auditLog.maintenance.retentionDays }}
                 - --retention-days
                 - {{ .Values.auditLog.maintenance.retentionDays | quote }}
-                {{- end }}
-                {{- if .Values.auditLog.maintenance.shutdownDelay }}
-                - --shutdown-delay
-                - {{ .Values.auditLog.maintenance.shutdownDelay | quote }}
-                {{- end }}
-                {{- if .Values.auditLog.maintenance.metricsPort }}
-                - --metrics-port
-                - {{ .Values.auditLog.maintenance.metricsPort | quote }}
                 {{- end }}
                 {{- with .Values.auditLog.maintenance.extraArgs }}
                 {{- toYaml . | nindent 16 }}
