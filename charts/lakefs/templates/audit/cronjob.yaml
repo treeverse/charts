@@ -41,10 +41,6 @@ spec:
                 - --retention-days
                 - {{ .Values.auditLog.maintenance.retentionDays | quote }}
                 {{- end }}
-                {{- if .Values.auditLog.maintenance.timeout }}
-                - --timeout
-                - {{ .Values.auditLog.maintenance.timeout | quote }}
-                {{- end }}
                 {{- with .Values.auditLog.maintenance.extraArgs }}
                 {{- toYaml . | nindent 16 }}
                 {{- end }}
