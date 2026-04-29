@@ -265,8 +265,8 @@ auditLog:
     # in-process scheduler. Set to true only if you want maintenance to
     # run as a separate pod.
     cronJob: false
-    # Cron schedule for the CronJob (default: every 4 hours).
-    schedule: "0 */4 * * *"
+    # Cron schedule for the CronJob (default: every hour).
+    schedule: "0 * * * *"
     # Snapshot retention in days (0 = no expiration).
     retentionDays: 90
     # Maximum time (seconds) the CronJob is allowed to run before K8s kills it (default: 8 hours).
