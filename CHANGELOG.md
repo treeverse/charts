@@ -1,8 +1,17 @@
 # Changelog
 
-# 1.8.2
+# 1.9.2
 :new: What's new:
-- Add audit log maintenance CronJob support (Enterprise-only). Runs compaction, snapshot expiration, orphan cleanup, and lakeFS commit on a configurable schedule (default: every 4 hours). Enable with `auditLog.enabled: true`.
+- Update lakeFS version to [1.82.0](https://changelog.lakefs.io/changelog/releases/v1.82.0/)
+- Add audit log maintenance CronJob support (Enterprise-only). Runs compaction, snapshot expiration, orphan cleanup, and lakeFS commit on a configurable schedule (default: every hour). Enable with `auditLog.enabled: true` and `auditLog.maintenance: true`.
+
+# 1.9.1
+:new: What's new:
+- Update lakeFS version to [1.81.0](https://changelog.lakefs.io/changelog/releases/v1.81.0/)
+
+# 1.9.0
+:new: What's new:
+- Decouple lakeFS image tag from `Chart.AppVersion`: select community or enterprise tag via `image.community.tag` / `image.enterprise.tag` based on the `enterprise.enabled` flag
 
 # 1.8.1
 :new: What's new:
