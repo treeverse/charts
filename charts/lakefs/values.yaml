@@ -9,7 +9,7 @@ image:
   community:
     tag: "1.80.0"
   enterprise:
-    tag: "1.81.0"
+    tag: "1.82.0"
   privateRegistry:
     enabled: false
     secretToken: null
@@ -255,6 +255,35 @@ enterprise:
         # certificates for AD FS IDP (e.g Azure AD)
         samlRsaPublicCert: null
         samlRsaPrivateKey: null
+
+# Audit log maintenance CronJob (Enterprise-only).
+# Requires enterprise.enabled: true and audit_log.enabled: true in lakefsConfig.
+# The CronJob uses the same lakeFS config file — no credentials needed.
+auditLog:
+  enabled: false
+  maintenance:
+    # Run maintenance inside the lakeFS server process (default: true).
+    # Disable to rely solely on the external CronJob instead.
+    inProcess: true
+    # Deploy a Kubernetes CronJob for maintenance instead of the default
+    # in-process scheduler. Set to true only if you want maintenance to
+    # run as a separate pod.
+    cronJob: false
+    # Cron schedule for the CronJob (default: every hour).
+    schedule: "0 * * * *"
+    # Snapshot retention in days (0 = no expiration).
+    retentionDays: 90
+    # Maximum time (seconds) the CronJob is allowed to run before K8s kills it (default: 8 hours).
+    activeDeadlineSeconds: 28800
+    # Extra CLI arguments to pass to the maintain command.
+    extraArgs: []
+    extraEnvVars: []
+    podAnnotations: {}
+    resources: {}
+    nodeSelector: {}
+    tolerations: []
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
 
 secrets:
   licenseContents: null

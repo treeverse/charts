@@ -1,0 +1,109 @@
+{{- if and (.Values.enterprise).enabled (.Values.auditLog).enabled (.Values.auditLog.maintenance).cronJob }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "audit.fullname" . }}
+  labels:
+    {{- include "audit.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.auditLog.maintenance.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.auditLog.maintenance.successfulJobsHistoryLimit | default 3 }}
+  failedJobsHistoryLimit: {{ .Values.auditLog.maintenance.failedJobsHistoryLimit | default 3 }}
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: {{ .Values.auditLog.maintenance.activeDeadlineSeconds | default 28800 }}
+      template:
+        metadata:
+          labels:
+            {{- include "audit.selectorLabels" . | nindent 12 }}
+          {{- with .Values.auditLog.maintenance.podAnnotations }}
+          annotations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        spec:
+          {{- if .Values.serviceAccount.create }}
+          serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
+          {{- else if .Values.auditLog.maintenance.serviceAccountName }}
+          serviceAccountName: {{ .Values.auditLog.maintenance.serviceAccountName }}
+          {{- end }}
+          restartPolicy: OnFailure
+          containers:
+            - name: audit-maintain
+              image: "{{ include "lakefs.repository" . }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              args:
+                - audit
+                - maintain
+                - -c
+                - /etc/lakefs/config.yaml
+                {{- if .Values.auditLog.maintenance.retentionDays }}
+                - --retention-days
+                - {{ .Values.auditLog.maintenance.retentionDays | quote }}
+                {{- end }}
+                {{- with .Values.auditLog.maintenance.extraArgs }}
+                {{- toYaml . | nindent 16 }}
+                {{- end }}
+              {{- include "lakefs.env" . | nindent 14 }}
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /etc/lakefs/config.yaml
+                  subPath: config.yaml
+                  readOnly: true
+                {{- if (.Values.enterprise).enabled }}
+                {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
+                - name: secret-volume-license-token
+                  mountPath: /etc/lakefs/license.tkn
+                  subPath: license.tkn
+                  readOnly: true
+                {{- end }}
+                {{- end }}
+              {{- with .Values.auditLog.maintenance.extraEnvVars }}
+              env:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with .Values.auditLog.maintenance.resources }}
+              resources:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+          volumes:
+            - name: config-volume
+              configMap:
+                name: {{ include "lakefs.fullname" . }}
+                items:
+                  - key: config.yaml
+                    path: config.yaml
+            {{- if (.Values.enterprise).enabled }}
+            {{- if and .Values.existingSecret .Values.secretKeys.licenseContentsKey }}
+            - name: secret-volume-license-token
+              secret:
+                secretName: {{ .Values.existingSecret }}
+                items:
+                  - key: {{ .Values.secretKeys.licenseContentsKey }}
+                    path: license.tkn
+            {{- else if and .Values.secrets .Values.secrets.licenseContents }}
+            - name: secret-volume-license-token
+              secret:
+                secretName: {{ include "lakefs.fullname" . }}
+                items:
+                  - key: license_contents
+                    path: license.tkn
+            {{- end }}
+            {{- end }}
+          {{- if (.Values.image.privateRegistry).enabled }}
+          imagePullSecrets:
+           {{- if (.Values.image.privateRegistry).secretToken }}
+            - name: "docker-registry"
+           {{- else if (.Values.image.privateRegistry).secretName }}
+            - name: {{ .Values.image.privateRegistry.secretName }}
+           {{- end }}
+          {{- end }}
+          {{- with .Values.auditLog.maintenance.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.auditLog.maintenance.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}
