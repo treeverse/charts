@@ -129,13 +129,6 @@ mds:
   enabled: false
   image:
     pullPolicy: IfNotPresent
-    # Defaults to `treeverse/lakefs-enterprise` when unset (see templates/mds/_mds.tpl).
-    repository: ""
-    # Defaults to `image.enterprise.tag` when unset.
-    tag: ""
-  # Override the container ENTRYPOINT. Empty uses the image default
-  # (`/app/lakefs` for the lakeFS Enterprise image).
-  command: []
   # Args appended after the ENTRYPOINT. The default runs the metadata search
   # service on the lakeFS Enterprise image; override when rolling back to the
   # legacy MDS container (which expects only `--config /app/config.yaml`).
