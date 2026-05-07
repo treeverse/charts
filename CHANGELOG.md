@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.9.3
+:new: What's new:
+- Update lakeFS community version to [1.81.0](https://github.com/treeverse/lakeFS/releases/tag/v1.81.0/)
+
 # 1.9.2
 :new: What's new:
 - Update lakeFS version to [1.82.0](https://changelog.lakefs.io/changelog/releases/v1.82.0/)
