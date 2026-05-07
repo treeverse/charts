@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.10.0
+:new: What's new:
+- MDS now runs on the `treeverse/lakefs-enterprise` image via `lakefs mds run` and uses the `metadata_search` config schema. Override `mds.image.repository`/`mds.image.tag` and `mds.args` (and re-add the legacy `metadata_settings`/`lakefs` config) to roll back to the standalone `treeverse/mds` container.
+- Added `mds.command` and `mds.args` for overriding the MDS container entrypoint and arguments.
+
 # 1.9.3
 :new: What's new:
 - Update lakeFS community version to [1.81.0](https://github.com/treeverse/lakeFS/releases/tag/v1.81.0/)
