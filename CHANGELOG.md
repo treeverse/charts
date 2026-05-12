@@ -5,18 +5,22 @@
 - MDS now runs on the `treeverse/lakefs-enterprise` image via `lakefs mds run` and uses the `metadata_search` config schema.
 - Added `mds.command` and `mds.args` for overriding the MDS container entrypoint and arguments.
 
+# 1.9.4
+:new: What's new:
+- Update lakeFS Enterprise version to [1.83.0](https://changelog.lakefs.io/changelog/releases/v1.83.0/)
+
 # 1.9.3
 :new: What's new:
 - Update lakeFS community version to [1.81.0](https://github.com/treeverse/lakeFS/releases/tag/v1.81.0/)
 
 # 1.9.2
 :new: What's new:
-- Update lakeFS version to [1.82.0](https://changelog.lakefs.io/changelog/releases/v1.82.0/)
+- Update lakeFS Enterprise version to [1.82.0](https://changelog.lakefs.io/changelog/releases/v1.82.0/)
 - Add audit log maintenance CronJob support (Enterprise-only). Runs compaction, snapshot expiration, orphan cleanup, and lakeFS commit on a configurable schedule (default: every hour). Enable with `auditLog.enabled: true` and `auditLog.maintenance: true`.
 
 # 1.9.1
 :new: What's new:
-- Update lakeFS version to [1.81.0](https://changelog.lakefs.io/changelog/releases/v1.81.0/)
+- Update lakeFS Enterprise version to [1.81.0](https://changelog.lakefs.io/changelog/releases/v1.81.0/)
 
 # 1.9.0
 :new: What's new:
