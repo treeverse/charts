@@ -29,6 +29,28 @@ app: {{ include "lakefs.name" . }}-mds
 {{- end }}
 
 {{/*
+MDS image repository. Defaults to the lakeFS Enterprise image, which ships
+the `lakefs mds` subcommand. To roll back to the legacy standalone MDS
+container, override `mds.image.repository` (and typically `mds.image.tag`
+and `mds.args` / `mds.command`) in values.
+*/}}
+{{- define "mds.repository" -}}
+{{- default "treeverse/lakefs-enterprise" .Values.mds.image.repository -}}
+{{- end }}
+
+{{/*
+MDS image tag. Explicit `mds.image.tag` wins; otherwise reuse the chart's
+enterprise tag so the MDS pod tracks the lakeFS server version by default.
+*/}}
+{{- define "mds.tag" -}}
+{{- if .Values.mds.image.tag -}}
+{{- .Values.mds.image.tag -}}
+{{- else -}}
+{{- required "image.enterprise.tag is required when mds.enabled is true and mds.image.tag is unset" (((.Values.image).enterprise).tag) -}}
+{{- end -}}
+{{- end }}
+
+{{/*
 MDS volumes
 */}}
 {{- define "mds.volumes" -}}

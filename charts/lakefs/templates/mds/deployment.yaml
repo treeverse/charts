@@ -36,11 +36,16 @@ spec:
       {{- end }}
       containers:
         - name: mds
-          args:
-            - --config
-            - /app/config.yaml
-          image: "{{ .Values.mds.image.repository }}:{{ .Values.mds.image.tag }}"
+          image: "{{ include "mds.repository" . }}:{{ include "mds.tag" . }}"
           imagePullPolicy: {{ .Values.mds.image.pullPolicy }}
+          {{- with .Values.mds.command }}
+          command:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.mds.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
@@ -53,14 +58,8 @@ spec:
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          env:
-            # TODO(mds): Remove this workaround once the MDS image installs
-            # packages globally instead of under the arktika user home directory.
-            # When securityContext sets a different runAsUser, Python cannot find
-            # packages installed in /home/arktika/.local/lib/python3.13/site-packages.
-            - name: PYTHONPATH
-              value: /home/arktika/.local/lib/python3.13/site-packages
           {{- with .Values.mds.extraEnvVars }}
+          env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
