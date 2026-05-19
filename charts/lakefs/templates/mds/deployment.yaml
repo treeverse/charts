@@ -58,10 +58,7 @@ spec:
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.mds.extraEnvVars }}
-          env:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+          {{- include "mds.env" . | nindent 10 }}
           resources:
             {{- toYaml .Values.mds.resources | nindent 12 }}
           volumeMounts:

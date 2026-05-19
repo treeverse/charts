@@ -60,11 +60,28 @@ MDS volumes
     items:
       - key: config.yaml
         path: config.yaml
+{{- if (.Values.enterprise).enabled }}
+{{- if and .Values.existingSecret .Values.secretKeys.licenseContentsKey }}
+- name: secret-volume-license-token
+  secret:
+    secretName: {{ .Values.existingSecret }}
+    items:
+      - key: {{ .Values.secretKeys.licenseContentsKey }}
+        path: license.tkn
+{{- else if and .Values.secrets .Values.secrets.licenseContents }}
+- name: secret-volume-license-token
+  secret:
+    secretName: {{ include "lakefs.fullname" . }}
+    items:
+      - key: license_contents
+        path: license.tkn
+{{- end }}
+{{- end }}
 {{ with .Values.mds.extraVolumes -}}
 {{- toYaml . }}
 {{- end -}}
 {{- end }}
- 
+
 {{/*
 MDS volume mounts
 */}}
@@ -72,7 +89,70 @@ MDS volume mounts
 - name: {{ include "mds.fullname" . }}-config
   mountPath: /app/config.yaml
   subPath: config.yaml
+{{- if (.Values.enterprise).enabled }}
+{{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
+- name: secret-volume-license-token
+  mountPath: /etc/lakefs/license.tkn
+  subPath: license.tkn
+  readOnly: true
+{{- end }}
+{{- end }}
 {{ with .Values.mds.extraVolumeMounts -}}
 {{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+MDS environment variables. Wires the same database / auth-encrypt / license
+secrets that the lakeFS server reads, so `lakefs mds run` can open the KV
+store, build the catalog, and validate the license.
+*/}}
+{{- define "mds.env" -}}
+env:
+  {{- if and .Values.existingSecret .Values.secretKeys.databaseConnectionString }}
+  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.existingSecret }}
+        key: {{ .Values.secretKeys.databaseConnectionString }}
+  {{- else if and .Values.secrets (.Values.secrets).databaseConnectionString }}
+  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
+        key: database_connection_string
+  {{- end }}
+  {{- if .Values.existingSecret }}
+  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.existingSecret }}
+        key: {{ .Values.secretKeys.authEncryptSecretKey }}
+  {{- else if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
+  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lakefs.fullname" . }}
+        key: auth_encrypt_secret_key
+  {{- end }}
+  {{- if (.Values.enterprise).enabled }}
+  {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
+  - name: LAKEFS_LICENSE_PATH
+    value: '/etc/lakefs/license.tkn'
+  {{- end }}
+  {{- end }}
+  {{- if .Values.useDevPostgres }}
+  - name: LAKEFS_DATABASE_TYPE
+    value: postgres
+  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
+    value: 'postgres://lakefs:lakefs@postgres-server:5432/postgres?sslmode=disable'
+  {{- end }}
+  {{- with .Values.mds.extraEnvVars }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- if .Values.mds.extraEnvVarsSecret }}
+envFrom:
+  - secretRef:
+      name: {{ .Values.mds.extraEnvVarsSecret }}
 {{- end }}
 {{- end }}

@@ -138,6 +138,8 @@ mds:
     - --config
     - /app/config.yaml
   extraEnvVars: {}
+  # Name of an existing secret to mount as envFrom on the MDS container.
+  extraEnvVarsSecret: null
   resources:
     # limits:
     #   cpu: 500m
