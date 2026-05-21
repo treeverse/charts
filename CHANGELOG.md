@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.11.0
+:new: What's new:
+- Update lakeFS Enterprise version to [1.84.0](https://changelog.lakefs.io/lakefs-enterprise/1.84.0/)
+
 # 1.10.0
 :new: What's new:
 - MDS now runs on the `treeverse/lakefs-enterprise` image via `lakefs mds run` and uses the `metadata_search` config schema.
