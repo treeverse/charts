@@ -1,39 +1,7 @@
 {{- define "lakefs.env" -}}
 env:
-  {{- if and .Values.existingSecret .Values.secretKeys.databaseConnectionString }}
-  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
-    valueFrom:
-      secretKeyRef:
-        name: {{ .Values.existingSecret }}
-        key: {{ .Values.secretKeys.databaseConnectionString }}
-  {{- else if and .Values.secrets (.Values.secrets).databaseConnectionString }}
-  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
-    valueFrom:
-      secretKeyRef:
-        name: {{ include "lakefs.fullname" . }}
-        key: database_connection_string
-  {{- end }}
-  {{- if .Values.existingSecret }}
-  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
-    valueFrom:
-      secretKeyRef:
-        name: {{ .Values.existingSecret }}
-        key: {{ .Values.secretKeys.authEncryptSecretKey }}
-  {{- else if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
-  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
-    valueFrom:
-      secretKeyRef:
-        name: {{ include "lakefs.fullname" . }}
-        key: auth_encrypt_secret_key
-  {{- else }}
-  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
-    value: asdjfhjaskdhuioaweyuiorasdsjbaskcbkj
-  {{- end }}
+  {{- include "lakefs.sharedSecretEnv" . | nindent 2 }}
   {{- if (.Values.enterprise).enabled}}
-  {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
-  - name: LAKEFS_LICENSE_PATH
-    value: '/etc/lakefs/license.tkn'
-  {{- end }}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
   - name: LAKEFS_FEATURES_LOCAL_RBAC
@@ -109,12 +77,6 @@ env:
   {{- if .Values.committedLocalCacheVolume }}
   - name: LAKEFS_COMMITTED_LOCAL_CACHE_DIR
     value: /lakefs/cache
-  {{- end }}
-  {{- if .Values.useDevPostgres }}
-  - name: LAKEFS_DATABASE_TYPE
-    value: postgres
-  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
-    value: 'postgres://lakefs:lakefs@postgres-server:5432/postgres?sslmode=disable'
   {{- end }}
   {{- if .Values.extraEnvVars }}
   {{- toYaml .Values.extraEnvVars | nindent 2 }}

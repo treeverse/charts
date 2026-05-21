@@ -103,50 +103,14 @@ MDS volume mounts
 {{- end }}
 
 {{/*
-MDS environment variables. Wires the same database / auth-encrypt / license
-secrets that the lakeFS server reads, so `lakefs mds run` can open the KV
-store, build the catalog, and validate the license.
+MDS environment variables. The `lakefs mds run` subcommand opens the KV
+store, builds the catalog, and validates the license against the same
+configuration the lakeFS server reads, so MDS gets the shared secret env
+vars from `lakefs.sharedSecretEnv`.
 */}}
 {{- define "mds.env" -}}
 env:
-  {{- if and .Values.existingSecret .Values.secretKeys.databaseConnectionString }}
-  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
-    valueFrom:
-      secretKeyRef:
-        name: {{ .Values.existingSecret }}
-        key: {{ .Values.secretKeys.databaseConnectionString }}
-  {{- else if and .Values.secrets (.Values.secrets).databaseConnectionString }}
-  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
-    valueFrom:
-      secretKeyRef:
-        name: {{ include "lakefs.fullname" . }}
-        key: database_connection_string
-  {{- end }}
-  {{- if .Values.existingSecret }}
-  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
-    valueFrom:
-      secretKeyRef:
-        name: {{ .Values.existingSecret }}
-        key: {{ .Values.secretKeys.authEncryptSecretKey }}
-  {{- else if and .Values.secrets (.Values.secrets).authEncryptSecretKey }}
-  - name: LAKEFS_AUTH_ENCRYPT_SECRET_KEY
-    valueFrom:
-      secretKeyRef:
-        name: {{ include "lakefs.fullname" . }}
-        key: auth_encrypt_secret_key
-  {{- end }}
-  {{- if (.Values.enterprise).enabled }}
-  {{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
-  - name: LAKEFS_LICENSE_PATH
-    value: '/etc/lakefs/license.tkn'
-  {{- end }}
-  {{- end }}
-  {{- if .Values.useDevPostgres }}
-  - name: LAKEFS_DATABASE_TYPE
-    value: postgres
-  - name: LAKEFS_DATABASE_POSTGRES_CONNECTION_STRING
-    value: 'postgres://lakefs:lakefs@postgres-server:5432/postgres?sslmode=disable'
-  {{- end }}
+  {{- include "lakefs.sharedSecretEnv" . | nindent 2 }}
   {{- with .Values.mds.extraEnvVars }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
