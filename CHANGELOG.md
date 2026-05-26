@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.1
+:new: What's new:
+- Update lakeFS Enterprise version to [1.85.0](https://changelog.lakefs.io/lakefs-enterprise/1.85.0/)
+
 # 1.12.0
 :new: What's new:
 - MDS now reads the same lakeFS secrets as the server (database connection string, auth encrypt key, license token) via `existingSecret` / `secrets`, so `lakefs mds run` can open the KV store, build the catalog, and validate the license without a separate secret block. Added `mds.extraEnvVarsSecret` for additional env-from secrets.
