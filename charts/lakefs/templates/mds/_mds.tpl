@@ -60,11 +60,28 @@ MDS volumes
     items:
       - key: config.yaml
         path: config.yaml
+{{- if (.Values.enterprise).enabled }}
+{{- if and .Values.existingSecret .Values.secretKeys.licenseContentsKey }}
+- name: secret-volume-license-token
+  secret:
+    secretName: {{ .Values.existingSecret }}
+    items:
+      - key: {{ .Values.secretKeys.licenseContentsKey }}
+        path: license.tkn
+{{- else if and .Values.secrets .Values.secrets.licenseContents }}
+- name: secret-volume-license-token
+  secret:
+    secretName: {{ include "lakefs.fullname" . }}
+    items:
+      - key: license_contents
+        path: license.tkn
+{{- end }}
+{{- end }}
 {{ with .Values.mds.extraVolumes -}}
 {{- toYaml . }}
 {{- end -}}
 {{- end }}
- 
+
 {{/*
 MDS volume mounts
 */}}
@@ -72,7 +89,34 @@ MDS volume mounts
 - name: {{ include "mds.fullname" . }}-config
   mountPath: /app/config.yaml
   subPath: config.yaml
+{{- if (.Values.enterprise).enabled }}
+{{- if or (and .Values.secrets .Values.secrets.licenseContents) (and .Values.existingSecret .Values.secretKeys.licenseContentsKey) }}
+- name: secret-volume-license-token
+  mountPath: /etc/lakefs/license.tkn
+  subPath: license.tkn
+  readOnly: true
+{{- end }}
+{{- end }}
 {{ with .Values.mds.extraVolumeMounts -}}
 {{- toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+MDS environment variables. The `lakefs mds run` subcommand opens the KV
+store, builds the catalog, and validates the license against the same
+configuration the lakeFS server reads, so MDS gets the shared secret env
+vars from `lakefs.sharedSecretEnv`.
+*/}}
+{{- define "mds.env" -}}
+env:
+  {{- include "lakefs.sharedSecretEnv" . | nindent 2 }}
+  {{- with .Values.mds.extraEnvVars }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- if .Values.mds.extraEnvVarsSecret }}
+envFrom:
+  - secretRef:
+      name: {{ .Values.mds.extraEnvVarsSecret }}
 {{- end }}
 {{- end }}
