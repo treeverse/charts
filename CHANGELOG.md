@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.12.3
+:new: What's new:
+- Update lakeFS Enterprise version to [1.86.0](https://changelog.lakefs.io/lakefs-enterprise/1.86.0/)
+  - Important note: lakeFS Enterprise 1.86.0 adds auth inverse secondary indices. Deployments with local RBAC data require a one-time KV migration (`lakefs migrate up`) before rolling out the new version — see the [release notes](https://changelog.lakefs.io/lakefs-enterprise/1.86.0/) for details.
+
 # 1.12.2
 :new: What's new:
 - Update lakeFS Enterprise version to [1.85.1](https://changelog.lakefs.io/lakefs-enterprise/1.85.1/)
