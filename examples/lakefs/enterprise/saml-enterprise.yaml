@@ -23,10 +23,12 @@ enterprise:
           ...
           -----END PRIVATE KEY-----
 
-image:
-  privateRegistry:
-    enabled: true
-    secretToken: <dockerhub-token>
+# lakeFS Enterprise images are publicly available - no private registry token is needed.
+# Only configure privateRegistry if you mirror the images into your own private registry:
+# image:
+#   privateRegistry:
+#     enabled: true
+#     secretToken: <dockerhub-token>
 
 lakefsConfig: |
   blockstore:
