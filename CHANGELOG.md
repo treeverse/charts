@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.7
+:new: What's new:
+- Update lakeFS Enterprise version to [1.88.0](https://changelog.lakefs.io/lakefs-enterprise/1.88.0/)
+
 # 1.12.6
 :books: Documentation:
 - Clarify that lakeFS Enterprise images are public and a private registry token is not required
