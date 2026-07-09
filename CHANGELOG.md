@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.12.9
+🆕 What's new:
+
+Update lakeFS community version to 1.83.0
+
 # 1.12.8
 :new: What's new:
 - Update lakeFS Enterprise version to [1.89.0](https://changelog.lakefs.io/lakefs-enterprise/1.89.0/)
