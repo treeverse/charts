@@ -1,0 +1,27 @@
+# Approves chart version-bump PRs opened by the lakeFS-Enterprise release
+# automation (treeverse-ci-bot). The automation enables auto-merge when it
+# opens the PR, so with this approval the PR merges as soon as the required
+# checks pass, and the merge releases the new chart version.
+
+name: Auto-approve release PRs
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions: {}
+
+jobs:
+  approve:
+    if: >-
+      github.event.pull_request.user.login == 'treeverse-ci-bot[bot]' &&
+      startsWith(github.event.pull_request.head.ref, 'auto-release/') &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Approve
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr review --approve "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}"
