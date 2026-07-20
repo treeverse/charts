@@ -2,7 +2,7 @@
 
 # 1.12.13
 :new: What's new:
-- Add `service.trafficDistribution` value to set [trafficDistribution](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution) (e.g. `PreferClose`) on the lakeFS Service (requires Kubernetes 1.31+)
+- Add `service.trafficDistribution` value to set [trafficDistribution](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution) on the lakeFS Service (requires Kubernetes 1.31+)
 
 # 1.12.12
 :new: What's new:
