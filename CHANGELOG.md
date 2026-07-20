@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.13
+:new: What's new:
+- Add `service.trafficDistribution` value to set [trafficDistribution](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution) on the lakeFS Service (requires Kubernetes 1.31+)
+
 # 1.12.12
 :new: What's new:
 - Update lakeFS Enterprise version to [1.91.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.91.0/)
