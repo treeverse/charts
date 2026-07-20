@@ -8,6 +8,9 @@ metadata:
     {{- toYaml .Values.service.annotations | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
+  {{- with .Values.service.trafficDistribution }}
+  trafficDistribution: {{ . }}
+  {{- end }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http

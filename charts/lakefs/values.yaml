@@ -51,6 +51,10 @@ service:
   annotations: {}
   type: ClusterIP
   port: 80
+  ## Kubernetes traffic distribution preference for the lakeFS Service (e.g. PreferClose).
+  ## Requires Kubernetes 1.31+ (beta, enabled by default; GA in 1.33). Empty means the field is omitted.
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  trafficDistribution: ""
 
 resources: {}
 
