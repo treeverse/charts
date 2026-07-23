@@ -3,11 +3,10 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
 image:
   pullPolicy: IfNotPresent
   community:
-    tag: "1.83.0"
+    tag: "1.84.0"
   enterprise:
     tag: "1.91.0"
   privateRegistry:
@@ -16,15 +15,13 @@ image:
     enabled: false
     secretToken: null
     secretName: null
-
 nameOverride: ""
 fullnameOverride: ""
-
 ingress:
   enabled: false
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
   ingressClassName: ""
   defaultBackend: {}
   hosts:
@@ -39,14 +36,11 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
 podAnnotations: {}
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"
-
 deployment:
   port: 8000
-
 service:
   annotations: {}
   type: ClusterIP
@@ -55,32 +49,23 @@ service:
   ## Requires Kubernetes 1.31+ (beta, enabled by default; GA in 1.33). Empty means the field is omitted.
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
   trafficDistribution: ""
-
 resources: {}
-
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
-
 ## Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in.
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 ##
 topologySpreadConstraints: []
-
 s3Fallback:
   enabled: false
-
 gcpFallback:
   enabled: false
-
 lakefsConfig: |
   database:
     type: local
   blockstore:
     type: local
-
 # yamllint disable rule:comments
 
 # Example: using node instance storage for caching committed data:
@@ -90,9 +75,7 @@ lakefsConfig: |
 #    path: /media/ephemeral0
 
 # yamllint enable
-
 serviceAccount: {}
-
 # to use an existing service account, replace the serviceAccount map above with the following:
 # serviceAccount:
 #   name: "my-serviceaccount"
@@ -147,30 +130,30 @@ mds:
   # Name of an existing secret to mount as envFrom on the MDS container.
   extraEnvVarsSecret: null
   resources:
-    # limits:
-    #   cpu: 500m
-    #   memory: 256Mi
-    # requests:
-    #   cpu: 250m
-    #   memory: 128Mi
+  # limits:
+  #   cpu: 500m
+  #   memory: 256Mi
+  # requests:
+  #   cpu: 250m
+  #   memory: 128Mi
   readinessProbe:
     httpGet:
       path: /health
       port: http
-    # failureThreshold: 10
-    # periodSeconds: 5
-    # successThreshold: 4
-    # timeoutSeconds: 1
-    # initialDelaySeconds: 5
+      # failureThreshold: 10
+      # periodSeconds: 5
+      # successThreshold: 4
+      # timeoutSeconds: 1
+      # initialDelaySeconds: 5
   livenessProbe:
     httpGet:
       path: /health
       port: http
-    # failureThreshold: 10
-    # periodSeconds: 5
-    # successThreshold: 4
-    # timeoutSeconds: 1
-    # initialDelaySeconds: 5
+      # failureThreshold: 10
+      # periodSeconds: 5
+      # successThreshold: 4
+      # timeoutSeconds: 1
+      # initialDelaySeconds: 5
   # Rendered verbatim into the MDS config file. The default schema below
   # matches the lakeFS Enterprise `metadata_search` section; replace with the
   # legacy MDS schema (`lakefs:` / `metadata_settings:` / `repositories:`)
@@ -185,15 +168,14 @@ mds:
       # max_commits: 1000
       # since: "1970-01-01T00:00:00Z"
       repositories: {}
-        # example-repo-1:
-        #   branches:
-        #     - main
-        #     - dev
-        # example-repo-2:
-        #   branches:
-        #     - main
-        #     - feature-*
-
+      # example-repo-1:
+      #   branches:
+      #     - main
+      #     - dev
+      # example-repo-2:
+      #   branches:
+      #     - main
+      #     - feature-*
 # https://docs.lakefs.io/latest/howto/mirroring/
 replication:
   enabled: false
@@ -244,13 +226,10 @@ replication:
   #     s3:
   #       region: "us-east-1"
   config: {}
-
 # Start local postgres pod for quick start, not for production
 useDevPostgres: false
-
 # Name of existing secret to use
 existingSecret: null
-
 # Keys used for existingSecret
 secretKeys:
   authEncryptSecretKey: auth_encrypt_secret_key
@@ -262,24 +241,19 @@ secretKeys:
   ldapBindPassword: null
   # Use the following to fetch OIDC client secret from an existing secret:
   oidcClientSecret: null
-
 # Enterprise configuration
 enterprise:
   enabled: false
-
   # Enterprise auth configuration
   auth:
     rbac:
       enabled: true
-
     ldap:
       enabled: false
       bindPassword: null
-
     oidc:
       enabled: false
       clientSecret: null
-
     saml:
       enabled: false
       createCertificateSecret: false
@@ -287,7 +261,6 @@ enterprise:
         # certificates for AD FS IDP (e.g Azure AD)
         samlRsaPublicCert: null
         samlRsaPrivateKey: null
-
 # Audit log maintenance CronJob (Enterprise-only).
 # Requires enterprise.enabled: true and audit_log.enabled: true in lakefsConfig.
 # The CronJob uses the same lakeFS config file — no credentials needed.
@@ -316,6 +289,5 @@ auditLog:
     tolerations: []
     successfulJobsHistoryLimit: 3
     failedJobsHistoryLimit: 3
-
 secrets:
   licenseContents: null
