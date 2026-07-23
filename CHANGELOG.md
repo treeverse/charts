@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.16
+:new: What's new:
+- Update lakeFS Enterprise version to [1.92.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.92.0/)
+
 # 1.12.15
 :new: What's new:
 - Update the replication (Transactional Mirroring) image to [0.1.18](https://docs.lakefs.io/releases/replication/0.1.18/)
