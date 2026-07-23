@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.15
+:new: What's new:
+- Update the replication (Transactional Mirroring) image to [0.1.18](https://docs.lakefs.io/releases/replication/0.1.18/)
+
 # 1.12.14
 :new: What's new:
 - Update lakeFS community version to [1.84.0](https://github.com/treeverse/lakeFS/releases/tag/v1.84.0)
