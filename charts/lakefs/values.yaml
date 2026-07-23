@@ -181,7 +181,7 @@ replication:
   enabled: false
   image:
     repository: treeverse/replication
-    tag: 0.1.17
+    tag: 0.1.18
     pullPolicy: IfNotPresent
   port: 8008
   resources: {}
