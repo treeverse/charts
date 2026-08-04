@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.20
+:new: What's new:
+- Update lakeFS Enterprise version to [1.94.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.94.0/)
+
 # 1.12.19
 :new: What's new:
 - Update lakeFS community version to [1.85.0](https://github.com/treeverse/lakeFS/releases/tag/v1.85.0)
