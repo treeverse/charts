@@ -6,7 +6,7 @@ replicaCount: 1
 image:
   pullPolicy: IfNotPresent
   community:
-    tag: "1.85.0"
+    tag: "1.86.0"
   enterprise:
     tag: "1.94.0"
   privateRegistry:
