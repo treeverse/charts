@@ -125,7 +125,7 @@ envFrom:
 {{- end }}
 {{- end }}
 {{- if (((.Values.enterprise).auth).saml).enabled }}
-- name: secret-volume-license-token
+- name: saml-certificates
   secret:
     secretName: saml-certificates
 {{- end }}
