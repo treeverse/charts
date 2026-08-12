@@ -101,7 +101,7 @@ spec:
               mountPath: "/lakefs/data"
           {{- end }}
           {{- if (((.Values.enterprise).auth).saml).enabled }}
-            - name: secret-volume-license-token
+            - name: saml-certificates
               readOnly: true
               mountPath: /etc/saml_certs/
           {{- end }}
