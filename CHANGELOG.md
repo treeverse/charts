@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.24
+:new: What's new:
+- Update lakeFS Enterprise version to [1.96.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.96.0/)
+
 # 1.12.23
 :bug: Bugs fixed:
 - Mount the SAML certificates from their own volume, so SAML can be enabled on a licensed installation
