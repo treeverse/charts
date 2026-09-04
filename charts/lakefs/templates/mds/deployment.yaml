@@ -20,6 +20,9 @@ spec:
       {{- end }}
       labels:
         {{- include "mds.selectorLabels" . | nindent 8 }}
+        {{- with .Values.mds.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- if .Values.image.privateRegistry.enabled }}
       imagePullSecrets:

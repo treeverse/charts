@@ -19,6 +19,9 @@ spec:
     {{- end }}
       labels:
         {{- include "lakefs.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- if (.Values.image.privateRegistry).enabled }}
       imagePullSecrets:

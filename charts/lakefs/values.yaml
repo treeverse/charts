@@ -17,6 +17,10 @@ image:
     secretName: null
 nameOverride: ""
 fullnameOverride: ""
+# Labels applied to every resource this chart renders (Deployments, Services,
+# ConfigMaps, Secrets, ServiceAccount, Ingress, CronJob), in addition to the
+# chart's standard labels.
+commonLabels: {}
 ingress:
   enabled: false
   annotations: {}
@@ -37,6 +41,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 podAnnotations: {}
+# Extra labels applied to lakeFS pods, in addition to the chart's selector labels.
+podLabels: {}
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"
 deployment:
@@ -129,6 +135,8 @@ mds:
   extraEnvVars: {}
   # Name of an existing secret to mount as envFrom on the MDS container.
   extraEnvVarsSecret: null
+  # Extra labels applied to the MDS pod, in addition to its selector labels.
+  podLabels: {}
   resources:
   # limits:
   #   cpu: 500m
@@ -186,6 +194,8 @@ replication:
   port: 8008
   resources: {}
   podAnnotations: {}
+  # Extra labels applied to the replication pod, in addition to its selector labels.
+  podLabels: {}
   extraEnvVars: []
   extraEnvVarsSecret: null
   serviceAccountName: ""
@@ -284,6 +294,8 @@ auditLog:
     extraArgs: []
     extraEnvVars: []
     podAnnotations: {}
+    # Extra labels applied to the audit maintenance CronJob's pod, in addition to its selector labels.
+    podLabels: {}
     resources: {}
     nodeSelector: {}
     tolerations: []
