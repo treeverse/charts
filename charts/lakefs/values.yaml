@@ -8,7 +8,7 @@ image:
   community:
     tag: "1.86.0"
   enterprise:
-    tag: "1.99.0"
+    tag: "1.100.0"
   privateRegistry:
     # Optional. lakeFS Enterprise images are public, so no token is required.
     # Only needed when mirroring the images into your own private registry.
