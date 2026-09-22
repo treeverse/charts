@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.32
+:new: What's new:
+- Update lakeFS community version to [1.87.0](https://github.com/treeverse/lakeFS/releases/tag/v1.87.0)
+
 # 1.12.31
 :new: What's new:
 - Update lakeFS Enterprise version to [1.102.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.102.0/)
