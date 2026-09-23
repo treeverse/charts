@@ -1,0 +1,84 @@
+{{- if include "iqs.enabled" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iqs.fullname" . }}
+  labels:
+    {{- include "iqs.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.iqs.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "iqs.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- include "iqs.tokenChecksum" . | nindent 8 }}
+      {{- with .Values.iqs.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "iqs.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.image.privateRegistry.enabled }}
+      imagePullSecrets:
+       {{- if (.Values.image.privateRegistry).secretToken }}
+        - name: "docker-registry"
+       {{- else }}
+        - name: {{ .Values.image.privateRegistry.secretName }}
+       {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
+      {{- with .Values.iqs.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: iqs
+          image: "{{ .Values.iqs.image.repository }}:{{ .Values.iqs.image.tag }}"
+          imagePullPolicy: {{ .Values.iqs.image.pullPolicy }}
+          {{- with .Values.iqs.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          {{- with .Values.iqs.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.iqs.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "iqs.tokenEnv" (list . "MDSQUERY_TOKEN") | trim | nindent 12 }}
+            {{- with .Values.iqs.extraEnvVars }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- if .Values.iqs.extraEnvVarsSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.iqs.extraEnvVarsSecret }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.iqs.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

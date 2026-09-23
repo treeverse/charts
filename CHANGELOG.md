@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.33
+:new: What's new:
+- Add IQS (Iceberg Query Service) for lakeFS Enterprise (`iqs.enabled`), an internal service used by the lakeFS server for metadata search queries
+
 # 1.12.32
 :new: What's new:
 - Update lakeFS community version to [1.87.0](https://github.com/treeverse/lakeFS/releases/tag/v1.87.0)

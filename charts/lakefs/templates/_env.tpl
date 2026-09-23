@@ -64,6 +64,15 @@ env:
   - name: LAKEFS_AUTH_UI_CONFIG_RBAC
     value: internal
   {{- end }}
+  {{- if include "iqs.enabled" . }}
+  # IQS (Iceberg Query Service) is internal: only the lakeFS server calls it.
+  # Enabling IQS enables the server's query endpoint, independent of metadata search sync.
+  - name: LAKEFS_METADATA_SEARCH_QUERY_ENABLED
+    value: "true"
+  - name: LAKEFS_METADATA_SEARCH_QUERY_ENDPOINT
+    value: "http://{{ include "iqs.fullname" . }}:8080"
+  {{- include "iqs.tokenEnv" (list . "LAKEFS_METADATA_SEARCH_QUERY_TOKEN") | trim | nindent 2 }}
+  {{- end }}
   {{- end }}
 
   {{- if (.Values.auditLog).enabled }}
