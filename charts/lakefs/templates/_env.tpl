@@ -65,8 +65,7 @@ env:
     value: internal
   {{- end }}
   {{- if include "iqs.enabled" . }}
-  # IQS (Iceberg Query Service) is internal: only the lakeFS server calls it.
-  # Enabling IQS enables the server's query endpoint, independent of metadata search sync.
+  # IQS (Iceberg Query Service) is internal.
   - name: LAKEFS_METADATA_SEARCH_QUERY_ENABLED
     value: "true"
   - name: LAKEFS_METADATA_SEARCH_QUERY_ENDPOINT

@@ -176,9 +176,8 @@ mds:
       #   branches:
       #     - main
       #     - feature-*
-# IQS (Iceberg Query Service): internal service used by the lakeFS server for
-# metadata search queries. Enterprise only. Token: secrets.iqsToken or
-# existingSecret + secretKeys.iqsToken.
+# IQS (Iceberg Query Service): internal service. Enterprise only.
+# Token: secrets.iqsToken or existingSecret + secretKeys.iqsToken.
 iqs:
   enabled: false
   replicaCount: 1

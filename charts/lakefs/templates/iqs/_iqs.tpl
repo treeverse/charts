@@ -1,6 +1,5 @@
 {{/*
-IQS (Iceberg Query Service) resource full name.
-IQS is internal: only the lakeFS server calls it, through a ClusterIP Service.
+IQS (Iceberg Query Service) resource full name. IQS is internal.
 */}}
 {{- define "iqs.fullname" -}}
 {{- $name := include "lakefs.fullname" . }}
