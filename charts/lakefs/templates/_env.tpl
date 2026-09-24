@@ -64,6 +64,9 @@ env:
   - name: LAKEFS_AUTH_UI_CONFIG_RBAC
     value: internal
   {{- end }}
+  {{- if .iqsServerEnv }}
+  {{- include "iqs.serverEnv" . | trim | nindent 2 }}
+  {{- end }}
   {{- end }}
 
   {{- if (.Values.auditLog).enabled }}

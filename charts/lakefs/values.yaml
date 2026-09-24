@@ -176,6 +176,40 @@ mds:
       #   branches:
       #     - main
       #     - feature-*
+# IQS (Iceberg Query Service): internal service. Enterprise only.
+# Token: secrets.iqsToken or existingSecret + secretKeys.iqsToken.
+iqs:
+  enabled: false
+  replicaCount: 1
+  image:
+    repository: treeverse/lakefs-iqs
+    tag: "0.1.0"
+    pullPolicy: IfNotPresent
+  args:
+    - run
+  # Required. Where lakeFS stores query results (metadata_search.query.results_location).
+  resultsLocation: null
+  # Blockstore id for resultsLocation, for multi-blockstore setups.
+  resultsStorageId: null
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  extraEnvVars: []
+  extraEnvVarsSecret: null
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      memory: 2Gi
+  readinessProbe:
+    httpGet:
+      path: /_health
+      port: http
+  livenessProbe:
+    httpGet:
+      path: /_health
+      port: http
 # https://docs.lakefs.io/latest/howto/mirroring/
 replication:
   enabled: false
@@ -241,6 +275,8 @@ secretKeys:
   ldapBindPassword: null
   # Use the following to fetch OIDC client secret from an existing secret:
   oidcClientSecret: null
+  # IQS token key in existingSecret (default: iqs_token)
+  iqsToken: null
 # Enterprise configuration
 enterprise:
   enabled: false
@@ -291,3 +327,5 @@ auditLog:
     failedJobsHistoryLimit: 3
 secrets:
   licenseContents: null
+  # Shared lakeFS/IQS token, required when iqs.enabled
+  iqsToken: null
