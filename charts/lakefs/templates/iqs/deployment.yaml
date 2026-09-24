@@ -29,7 +29,9 @@ spec:
        {{- end }}
       {{- end }}
       serviceAccountName: {{ include "lakefs.serviceAccountName" . }}
-      {{- with .Values.iqs.securityContext }}
+      # IQS needs lakeFS data access (cloud identity) but not the Kubernetes API.
+      automountServiceAccountToken: false
+      {{- with .Values.iqs.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -37,6 +39,10 @@ spec:
         - name: iqs
           image: "{{ .Values.iqs.image.repository }}:{{ .Values.iqs.image.tag }}"
           imagePullPolicy: {{ .Values.iqs.image.pullPolicy }}
+          {{- with .Values.iqs.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.iqs.args }}
           args:
             {{- toYaml . | nindent 12 }}

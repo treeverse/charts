@@ -187,10 +187,21 @@ iqs:
     pullPolicy: IfNotPresent
   args:
     - run
+  # Required. Where lakeFS stores query results (metadata_search.query.results_location).
+  resultsLocation: null
+  # Blockstore id for resultsLocation, for multi-blockstore setups.
+  resultsStorageId: null
   podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
   extraEnvVars: []
   extraEnvVarsSecret: null
-  resources: {}
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      memory: 2Gi
   readinessProbe:
     httpGet:
       path: /_health
