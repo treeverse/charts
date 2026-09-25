@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.34
+:new: What's new:
+- Update lakeFS Enterprise version to [1.103.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.103.0/)
+
 # 1.12.33
 :new: What's new:
 - Add IQS (Iceberg Query Service) for lakeFS Enterprise (`iqs.enabled`), an internal service used by the lakeFS server for metadata search queries
