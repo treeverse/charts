@@ -1,0 +1,28 @@
+{{/* Backend limits. Envoy defaults, 1024 connections and 15s idle, are too low. */}}
+{{- $bcp := .Values.kgateway.backendConfigPolicy }}
+{{- if .Values.kgateway.enabled }}
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: BackendConfigPolicy
+metadata:
+  name: {{ include "lakefs.fullname" . }}
+  labels:
+    {{- include "lakefs.labels" . | nindent 4 }}
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: {{ include "lakefs.fullname" . }}
+    {{- range .Values.kgateway.extraBackendServices }}
+    - group: ""
+      kind: Service
+      name: {{ . }}
+    {{- end }}
+  {{- with $bcp.circuitBreakers }}
+  circuitBreakers:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $bcp.commonHttpProtocolOptions }}
+  commonHttpProtocolOptions:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

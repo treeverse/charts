@@ -1,0 +1,13 @@
+{{/* 403 for /metrics and /_pprof, replacing nginx's deny snippet. Referenced by the route's ExtensionRef filter. */}}
+{{- if and .Values.kgateway.enabled .Values.kgateway.denyInternalPaths }}
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: DirectResponse
+metadata:
+  name: {{ include "lakefs.fullname" . }}-deny-internal-paths
+  labels:
+    {{- include "lakefs.labels" . | nindent 4 }}
+spec:
+  status: 403
+  body: |
+    <h1>403 Forbidden</h1><p>Access is denied</p>
+{{- end }}

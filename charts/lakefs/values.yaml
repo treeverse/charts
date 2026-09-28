@@ -36,6 +36,43 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+kgateway:
+  # Render Gateway API objects instead of relying on an Ingress controller.
+  # The ingress block stays independent: enable both during a migration so
+  # rollback is a DNS change rather than a redeploy.
+  enabled: false
+  gatewayName: kgateway-external
+  gatewayNamespace: kube-system
+  # Listener to bind. Empty binds every listener on the Gateway, http-80 included.
+  sectionName: http-443
+  # Defaults to every host in ingress.hosts.
+  hostnames: []
+  # 403 for /metrics and /_pprof, the kgateway equivalent of nginx's deny snippet.
+  denyInternalPaths: true
+  # Extra Services the backend limits below should also apply to.
+  extraBackendServices: []
+
+  trafficPolicy:
+    timeouts:
+      streamIdle: 350s
+      request: 0s  # 0s means no timeout; empty means Envoy's 15s
+    retry:
+      attempts: 3
+      backoffBaseInterval: 25ms
+      retryOn:
+        - connect-failure
+        - reset-before-request
+
+  backendConfigPolicy:
+    circuitBreakers:
+      maxConnections: 100000
+      maxPendingRequests: 200000
+      maxRequests: 200000
+      maxRetries: 1000
+    commonHttpProtocolOptions:
+      idleTimeout: 300s
+      maxRequestsPerConnection: 0
+
 podAnnotations: {}
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"

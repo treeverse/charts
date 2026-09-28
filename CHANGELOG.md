@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.36
+:new: What's new:
+- Add Gateway API support (`kgateway.enabled`): renders an `HTTPRoute` plus kgateway's `DirectResponse`, `TrafficPolicy` and `BackendConfigPolicy`, for running lakeFS behind [kgateway](https://kgateway.dev/) instead of an Ingress controller
+
 # 1.12.35
 :new: What's new:
 - Update lakeFS Enterprise version to [1.103.1](https://docs.lakefs.io/releases/lakefs-enterprise/1.103.1/)
