@@ -72,16 +72,16 @@ Included only by the server deployment.
 */}}
 {{- define "iqs.serverEnv" -}}
 {{- if include "iqs.enabled" . }}
-- name: LAKEFS_METADATA_SEARCH_QUERY_ENABLED
+- name: LAKEFS_ICEBERG_QUERY_ENABLED
   value: "true"
-- name: LAKEFS_METADATA_SEARCH_QUERY_ENDPOINT
+- name: LAKEFS_ICEBERG_QUERY_ENDPOINT
   value: "http://{{ include "iqs.fullname" . }}.{{ .Release.Namespace }}.svc:8080"
-- name: LAKEFS_METADATA_SEARCH_QUERY_RESULTS_LOCATION
+- name: LAKEFS_ICEBERG_QUERY_RESULTS_LOCATION
   value: {{ required "iqs.resultsLocation is required when iqs.enabled is true" .Values.iqs.resultsLocation | quote }}
 {{- with .Values.iqs.resultsStorageId }}
-- name: LAKEFS_METADATA_SEARCH_QUERY_RESULTS_STORAGE_ID
+- name: LAKEFS_ICEBERG_QUERY_RESULTS_STORAGE_ID
   value: {{ . | quote }}
 {{- end }}
-{{- include "iqs.tokenEnv" (list . "LAKEFS_METADATA_SEARCH_QUERY_TOKEN") }}
+{{- include "iqs.tokenEnv" (list . "LAKEFS_ICEBERG_QUERY_TOKEN") }}
 {{- end }}
 {{- end }}
