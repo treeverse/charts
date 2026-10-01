@@ -1,6 +1,10 @@
 # Changelog
 
 
+# 1.12.42
+:new: What's new:
+- Update IQS version
+
 # 1.12.41
 :new: What's new:
 - Update IQS params
