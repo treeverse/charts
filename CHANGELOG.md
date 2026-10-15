@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.12.44
+:new: What's new:
+- Update lakeFS Enterprise version to [1.106.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.106.0/)
+- Update IQS version to 0.2.1
+
 # 1.12.43
 :new: What's new:
 - Update lakeFS Enterprise version to [1.105.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.105.0/)
