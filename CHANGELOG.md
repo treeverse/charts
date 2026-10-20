@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.45
+:new: What's new:
+- Update lakeFS Enterprise version to [1.107.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.107.0/)
+
 # 1.12.44
 :new: What's new:
 - Update lakeFS Enterprise version to [1.106.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.106.0/)
