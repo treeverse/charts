@@ -6,6 +6,9 @@
 - Update IQS version to 0.2.2
 - Update Replication version to 0.1.19
 
+:bug: Bugs fixed:
+- The audit log maintenance CronJob now uses `image.enterprise.tag`; it used the chart `appVersion` (e.g. `1.117.0`), which is not a lakeFS Enterprise image
+
 # 1.12.45
 :new: What's new:
 - Update lakeFS Enterprise version to [1.107.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.107.0/)
