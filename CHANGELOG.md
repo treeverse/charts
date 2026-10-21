@@ -3,6 +3,8 @@
 # 1.12.46
 :new: What's new:
 - Update lakeFS Enterprise version to [1.108.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.108.0/)
+- Update IQS version to 0.2.2
+- Update Replication version to 0.1.19
 
 # 1.12.45
 :new: What's new:
