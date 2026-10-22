@@ -30,7 +30,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: audit-maintain
-              image: "{{ include "lakefs.repository" . }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              image: "{{ include "lakefs.repository" . }}:{{ include "lakefs.tag" . }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               args:
                 - audit
