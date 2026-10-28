@@ -138,7 +138,7 @@ mds:
   #   memory: 128Mi
   readinessProbe:
     httpGet:
-      path: /health
+      path: /_health
       port: http
       # failureThreshold: 10
       # periodSeconds: 5
@@ -147,7 +147,7 @@ mds:
       # initialDelaySeconds: 5
   livenessProbe:
     httpGet:
-      path: /health
+      path: /_health
       port: http
       # failureThreshold: 10
       # periodSeconds: 5
