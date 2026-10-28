@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.12.47
+:bug: Bugs fixed:
+- MDS readiness and liveness probes default to `/_health`, the path `lakefs mds run` serves; `/health` returns 404
+
 # 1.12.46
 :new: What's new:
 - Update lakeFS Enterprise version to [1.108.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.108.0/)
