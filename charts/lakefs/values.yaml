@@ -48,8 +48,9 @@ httpRoute:
   #  - name: my-gateway
   #    namespace: gateway-system
   #    sectionName: https
-  # Defaults to the hosts in ingress.hosts when empty. Wildcards (e.g. "*.s3.example.com") are allowed
-  # for virtual-host style S3 gateway access; the Gateway listener must permit them too.
+  # Hostnames the route matches, passed through verbatim as an array. Not shared with ingress.hosts: when both are enabled, list the hosts here too.
+  # Wildcards (e.g. "*.s3.example.com") are allowed for virtual-host style S3 gateway access; the Gateway
+  # listener must permit them too. Empty matches every hostname the Gateway listener accepts.
   hostnames: []
   #  - lakefs.example.com
   #  - "*.s3.lakefs.example.com"
@@ -57,7 +58,7 @@ httpRoute:
   timeouts: {}
   #  request: 0s
   #  backendRequest: 0s
-  # Rules rendered ahead of the "/" catch-all. Defaults to the pathsOverrides in ingress.hosts when empty.
+  # Rules rendered ahead of the "/" catch-all. Not shared with ingress.hosts[].pathsOverrides.
   pathsOverrides: []
   #  - path: /some/path
   #    serviceName: other-service

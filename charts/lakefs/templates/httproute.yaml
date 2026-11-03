@@ -4,25 +4,6 @@
   {{- if not .Values.httpRoute.parentRefs -}}
     {{- fail "httpRoute.parentRefs is required when httpRoute.enabled is true" -}}
   {{- end -}}
-  {{- $hostnames := .Values.httpRoute.hostnames -}}
-  {{- if not $hostnames -}}
-    {{- $hostnames = list -}}
-    {{- range .Values.ingress.hosts -}}
-      {{- if .host -}}
-        {{- $hostnames = append $hostnames .host -}}
-      {{- end -}}
-    {{- end -}}
-  {{- end -}}
-  {{- $pathsOverrides := .Values.httpRoute.pathsOverrides -}}
-  {{- if not $pathsOverrides -}}
-    {{- $pathsOverrides = list -}}
-    {{- range .Values.ingress.hosts -}}
-      {{- range .pathsOverrides -}}
-        {{- $pathsOverrides = append $pathsOverrides . -}}
-      {{- end -}}
-    {{- end -}}
-    {{- $pathsOverrides = uniq $pathsOverrides -}}
-  {{- end -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -39,14 +20,12 @@ metadata:
 spec:
   parentRefs:
     {{- toYaml .Values.httpRoute.parentRefs | nindent 4 }}
-  {{- with $hostnames }}
+  {{- with .Values.httpRoute.hostnames }}
   hostnames:
-    {{- range . }}
-    - {{ . | quote }}
-    {{- end }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   rules:
-    {{- range $pathsOverrides }}
+    {{- range .Values.httpRoute.pathsOverrides }}
     - matches:
         - path:
             type: PathPrefix
