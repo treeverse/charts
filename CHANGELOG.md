@@ -1,6 +1,6 @@
 # Changelog
 
-# 1.12.48
+# 1.13.0
 :new: What's new:
 - Optional Gateway API `HTTPRoute` (`httpRoute.enabled`, default `false`) with `parentRefs`, `hostnames` (wildcards allowed) and `rules` (HTTPRouteRule list; `backendRefs` defaults to the lakeFS Service). Independent of `ingress.enabled` and `ingress.*` values; existing installs render unchanged
 
