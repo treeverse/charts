@@ -26,24 +26,14 @@ spec:
   {{- end }}
   rules:
     {{- range .Values.httpRoute.rules }}
-    - backendRefs:
-      {{- if .backendRefs }}
-        {{- toYaml .backendRefs | nindent 8 }}
-      {{- else }}
-        - name: {{ $fullName }}
-          port: {{ $svcPort }}
-      {{- end }}
-      {{- with .matches }}
-      matches:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .filters }}
-      filters:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .timeouts }}
-      timeouts:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+    {{- $redirect := false }}
+    {{- range .filters }}
+    {{- if eq .type "RequestRedirect" }}{{- $redirect = true }}{{- end }}
+    {{- end }}
+    {{- $rule := pick . "matches" "filters" "timeouts" "backendRefs" }}
+    {{- if and (not .backendRefs) (not $redirect) }}
+    {{- $_ := set $rule "backendRefs" (list (dict "name" $fullName "port" $svcPort)) }}
+    {{- end }}
+    - {{ toYaml $rule | indent 6 | trim }}
     {{- end }}
 {{- end }}

@@ -55,7 +55,7 @@ httpRoute:
   #  - lakefs.example.com
   #  - "*.s3.lakefs.example.com"
   # Route rules. Each renders matches, filters, timeouts and backendRefs; other HTTPRouteRule fields are ignored.
-  # backendRefs defaults to the lakeFS Service when omitted. Not shared with ingress.hosts[].pathsOverrides.
+  # backendRefs defaults to the lakeFS Service when omitted (not on RequestRedirect rules). Not shared with ingress.hosts[].pathsOverrides.
   # Per-rule timeouts need Gateway API v1.2+; "0s" disables them, useful for large S3 gateway uploads.
   rules:
     - matches:
@@ -72,6 +72,14 @@ httpRoute:
   #     backendRefs:
   #       - name: other-service
   #         port: 80
+  #   - matches:
+  #       - path:
+  #           type: PathPrefix
+  #           value: /old-path
+  #     filters:
+  #       - type: RequestRedirect
+  #         requestRedirect:
+  #           statusCode: 302
 podAnnotations: {}
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"
