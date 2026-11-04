@@ -54,16 +54,24 @@ httpRoute:
   hostnames: []
   #  - lakefs.example.com
   #  - "*.s3.lakefs.example.com"
-  # Timeouts for the catch-all "/" rule. "0s" disables the timeout, useful for large S3 gateway uploads.
-  timeouts: {}
-  #  request: 0s
-  #  backendRequest: 0s
-  # Rules rendered ahead of the "/" catch-all. Not shared with ingress.hosts[].pathsOverrides.
-  pathsOverrides: []
-  #  - path: /some/path
-  #    serviceName: other-service
-  #    servicePort: 80
-  #    timeouts: {}
+  # Route rules. Each renders matches, filters, timeouts and backendRefs; other HTTPRouteRule fields are ignored.
+  # backendRefs defaults to the lakeFS Service when omitted. Not shared with ingress.hosts[].pathsOverrides.
+  # Per-rule timeouts need Gateway API v1.2+; "0s" disables them, useful for large S3 gateway uploads.
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+  #     timeouts:
+  #       request: 0s
+  #       backendRequest: 0s
+  #   - matches:
+  #       - path:
+  #           type: PathPrefix
+  #           value: /some/path
+  #     backendRefs:
+  #       - name: other-service
+  #         port: 80
 podAnnotations: {}
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"
