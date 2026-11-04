@@ -2,7 +2,7 @@
 
 # 1.12.48
 :new: What's new:
-- Optional Gateway API `HTTPRoute` (`httpRoute.enabled`, default `false`) with `parentRefs`, `hostnames` (wildcards allowed), `timeouts` and `pathsOverrides`. Independent of `ingress.enabled` and `ingress.*` values; existing installs render unchanged
+- Optional Gateway API `HTTPRoute` (`httpRoute.enabled`, default `false`) with `parentRefs`, `hostnames` (wildcards allowed) and `rules` (HTTPRouteRule list; `backendRefs` defaults to the lakeFS Service). Independent of `ingress.enabled` and `ingress.*` values; existing installs render unchanged
 
 # 1.12.47
 :bug: Bugs fixed:
