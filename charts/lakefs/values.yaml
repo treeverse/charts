@@ -55,7 +55,8 @@ httpRoute:
   hostnames: []
   #  - lakefs.example.com
   #  - "*.s3.lakefs.example.com"
-  # HTTPRouteRule list. backendRefs defaults to the lakeFS Service when omitted (not on RequestRedirect rules).
+  # Route rules. Each renders matches, filters, timeouts and backendRefs; other HTTPRouteRule fields are ignored.
+  # backendRefs defaults to the lakeFS Service when omitted.
   # Per-rule timeouts need Gateway API v1.2+; "0s" disables them, useful for large S3 gateway uploads.
   rules:
     - matches:
