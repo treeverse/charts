@@ -30,7 +30,7 @@ spec:
     {{- range .filters }}
     {{- if eq .type "RequestRedirect" }}{{- $redirect = true }}{{- end }}
     {{- end }}
-    {{- $rule := pick . "matches" "filters" "timeouts" "backendRefs" }}
+    {{- $rule := deepCopy . }}
     {{- if and (not .backendRefs) (not $redirect) }}
     {{- $_ := set $rule "backendRefs" (list (dict "name" $fullName "port" $svcPort)) }}
     {{- end }}
