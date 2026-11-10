@@ -36,6 +36,35 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+## Gateway API HTTPRoute (gateway.networking.k8s.io/v1) exposing the lakeFS Service.
+## Independent of ingress.enabled: both can render side by side during a migration.
+## Ref: https://gateway-api.sigs.k8s.io/api-types/httproute/
+httpRoute:
+  enabled: false
+  annotations: {}
+  # external-dns.alpha.kubernetes.io/hostname: lakefs.example.com
+  labels: {}
+  # team: data-platform
+  # Gateway(s) to attach to. Required when enabled.
+  parentRefs: []
+  #  - name: my-gateway
+  #    namespace: gateway-system
+  #    sectionName: https
+  # Not shared with ingress.hosts. Wildcards (e.g. "*.s3.example.com") are allowed for virtual-host style
+  # S3 gateway access; the Gateway listener must permit them too.
+  hostnames: []
+  #  - lakefs.example.com
+  #  - "*.s3.lakefs.example.com"
+  # Route rules. Each renders matches, filters, timeouts and backendRefs; other HTTPRouteRule fields are ignored.
+  # backendRefs defaults to the lakeFS Service when omitted.
+  # Per-rule timeouts need Gateway API v1.2+; "0s" disables them, useful for large S3 gateway uploads.
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+  #     timeouts:
+  #       request: 0s
 podAnnotations: {}
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"
