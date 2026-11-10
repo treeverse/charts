@@ -4,6 +4,11 @@
 :new: What's new:
 - Optional Gateway API `HTTPRoute` (`httpRoute.enabled`, default `false`) with `parentRefs`, `hostnames` (wildcards allowed) and `rules` (HTTPRouteRule list; `backendRefs` defaults to the lakeFS Service). Independent of `ingress.enabled` and `ingress.*` values; existing installs render unchanged
 
+# 1.12.48
+:new: What's new:
+- Update lakeFS Enterprise version to [1.109.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.109.0/)
+- Update IQS version to 0.2.3
+
 # 1.12.47
 :bug: Bugs fixed:
 - MDS readiness and liveness probes default to `/_health`, the path `lakefs mds run` serves; `/health` returns 404
