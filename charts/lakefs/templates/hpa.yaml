@@ -1,20 +1,5 @@
 {{- if .Values.autoscaling.enabled -}}
   {{- $a := .Values.autoscaling -}}
-  {{- if not (or $a.targetCPUUtilizationPercentage $a.targetMemoryUtilizationPercentage $a.metrics) -}}
-    {{- fail "autoscaling.enabled requires targetCPUUtilizationPercentage, targetMemoryUtilizationPercentage or metrics" -}}
-  {{- end -}}
-  {{- $res := .Values.resources | default dict -}}
-  {{- $req := $res.requests | default dict -}}
-  {{- $lim := $res.limits | default dict -}}
-  {{- if and $a.targetCPUUtilizationPercentage (not (or $req.cpu $lim.cpu)) -}}
-    {{- fail "autoscaling.targetCPUUtilizationPercentage requires resources.requests.cpu (or limits.cpu)" -}}
-  {{- end -}}
-  {{- if and $a.targetMemoryUtilizationPercentage (not (or $req.memory $lim.memory)) -}}
-    {{- fail "autoscaling.targetMemoryUtilizationPercentage requires resources.requests.memory (or limits.memory)" -}}
-  {{- end -}}
-  {{- if lt (int $a.maxReplicas) (int $a.minReplicas) -}}
-    {{- fail "autoscaling.maxReplicas must be >= autoscaling.minReplicas" -}}
-  {{- end -}}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -28,6 +13,7 @@ spec:
     name: {{ include "lakefs.fullname" . }}
   minReplicas: {{ $a.minReplicas }}
   maxReplicas: {{ $a.maxReplicas }}
+  {{- if or $a.targetCPUUtilizationPercentage $a.targetMemoryUtilizationPercentage $a.metrics }}
   metrics:
     {{- with $a.targetCPUUtilizationPercentage }}
     - type: Resource
@@ -48,6 +34,7 @@ spec:
     {{- with $a.metrics }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+  {{- end }}
   {{- with $a.behavior }}
   behavior:
     {{- toYaml . | nindent 4 }}
