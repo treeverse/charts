@@ -3,6 +3,7 @@
 # 1.14.0
 :new: What's new:
 - Add `extraObjects` value to deploy arbitrary Kubernetes objects with the release (maps or strings, rendered with `tpl`). Existing undocumented `extraManifests` keeps working
+- Optional `HorizontalPodAutoscaler` (`autoscaling.enabled`, default `false`) with `minReplicas`/`maxReplicas`, CPU/memory utilization targets, extra `metrics` and `behavior`. When enabled, `replicaCount` is not rendered on the Deployment
 
 # 1.13.0
 :new: What's new:

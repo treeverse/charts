@@ -3,6 +3,26 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+
+# HorizontalPodAutoscaler for the lakeFS Deployment; replicaCount is ignored when enabled.
+# CPU/memory targets need resources.requests and metrics-server in the cluster.
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage:
+  # Extra autoscaling/v2 metric specs (Pods/Object/External), e.g. from prometheus-adapter or KEDA
+  metrics: []
+  #  - type: Pods
+  #    pods:
+  #      metric:
+  #        name: http_requests_per_second
+  #      target:
+  #        type: AverageValue
+  #        averageValue: "100"
+  # autoscaling/v2 scaling behavior
+  behavior: {}
 image:
   pullPolicy: IfNotPresent
   community:
