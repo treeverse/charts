@@ -1,6 +1,6 @@
 # Changelog
 
-# 1.13.1
+# 1.14.0
 :new: What's new:
 - Add `extraObjects` value to deploy arbitrary Kubernetes objects with the release (maps or strings, rendered with `tpl`). Existing undocumented `extraManifests` keeps working
 
