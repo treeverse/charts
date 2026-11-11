@@ -98,7 +98,13 @@ service:
   ## Requires Kubernetes 1.31+ (beta, enabled by default; GA in 1.33). Empty means the field is omitted.
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
   trafficDistribution: ""
+# lakeFS container resources. requests required when autoscaling uses CPU/memory targets.
 resources: {}
+#  requests:
+#    cpu: 500m
+#    memory: 512Mi
+#  limits:
+#    memory: 1Gi
 nodeSelector: {}
 tolerations: []
 affinity: {}

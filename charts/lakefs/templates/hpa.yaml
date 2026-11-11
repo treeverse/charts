@@ -3,6 +3,13 @@
   {{- if not (or $a.targetCPUUtilizationPercentage $a.targetMemoryUtilizationPercentage $a.metrics) -}}
     {{- fail "autoscaling.enabled requires targetCPUUtilizationPercentage, targetMemoryUtilizationPercentage or metrics" -}}
   {{- end -}}
+  {{- $req := (.Values.resources | default dict).requests | default dict -}}
+  {{- if and $a.targetCPUUtilizationPercentage (not $req.cpu) -}}
+    {{- fail "autoscaling.targetCPUUtilizationPercentage requires resources.requests.cpu" -}}
+  {{- end -}}
+  {{- if and $a.targetMemoryUtilizationPercentage (not $req.memory) -}}
+    {{- fail "autoscaling.targetMemoryUtilizationPercentage requires resources.requests.memory" -}}
+  {{- end -}}
   {{- if lt (int $a.maxReplicas) (int $a.minReplicas) -}}
     {{- fail "autoscaling.maxReplicas must be >= autoscaling.minReplicas" -}}
   {{- end -}}
