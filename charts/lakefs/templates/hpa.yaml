@@ -13,6 +13,7 @@ spec:
     name: {{ include "lakefs.fullname" . }}
   minReplicas: {{ $a.minReplicas }}
   maxReplicas: {{ $a.maxReplicas }}
+  {{- /* Kubernetes defaults omitted or empty metrics to 80% CPU utilization; clearing all metric settings does not disable autoscaling. */}}
   metrics:
     {{- with $a.targetCPUUtilizationPercentage }}
     - type: Resource
