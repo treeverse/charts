@@ -33,7 +33,6 @@ spec:
     {{- with $a.metrics }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- end }}
   {{- with $a.behavior }}
   behavior:
     {{- toYaml . | nindent 4 }}
