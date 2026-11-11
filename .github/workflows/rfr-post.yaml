@@ -47,9 +47,7 @@ jobs:
           # change.
           SLACK_CHANNEL: ${{ vars.RFR_SLACK_CHANNEL }}
           GITHUB_TOKEN: ${{ github.token }}
-          # GitHub login to Slack user id, as JSON, from the organization's
-          # variable.  Unset, people are named as plain text and not pinged.
-          USER_MAP_JSON: ${{ vars.RFR_SLACK_USERS }}
+          USER_MAP: .github/rfr-slack-users.json
           # "true" prints the Slack payload instead of posting it.
           DRY_RUN: ${{ vars.RFR_DRY_RUN || 'false' }}
         run: python .github/scripts/rfr_post.py

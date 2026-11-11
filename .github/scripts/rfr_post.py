@@ -54,24 +54,13 @@ def load_event() -> dict:
 
 
 def load_user_map(path: str) -> dict[str, str]:
-    """Return GitHub login to Slack user id, with logins lower-cased.
-
-    The mapping is the JSON in the USER_MAP_JSON environment variable when that
-    is set, otherwise the JSON file at `path`.  With neither, it is empty.
-    """
-    inline = os.environ.get("USER_MAP_JSON", "").strip()
-    if inline:
-        try:
-            mapping = json.loads(inline)
-        except json.JSONDecodeError as error:
-            sys.exit(f"USER_MAP_JSON is not valid JSON: {error}")
-    else:
-        try:
-            with open(path, encoding="utf-8") as handle:
-                mapping = json.load(handle)
-        except FileNotFoundError:
-            print(f"No USER_MAP_JSON and no user map at {path}; reviewers are named as plain text.")
-            return {}
+    """Return GitHub login to Slack user id, with logins lower-cased."""
+    try:
+        with open(path, encoding="utf-8") as handle:
+            mapping = json.load(handle)
+    except FileNotFoundError:
+        print(f"No user map at {path}; reviewers are named as plain text.")
+        return {}
     return {login.lower(): user_id for login, user_id in mapping.items()}
 
 
