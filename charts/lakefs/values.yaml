@@ -5,7 +5,8 @@
 replicaCount: 1
 
 # HorizontalPodAutoscaler for the lakeFS Deployment; replicaCount is ignored when enabled.
-# CPU/memory targets need resources.requests and metrics-server in the cluster.
+# CPU/memory targets need resources.requests (or limits) and metrics-server in the cluster.
+# Enabling on a running release briefly resets the Deployment to 1 replica until the HPA scales it to minReplicas.
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -98,7 +99,7 @@ service:
   ## Requires Kubernetes 1.31+ (beta, enabled by default; GA in 1.33). Empty means the field is omitted.
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
   trafficDistribution: ""
-# lakeFS container resources. requests required when autoscaling uses CPU/memory targets.
+# lakeFS container resources. requests (or limits) required when autoscaling uses CPU/memory targets.
 resources: {}
 #  requests:
 #    cpu: 500m
