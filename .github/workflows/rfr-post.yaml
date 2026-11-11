@@ -1,53 +1,45 @@
 name: Post PR to #rfr
 
-# One Slack message per PR that is ready for review, mentioning the requested
-# reviewers.  Later reviewer changes edit that message rather than posting again.
+# Asks the workflow of the same name in treeverse/dev to post this PR to the #rfr
+# Slack channel, or to update its message there.  That workflow reads the PR itself.
 
 on:
   pull_request:
     types: [opened, ready_for_review, review_requested, review_request_removed]
 
-permissions:
-  contents: read
-  # Reads the PR's reviews, which tell a re-review request from a first one.
-  pull-requests: read
-
-# One run at a time per PR, so an update never overlaps the post it edits.  A
-# pending run may be replaced by a newer one; each run reconciles against the
-# reviewers the message already records, so nothing is lost when that happens.
-concurrency:
-  group: rfr-post-${{ github.event.pull_request.number }}
-  cancel-in-progress: false
+permissions: {}
 
 jobs:
-  post:
-    # Secrets are not available to PRs from forks.  Without a channel there is
-    # nowhere to post.
+  trigger:
+    # Secrets are not available to PRs from forks.  Drafts and bot PRs are never
+    # posted.  The job is skipped until the app's client id is set.
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
-      vars.RFR_SLACK_CHANNEL != ''
+      !github.event.pull_request.draft &&
+      github.event.pull_request.user.type != 'Bot' &&
+      vars.RFR_TRIGGER_CLIENT_ID != ''
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
+      # This app can only start workflows in treeverse/dev.
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
         with:
-          sparse-checkout: .github
+          client-id: ${{ vars.RFR_TRIGGER_CLIENT_ID }}
+          private-key: ${{ secrets.RFR_TRIGGER_PRIVATE_KEY }}
+          owner: treeverse
+          repositories: dev
+          permission-actions: write
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Post or update the PR message
+      - name: Start the workflow in treeverse/dev
         env:
-          # Bot token with `chat:write` and `channels:history`.  A webhook
-          # cannot be used: it cannot find or edit an earlier message.
-          SLACK_BOT_TOKEN: ${{ secrets.RFR_SLACK_BOT_TOKEN }}
-          # Channel id, from a variable so the target can change without a code
-          # change.
-          SLACK_CHANNEL: ${{ vars.RFR_SLACK_CHANNEL }}
-          GITHUB_TOKEN: ${{ github.token }}
-          USER_MAP: .github/rfr-slack-users.json
-          # "true" prints the Slack payload instead of posting it.
-          DRY_RUN: ${{ vars.RFR_DRY_RUN || 'false' }}
-        run: python .github/scripts/rfr_post.py
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY: ${{ github.event.repository.name }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          ACTION: ${{ github.event.action }}
+          REVIEWER: ${{ github.event.requested_reviewer.login }}
+        run: |
+          gh workflow run rfr-post.yaml --repo treeverse/dev \
+            -f repository="$REPOSITORY" -f number="$NUMBER" \
+            -f action="$ACTION" -f reviewer="$REVIEWER"
