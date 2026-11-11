@@ -1,0 +1,55 @@
+name: Post PR to #rfr
+
+# One Slack message per PR that is ready for review, mentioning the requested
+# reviewers.  Later reviewer changes edit that message rather than posting again.
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, review_requested, review_request_removed]
+
+permissions:
+  contents: read
+  # Reads the PR's reviews, which tell a re-review request from a first one.
+  pull-requests: read
+
+# One run at a time per PR, so an update never overlaps the post it edits.  A
+# pending run may be replaced by a newer one; each run reconciles against the
+# reviewers the message already records, so nothing is lost when that happens.
+concurrency:
+  group: rfr-post-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  post:
+    # Secrets are not available to PRs from forks.  Without a channel there is
+    # nowhere to post.
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      vars.RFR_SLACK_CHANNEL != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Post or update the PR message
+        env:
+          # Bot token with `chat:write` and `channels:history`.  A webhook
+          # cannot be used: it cannot find or edit an earlier message.
+          SLACK_BOT_TOKEN: ${{ secrets.RFR_SLACK_BOT_TOKEN }}
+          # Channel id, from a variable so the target can change without a code
+          # change.
+          SLACK_CHANNEL: ${{ vars.RFR_SLACK_CHANNEL }}
+          GITHUB_TOKEN: ${{ github.token }}
+          # GitHub login to Slack user id, as JSON, from the organization's
+          # variable.  Unset, people are named as plain text and not pinged.
+          USER_MAP_JSON: ${{ vars.RFR_SLACK_USERS }}
+          # "true" prints the Slack payload instead of posting it.
+          DRY_RUN: ${{ vars.RFR_DRY_RUN || 'false' }}
+        run: python .github/scripts/rfr_post.py
