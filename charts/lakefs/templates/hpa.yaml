@@ -13,7 +13,6 @@ spec:
     name: {{ include "lakefs.fullname" . }}
   minReplicas: {{ $a.minReplicas }}
   maxReplicas: {{ $a.maxReplicas }}
-  {{- if or $a.targetCPUUtilizationPercentage $a.targetMemoryUtilizationPercentage $a.metrics }}
   metrics:
     {{- with $a.targetCPUUtilizationPercentage }}
     - type: Resource
