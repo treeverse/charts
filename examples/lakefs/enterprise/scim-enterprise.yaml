@@ -1,0 +1,42 @@
+ingress:
+  enabled: true
+  ingressClassName: <class-name>
+  hosts:
+    # the ingress that will be created for lakeFS; the identity provider sends its SCIM requests
+    # to https://<lakefs.ingress.domain>/api/scim/v2, so this domain must terminate HTTPS
+    - host: <lakefs.ingress.domain>
+      paths:
+        - /
+
+enterprise:
+  enabled: true
+  auth:
+    oidc:
+      enabled: true
+      # secret given by the OIDC provider (e.g auth0, Okta, Microsoft Entra ID)
+      clientSecret: <oidc-client-secret>
+      # Microsoft Entra ID: the claim SCIM's externalId is mapped to, so that SSO and provisioning name the same user
+      externalUserIdClaimName: oid
+    scim:
+      enabled: true
+      # the bearer token entered in the identity provider's provisioning settings; list two while rotating
+      tokens:
+        - <scim-bearer-token>
+      # every provisioned user joins this group; it must exist before lakeFS starts
+      defaultUserGroup: Developers
+
+# To hold the tokens in your own secret instead, as a JSON list under one key:
+# existingSecret: <secret-name>
+# secretKeys:
+#   scimTokens: scim_tokens
+
+lakefsConfig: |
+  blockstore:
+    type: local
+  auth:
+    providers:
+      oidc:
+        post_login_redirect_url: /
+        url: https://oidc-provider-url.com/
+        client_id: <oidc-client-id>
+        callback_base_url: https://<lakefs.ingress.domain>

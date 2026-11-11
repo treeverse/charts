@@ -93,6 +93,36 @@ Sensitive information like `database_connection_string` (used by PostgreSQL) is 
 You should give your Kubernetes nodes access to all S3 buckets (or other resources) you intend to use lakeFS with.
 If you can't provide such access, lakeFS can be configured to use an AWS key-pair to authenticate (part of the `lakefsConfig` YAML).
 
+### SCIM provisioning (lakeFS Enterprise)
+
+lakeFS Enterprise can serve SCIM 2.0 provisioning to an identity provider such as Okta or Microsoft Entra ID, which then creates, updates and deactivates users and groups in lakeFS. The provider sends its requests to `https://<lakefs domain>/api/scim/v2`, so the ingress must terminate HTTPS on the API or UI domain of lakeFS; the S3 gateway domain routes everything to the gateway and cannot serve them. SCIM runs on the built-in RBAC service (`enterprise.auth.rbac.enabled`, the default), and the server refuses to start with the block enabled beside an external one. The setup guide for each provider is in the lakeFS Enterprise documentation.
+
+Example `my-values.yaml` with the tokens held by the chart:
+
+```yaml
+enterprise:
+  enabled: true
+  auth:
+    scim:
+      enabled: true
+      # the token entered in the provider's provisioning settings; list two while rotating
+      tokens:
+        - <scim-bearer-token>
+      defaultUserGroup: Developers
+```
+
+With `existingSecret`, the secret holds the tokens as a JSON list under the key named by `secretKeys.scimTokens`:
+
+```bash
+kubectl create secret generic my-lakefs-secrets --from-literal=scim_tokens='["<scim-bearer-token>"]'
+```
+
+```yaml
+existingSecret: my-lakefs-secrets
+secretKeys:
+  scimTokens: scim_tokens
+```
+
 ## Notable Chart Upgrades
 
 ### Upgrading from chart version 0.9.4 or lower
@@ -177,3 +207,10 @@ helm upgrade -f my-values.yaml my-lakefs lakefs/lakefs --set kv_upgrade=true
 | `iqs.extraEnvVars` / `iqs.extraEnvVarsSecret` | Extra env vars for IQS (`IQS_*` configure the service, e.g. `IQS_LOGGING_LEVEL`)                                                                                                                                                                                  |                                     |
 | `secrets.iqsToken`                    | Bearer token shared by the lakeFS server and IQS. Required when `iqs.enabled` (ignored when existingSecret is set)                                                                                                                                                                    |                                     |
 | `secretKeys.iqsToken`                 | Name of key in existing secret holding the IQS token. Only used when existingSecret is set.                                                                                                                                                                                          | `iqs_token`                         |
+| `enterprise.auth.scim.enabled`        | Serve SCIM 2.0 provisioning at `/api/scim/v2`, see [SCIM provisioning](#scim-provisioning-lakefs-enterprise). lakeFS Enterprise only, on the built-in RBAC service.                                                                                                              | `false`                             |
+| `enterprise.auth.scim.tokens`         | Bearer tokens the identity provider may present, a list so that a rotation can hold the old and the new. Required when SCIM is enabled (ignored when existingSecret is set)                                                                                                        | `[]`                                |
+| `secretKeys.scimTokens`               | Name of key in existing secret holding the SCIM tokens as a JSON list, e.g. `["<token>"]`. Required when existingSecret is set and SCIM is enabled.                                                                                                                                |                                     |
+| `enterprise.auth.scim.defaultUserGroup` | Group every provisioned user joins. It must exist and not be provisioned by the provider, or the server refuses to start.                                                                                                                                                        |                                     |
+| `enterprise.auth.scim.defaultGroupPolicy` | Policy attached to every provisioned group. It must exist, or the server refuses to start.                                                                                                                                                                                     |                                     |
+| `enterprise.auth.scim.revokeCredentialsOnDeactivate` | Revoke a user's credentials when the provider deactivates the user.                                                                                                                                                                                                 | `false`                             |
+| `enterprise.auth.oidc.externalUserIdClaimName` | Claim that identifies the user at the OIDC provider when it is not the token's subject (`oid` for Microsoft Entra ID, so that SSO and SCIM name the same user).                                                                                                           |                                     |

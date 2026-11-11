@@ -168,3 +168,23 @@ app: {{ include "lakefs.name" . }}-audit-maintain
 {{- $registry := "https://index.docker.io/v1/" }}
 {{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" $registry $username $token (printf "%s:%s" $username $token | b64enc) | b64enc }}
 {{- end }}
+
+{{/*
+SCIM bearer tokens held by the chart, as the JSON list the lakeFS server reads
+from its environment. Fails when SCIM is enabled and none is set.
+*/}}
+{{- define "lakefs.scimTokens" -}}
+{{- $tokens := (((.Values.enterprise).auth).scim).tokens -}}
+{{- if not $tokens }}{{ fail "enterprise.auth.scim.tokens is required when enterprise.auth.scim.enabled is true (or use existingSecret + secretKeys.scimTokens)" }}{{ end -}}
+{{- toJson $tokens -}}
+{{- end }}
+
+{{/*
+Pod annotation that rolls the lakeFS pods when a chart-managed SCIM token
+changes. Tokens in existingSecret are not visible to the chart.
+*/}}
+{{- define "lakefs.scimTokensChecksum" -}}
+{{- if and (((.Values.enterprise).auth).scim).enabled (not .Values.existingSecret) }}
+checksum/scim-tokens: {{ include "lakefs.scimTokens" . | sha256sum }}
+{{- end }}
+{{- end }}
