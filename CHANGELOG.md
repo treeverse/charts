@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.13.1
+:new: What's new:
+- Add `extraObjects` value to deploy arbitrary Kubernetes objects with the release (maps or strings, rendered with `tpl`). Existing undocumented `extraManifests` keeps working
+
 # 1.13.0
 :new: What's new:
 - Optional Gateway API `HTTPRoute` (`httpRoute.enabled`, default `false`) with `parentRefs`, `hostnames` (wildcards allowed) and `rules` (HTTPRouteRule list; `backendRefs` defaults to the lakeFS Service). Independent of `ingress.enabled` and `ingress.*` values; existing installs render unchanged

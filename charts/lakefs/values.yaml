@@ -109,6 +109,15 @@ serviceAccount: {}
 # serviceAccount:
 #   name: "my-serviceaccount"
 
+# Extra Kubernetes objects to deploy with the release (maps or strings, rendered with tpl)
+extraObjects: []
+#  - apiVersion: v1
+#    kind: ConfigMap
+#    metadata:
+#      name: "{{ .Release.Name }}-extra"
+#    data:
+#      key: value
+
 # Extra Environment Values - allows yaml definitions
 extraEnvVars:
 #  - name: VALUE_FROM_SECRET

@@ -1,0 +1,8 @@
+{{- range concat (.Values.extraObjects | default list) (.Values.extraManifests | default list) }}
+---
+{{- if typeIs "string" . }}
+{{ tpl . $ }}
+{{- else }}
+{{ tpl (toYaml .) $ }}
+{{- end }}
+{{- end }}
