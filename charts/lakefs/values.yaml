@@ -136,8 +136,8 @@ serviceAccount: {}
 # serviceAccount:
 #   name: "my-serviceaccount"
 
-# Extra Kubernetes objects to deploy with the release (maps or strings, rendered with tpl)
-extraObjects: []
+# Extra Kubernetes objects to deploy with the release: list (or map) of objects, maps or strings, rendered with tpl
+extraManifests:
 #  - apiVersion: v1
 #    kind: ConfigMap
 #    metadata:
