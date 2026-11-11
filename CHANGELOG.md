@@ -1,5 +1,10 @@
 # Changelog
 
+# 1.14.0
+:new: What's new:
+- Document `extraManifests` value to deploy arbitrary Kubernetes objects with the release. Now accepts string items as well as maps (all rendered with `tpl`); existing list and map forms keep working
+- Optional `HorizontalPodAutoscaler` (`autoscaling.enabled`, default `false`) with `minReplicas`/`maxReplicas`, CPU/memory utilization targets, extra `metrics` and `behavior`. When enabled, `replicaCount` is not rendered on the Deployment
+
 # 1.13.0
 :new: What's new:
 - Optional Gateway API `HTTPRoute` (`httpRoute.enabled`, default `false`) with `parentRefs`, `hostnames` (wildcards allowed) and `rules` (HTTPRouteRule list; `backendRefs` defaults to the lakeFS Service). Independent of `ingress.enabled` and `ingress.*` values; existing installs render unchanged

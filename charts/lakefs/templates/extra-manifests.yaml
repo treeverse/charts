@@ -1,0 +1,9 @@
+{{- /* extraManifests: list or map; items are maps or strings */ -}}
+{{- range .Values.extraManifests }}
+---
+{{- if typeIs "string" . }}
+{{ tpl . $ }}
+{{- else }}
+{{ tpl (toYaml .) $ }}
+{{- end }}
+{{- end }}

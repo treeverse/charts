@@ -3,6 +3,27 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+
+# HorizontalPodAutoscaler for the lakeFS Deployment; replicaCount is ignored when enabled.
+# CPU/memory targets need requests (resources.requests, resources.limits or a LimitRange) and metrics-server in the cluster.
+# Enabling on a running release briefly resets the Deployment to 1 replica until the HPA scales it to minReplicas.
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage:
+  # Extra autoscaling/v2 metric specs (Pods/Object/External), e.g. from prometheus-adapter or KEDA
+  metrics: []
+  #  - type: Pods
+  #    pods:
+  #      metric:
+  #        name: http_requests_per_second
+  #      target:
+  #        type: AverageValue
+  #        averageValue: "100"
+  # autoscaling/v2 scaling behavior
+  behavior: {}
 image:
   pullPolicy: IfNotPresent
   community:
@@ -78,7 +99,13 @@ service:
   ## Requires Kubernetes 1.31+ (beta, enabled by default; GA in 1.33). Empty means the field is omitted.
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
   trafficDistribution: ""
+# lakeFS container resources. requests needed when autoscaling uses CPU/memory targets.
 resources: {}
+#  requests:
+#    cpu: 500m
+#    memory: 512Mi
+#  limits:
+#    memory: 1Gi
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -108,6 +135,15 @@ serviceAccount: {}
 # to use an existing service account, replace the serviceAccount map above with the following:
 # serviceAccount:
 #   name: "my-serviceaccount"
+
+# Extra Kubernetes objects to deploy with the release: list (or map) of objects, maps or strings, rendered with tpl
+extraManifests:
+#  - apiVersion: v1
+#    kind: ConfigMap
+#    metadata:
+#      name: "{{ .Release.Name }}-extra"
+#    data:
+#      key: value
 
 # Extra Environment Values - allows yaml definitions
 extraEnvVars:
