@@ -33,8 +33,6 @@ enterprise:
 lakefsConfig: |
   blockstore:
     type: local
-  features:
-    local_rbac: true
   auth:
     logout_redirect_url: https://<lakefs.ingress.domain>
     cookie_auth_verification:

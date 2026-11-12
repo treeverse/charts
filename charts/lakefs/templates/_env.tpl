@@ -4,8 +4,10 @@ env:
   {{- if (.Values.enterprise).enabled}}
   - name: LAKEFS_USAGE_REPORT_ENABLED
     value: "true"
+  {{- if not (((.Values.enterprise).auth).rbac).enabled }}
   - name: LAKEFS_FEATURES_LOCAL_RBAC
-    value: "{{ (((.Values.enterprise).auth).rbac).enabled | default false }}"
+    value: "false"
+  {{- end }}
   {{- if (((.Values.enterprise).auth).saml).enabled }}
   - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_AUTH_SOURCE
     value: saml

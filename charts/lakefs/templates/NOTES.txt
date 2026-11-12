@@ -18,3 +18,10 @@ Thank you for installing lakeFS!
 {{- end }}
 
 2. See the docs on how to create your first repository: https://docs.lakefs.io/quickstart/repository.html
+{{- if and (.Values.enterprise).enabled (not (((.Values.enterprise).auth).rbac).enabled) }}
+
+DEPRECATED: enterprise.auth.rbac.enabled is false, so the chart sets the deprecated
+lakeFS setting features.local_rbac to false. A future chart version will stop setting it.
+lakeFS Enterprise releases after 1.109.0 use the external RBAC service whenever
+auth.api.endpoint is set. Upgrade lakeFS Enterprise past 1.109.0 before that chart version.
+{{- end }}

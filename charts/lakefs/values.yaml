@@ -350,6 +350,9 @@ enterprise:
   # Enterprise auth configuration
   auth:
     rbac:
+      # false selects an external RBAC service by setting the deprecated lakeFS
+      # setting features.local_rbac. lakeFS Enterprise releases after 1.109.0
+      # select it from auth.api.endpoint instead.
       enabled: true
     ldap:
       enabled: false

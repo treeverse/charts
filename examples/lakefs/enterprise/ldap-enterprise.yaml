@@ -24,8 +24,6 @@ enterprise:
 lakefsConfig: |
   blockstore:
     type: local
-  features:
-    local_rbac: true
   auth:
     ui_config:
       login_cookie_names:
