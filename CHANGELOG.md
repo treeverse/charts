@@ -2,7 +2,7 @@
 
 # 1.15.1
 :new: What's new:
-- lakeFS Enterprise: the chart no longer sets the deprecated `features.local_rbac` when `enterprise.auth.rbac.enabled` is `true` (the default); `false` still sets it and prints a deprecation notice
+- lakeFS Enterprise: the chart no longer sets the deprecated `features.local_rbac` when `enterprise.auth.rbac.enabled` is `true` (the default); `false` still sets it and prints a deprecation notice (#463)
 
 # 1.15.0
 :new: What's new:
