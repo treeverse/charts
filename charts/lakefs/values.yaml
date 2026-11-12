@@ -3,7 +3,6 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
 # HorizontalPodAutoscaler for the lakeFS Deployment; replicaCount is ignored when enabled.
 # CPU/memory targets need requests (resources.requests, resources.limits or a LimitRange) and metrics-server in the cluster.
 # Enabling on a running release briefly resets the Deployment to 1 replica until the HPA scales it to minReplicas.
@@ -29,7 +28,7 @@ image:
   community:
     tag: "1.88.0"
   enterprise:
-    tag: "1.109.0"
+    tag: "1.110.0"
   privateRegistry:
     # Optional. lakeFS Enterprise images are public, so no token is required.
     # Only needed when mirroring the images into your own private registry.
@@ -84,8 +83,8 @@ httpRoute:
         - path:
             type: PathPrefix
             value: /
-  #     timeouts:
-  #       request: 0s
+            #     timeouts:
+            #       request: 0s
 podAnnotations: {}
 jobPodAnnotations:
   sidecar.istio.io/inject: "false"

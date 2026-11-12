@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.15.2
+:new: What's new:
+- Update lakeFS Enterprise version to [1.110.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.110.0/)
+
 # 1.15.1
 :new: What's new:
 - lakeFS Enterprise: the chart no longer sets the deprecated `features.local_rbac` when `enterprise.auth.rbac.enabled` is `true` (the default), so a `features.local_rbac` set in `lakefsConfig` now takes effect; `false` still sets it and prints a deprecation notice (#463)
