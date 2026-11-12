@@ -1,9 +1,12 @@
 # Changelog
 
+# 1.15.1
+:new: What's new:
+- lakeFS Enterprise: the chart no longer sets the deprecated `features.local_rbac` when `enterprise.auth.rbac.enabled` is `true` (the default); `false` still sets it and prints a deprecation notice (#463)
+
 # 1.15.0
 :new: What's new:
 - SCIM provisioning for lakeFS Enterprise: `enterprise.auth.scim.*` (`enabled`, default `false`, `tokens`, `defaultUserGroup`, `revokeCredentialsOnDeactivate`), with `secretKeys.scimTokens` for a token list held in `existingSecret`; a change to chart-managed tokens rolls the lakeFS pods. Existing installs render unchanged
-- lakeFS Enterprise: the chart no longer sets the deprecated `features.local_rbac` when `enterprise.auth.rbac.enabled` is `true` (the default); `false` still sets it and prints a deprecation notice (#463)
 
 # 1.14.0
 :new: What's new:
