@@ -340,6 +340,8 @@ secretKeys:
   ldapBindPassword: null
   # Use the following to fetch OIDC client secret from an existing secret:
   oidcClientSecret: null
+  # Use the following to fetch the SCIM tokens, as a JSON list, from an existing secret:
+  scimTokens: null
   # IQS token key in existingSecret (default: iqs_token)
   iqsToken: null
 # Enterprise configuration
@@ -362,6 +364,14 @@ enterprise:
         # certificates for AD FS IDP (e.g Azure AD)
         samlRsaPublicCert: null
         samlRsaPrivateKey: null
+    scim:
+      enabled: false
+      # Bearer tokens the identity provider presents, a list so that a rotation can hold two
+      # (ignored when existingSecret is set)
+      tokens: []
+      # Group every user SCIM creates joins; it must exist and not be provisioned by the provider
+      defaultUserGroup: null
+      revokeCredentialsOnDeactivate: false
 # Audit log maintenance CronJob (Enterprise-only).
 # Requires enterprise.enabled: true and audit_log.enabled: true in lakefsConfig.
 # The CronJob uses the same lakeFS config file — no credentials needed.

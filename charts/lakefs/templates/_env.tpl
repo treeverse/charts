@@ -60,6 +60,23 @@ env:
         key: ldap_bind_password
   {{- end }}
   {{- end }}
+  {{- if (((.Values.enterprise).auth).scim).enabled }}
+  - name: LAKEFS_AUTH_PROVIDERS_SCIM_ENABLED
+    value: "true"
+  {{- with .Values.enterprise.auth.scim.defaultUserGroup }}
+  - name: LAKEFS_AUTH_PROVIDERS_SCIM_DEFAULT_USER_GROUP
+    value: {{ . | quote }}
+  {{- end }}
+  {{- if .Values.enterprise.auth.scim.revokeCredentialsOnDeactivate }}
+  - name: LAKEFS_AUTH_PROVIDERS_SCIM_REVOKE_CREDENTIALS_ON_DEACTIVATE
+    value: "true"
+  {{- end }}
+  - name: LAKEFS_AUTH_PROVIDERS_SCIM_TOKENS
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.existingSecret | default (include "lakefs.fullname" .) }}
+        key: {{ if .Values.existingSecret }}{{ required "secretKeys.scimTokens is required when enterprise.auth.scim.enabled is true and existingSecret is set" (.Values.secretKeys).scimTokens }}{{ else }}scim_tokens{{ end }}
+  {{- end }}
   {{- if (((.Values.enterprise).auth).rbac).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_RBAC
     value: internal
