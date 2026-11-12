@@ -42,10 +42,6 @@ env:
         name: {{ include "lakefs.fullname" . }}
         key: oidc_client_secret
   {{- end }}
-  {{- with (((.Values.enterprise).auth).oidc).externalUserIdClaimName }}
-  - name: LAKEFS_AUTH_COOKIE_AUTH_VERIFICATION_EXTERNAL_USER_ID_CLAIM_NAME
-    value: {{ . | quote }}
-  {{- end }}
   {{- end }}
   {{- if (((.Values.enterprise).auth).ldap).enabled }}
   - name: LAKEFS_AUTH_UI_CONFIG_LOGOUT_URL
@@ -69,10 +65,6 @@ env:
     value: "true"
   {{- with .Values.enterprise.auth.scim.defaultUserGroup }}
   - name: LAKEFS_AUTH_PROVIDERS_SCIM_DEFAULT_USER_GROUP
-    value: {{ . | quote }}
-  {{- end }}
-  {{- with .Values.enterprise.auth.scim.defaultGroupPolicy }}
-  - name: LAKEFS_AUTH_PROVIDERS_SCIM_DEFAULT_GROUP_POLICY
     value: {{ . | quote }}
   {{- end }}
   {{- if .Values.enterprise.auth.scim.revokeCredentialsOnDeactivate }}

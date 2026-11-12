@@ -184,7 +184,7 @@ Pod annotation that rolls the lakeFS pods when a chart-managed SCIM token
 changes. Tokens in existingSecret are not visible to the chart.
 */}}
 {{- define "lakefs.scimTokensChecksum" -}}
-{{- if and (((.Values.enterprise).auth).scim).enabled (not .Values.existingSecret) }}
+{{- if and (.Values.enterprise).enabled (((.Values.enterprise).auth).scim).enabled (not .Values.existingSecret) }}
 checksum/scim-tokens: {{ include "lakefs.scimTokens" . | sha256sum }}
 {{- end }}
 {{- end }}

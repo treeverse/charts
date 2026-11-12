@@ -2,7 +2,7 @@
 
 # 1.15.0
 :new: What's new:
-- SCIM provisioning for lakeFS Enterprise: `enterprise.auth.scim.*` (`enabled`, default `false`, `tokens`, `defaultUserGroup`, `defaultGroupPolicy`, `revokeCredentialsOnDeactivate`), with `secretKeys.scimTokens` for a token list held in `existingSecret`; a change to chart-managed tokens rolls the lakeFS pods. `enterprise.auth.oidc.externalUserIdClaimName` sets the claim that identifies a user at the provider. Existing installs render unchanged
+- SCIM provisioning for lakeFS Enterprise: `enterprise.auth.scim.*` (`enabled`, default `false`, `tokens`, `defaultUserGroup`, `revokeCredentialsOnDeactivate`), with `secretKeys.scimTokens` for a token list held in `existingSecret`; a change to chart-managed tokens rolls the lakeFS pods. Existing installs render unchanged
 
 # 1.14.0
 :new: What's new:
