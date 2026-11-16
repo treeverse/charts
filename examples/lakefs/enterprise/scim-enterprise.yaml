@@ -22,6 +22,8 @@ enterprise:
         - <scim-bearer-token>
       # every user SCIM creates joins this group, which must exist; once the installation is set up, lakeFS checks it at startup
       defaultUserGroup: Developers
+      # every group SCIM creates gets this policy, which must exist; once the installation is set up, lakeFS checks it at startup
+      defaultGroupPolicy: FSReadAll
 
 # To hold the tokens in your own secret instead, as a JSON list under one key:
 # existingSecret: <secret-name>
