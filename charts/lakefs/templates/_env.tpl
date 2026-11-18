@@ -69,6 +69,10 @@ env:
   - name: LAKEFS_AUTH_PROVIDERS_SCIM_DEFAULT_USER_GROUP
     value: {{ . | quote }}
   {{- end }}
+  {{- with .Values.enterprise.auth.scim.defaultGroupPolicy }}
+  - name: LAKEFS_AUTH_PROVIDERS_SCIM_DEFAULT_GROUP_POLICY
+    value: {{ . | quote }}
+  {{- end }}
   {{- if .Values.enterprise.auth.scim.revokeCredentialsOnDeactivate }}
   - name: LAKEFS_AUTH_PROVIDERS_SCIM_REVOKE_CREDENTIALS_ON_DEACTIVATE
     value: "true"
