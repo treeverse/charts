@@ -34,10 +34,10 @@ lakefsConfig: |
   blockstore:
     type: local
   auth:
-    # OIDC login finds a user SCIM provisioned by this claim, sub when unset. With Microsoft Entra ID,
-    # set it to oid: Entra's sub is not the object ID that SCIM stores. It sits under auth.oidc, not auth.providers.oidc
+    # OIDC login finds a user SCIM provisioned by this claim, sub when unset. It sits under auth.oidc, not auth.providers.oidc.
+    # Before you set it, see https://docs.lakefs.io/security/scim-self-managed/#linking-provisioned-users-to-sso-logins
     # oidc:
-    #   external_user_id_claim_name: oid
+    #   external_user_id_claim_name: <claim-name>
     providers:
       oidc:
         post_login_redirect_url: /
