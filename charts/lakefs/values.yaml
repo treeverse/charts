@@ -373,6 +373,8 @@ enterprise:
       tokens: []
       # Group every user SCIM creates joins; it must exist and not be provisioned by the provider
       defaultUserGroup: null
+      # Policy attached to every group SCIM creates; it must exist
+      defaultGroupPolicy: null
       revokeCredentialsOnDeactivate: false
 # Audit log maintenance CronJob (Enterprise-only).
 # Requires enterprise.enabled: true and audit_log.enabled: true in lakefsConfig.

@@ -97,6 +97,8 @@ If you can't provide such access, lakeFS can be configured to use an AWS key-pai
 
 lakeFS Enterprise can serve SCIM 2.0 provisioning to an identity provider such as Okta or Microsoft Entra ID, which then creates, updates and deactivates users and groups in lakeFS. The provider sends its requests to `https://<lakefs domain>/api/scim/v2`, so the ingress must terminate HTTPS on the API or UI domain of lakeFS; the S3 gateway domain routes everything to the gateway and cannot serve them. SCIM runs on the built-in RBAC service (`enterprise.auth.rbac.enabled`, the default), and the server refuses to start with the block enabled beside an external one. The setup guide for each provider is in the lakeFS Enterprise documentation.
 
+OIDC login finds a user SCIM provisioned by the token claim that `auth.oidc.external_user_id_claim_name` names in `lakefsConfig`, `sub` by default. The key sits under `auth.oidc`, not under `auth.providers.oidc` with the provider's URL and client ID. See [Linking provisioned users to SSO logins](https://docs.lakefs.io/security/scim-self-managed/#linking-provisioned-users-to-sso-logins) for the identity provider's `externalId` mapping, the Microsoft Entra ID setup and when to set the key.
+
 Example `my-values.yaml` with the tokens held by the chart:
 
 ```yaml
@@ -109,6 +111,7 @@ enterprise:
       tokens:
         - <scim-bearer-token>
       defaultUserGroup: Developers
+      defaultGroupPolicy: FSReadAll
 ```
 
 With `existingSecret`, the secret holds the tokens as a JSON list under the key named by `secretKeys.scimTokens`:
@@ -211,4 +214,5 @@ helm upgrade -f my-values.yaml my-lakefs lakefs/lakefs --set kv_upgrade=true
 | `enterprise.auth.scim.tokens`         | Bearer tokens the identity provider may present, a list so that a rotation can hold the old and the new. Required when SCIM is enabled (ignored when existingSecret is set)                                                                                                        | `[]`                                |
 | `secretKeys.scimTokens`               | Name of key in existing secret holding the SCIM tokens as a JSON list, e.g. `["<token>"]`. Required when existingSecret is set and SCIM is enabled.                                                                                                                                |                                     |
 | `enterprise.auth.scim.defaultUserGroup` | Group every user SCIM creates joins. It must exist and not be provisioned by the provider. Once the installation is set up, the server checks this at startup and refuses to start otherwise; a fresh install is checked from its next start.                                                                                                                                                        |                                     |
+| `enterprise.auth.scim.defaultGroupPolicy` | Policy attached to every group SCIM creates; a group SCIM adopts keeps its own policies and gains none. The policy must exist. Once the installation is set up, the server checks this at startup and refuses to start otherwise; a fresh install is checked from its next start. |                                     |
 | `enterprise.auth.scim.revokeCredentialsOnDeactivate` | Revoke a user's credentials when the provider deactivates the user.                                                                                                                                                                                                 | `false`                             |
