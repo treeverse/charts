@@ -97,6 +97,8 @@ If you can't provide such access, lakeFS can be configured to use an AWS key-pai
 
 lakeFS Enterprise can serve SCIM 2.0 provisioning to an identity provider such as Okta or Microsoft Entra ID, which then creates, updates and deactivates users and groups in lakeFS. The provider sends its requests to `https://<lakefs domain>/api/scim/v2`, so the ingress must terminate HTTPS on the API or UI domain of lakeFS; the S3 gateway domain routes everything to the gateway and cannot serve them. SCIM runs on the built-in RBAC service (`enterprise.auth.rbac.enabled`, the default), and the server refuses to start with the block enabled beside an external one. The setup guide for each provider is in the lakeFS Enterprise documentation.
 
+OIDC login finds a user SCIM provisioned by the token claim that `auth.oidc.external_user_id_claim_name` names in `lakefsConfig`, `sub` by default. With Microsoft Entra ID, set it to `oid`: Entra's `sub` is not the object ID that SCIM stores, so login creates a second user or fails. The key sits under `auth.oidc`, not under `auth.providers.oidc` with the provider's URL and client ID.
+
 Example `my-values.yaml` with the tokens held by the chart:
 
 ```yaml
