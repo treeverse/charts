@@ -24,8 +24,8 @@ fluffy:
       external:
         aws_auth:
           enabled: true
-          # the maximum age in seconds for the GetCallerIdentity request
-          #get_caller_identity_max_age: 60
+          # the maximum age of the GetCallerIdentity request, as a duration with a unit
+          #get_caller_identity_max_age: 1m
           # headers that must be present by the client when doing login request
           required_headers:
             # same host as the lakeFS server ingress
