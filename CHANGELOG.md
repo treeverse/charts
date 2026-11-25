@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.16.1
+:new: What's new:
+- Update lakeFS Enterprise version to [1.112.0](https://docs.lakefs.io/releases/lakefs-enterprise/1.112.0/)
+
 # 1.16.0
 :new: What's new:
 - SCIM provisioning for lakeFS Enterprise: `enterprise.auth.scim.defaultGroupPolicy` names a policy that lakeFS Enterprise 1.110.0 or later attaches to every group SCIM creates. Existing installs render unchanged
