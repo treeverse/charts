@@ -17,6 +17,9 @@ spec:
         metadata:
           labels:
             {{- include "audit.selectorLabels" . | nindent 12 }}
+            {{- with .Values.auditLog.maintenance.podLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           {{- with .Values.auditLog.maintenance.podAnnotations }}
           annotations:
             {{- toYaml . | nindent 12 }}
